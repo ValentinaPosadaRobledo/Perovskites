@@ -7,10 +7,18 @@
 # ---------------------------------------------------------------------------
 materials_project:
   api_key_env: MP_API_KEY  # nombre de la variable, no la clave  # pragma: allowlist secret
-  formula_anonymous: ABC3            # PROPUESTA (F1.1): verificar sintaxis en mp-api
+  formula_anonymous: ABC3            # verificado en mp-api 0.47.2: `formula` acepta anónimas
   elements_include: [O]
+  # Se descartan después las ABC3 en que el O no es el elemento con subíndice 3.
+  exclude_deprecated: true           # entradas retiradas por MP por errores
+  # GNoME (candidatos hipotéticos generados por modelo): fuera del análisis principal,
+  # descargadas y marcadas (`is_gnome`) para sensibilidad. Decisión de la autora, 2026-11-13.
+  gnome_policy: exclude_and_flag     # exclude_and_flag | include | exclude
+  # La E_hull del endpoint `summary` usa el esquema mixto GGA/GGA+U/r2SCAN: la del análisis
+  # se toma del endpoint `thermo` con un thermo_type explícito.
   thermo_types: [GGA_GGA+U]          # una sola funcional en el análisis principal
   sensitivity_thermo_types: [R2SCAN] # solo para el análisis de sensibilidad
+  thermo_chunk_size: 500             # material_ids por consulta al endpoint thermo
   fields:
     - material_id
     - formula_pretty
@@ -20,6 +28,8 @@ materials_project:
     - energy_above_hull
     - formation_energy_per_atom
     - symmetry
+    - deprecated
+    - builder_meta                   # lote de cálculo (batch_id): procedencia y detección de GNoME
 
 # ---------------------------------------------------------------------------
 # F1.3 Identificación de perovskitas por conectividad (regla 2.1.1)
