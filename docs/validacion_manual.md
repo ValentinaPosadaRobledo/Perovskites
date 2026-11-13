@@ -36,12 +36,39 @@ generada, está en `results/f1_2_datos_externos/conflicts.csv`.
 
 ## Registro
 
-| # | material_id | Fórmula | Grupo espacial | NC(B) | NC(A) | Compartición BO₆ | Ángulo B–O–B mín (°) | Clasificación automática | Clasificación manual | ¿Coinciden? | Motivo / referencia | Revisora | Fecha |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | | | | | | | | | | | | | |
+La planilla está en **`docs/validacion_manual_casos.csv`**: 59 casos, generados por
+`scripts/prepare_f1_4.py` a partir de la identificación de F1.3. Se abre directamente en
+Excel o en Google Sheets.
+
+**Cómo revisar cada caso**
+
+1. Busca la estructura en Materials Project con el ID (`mp_id_antiguo`, p. ej. `mp-5229`, o
+   `material_id` en el formato nuevo) y mira su visualización: poliedros BO₆, cómo se unen y
+   dónde está el catión A.
+2. Lee `que_mirar` (la pregunta clave de su categoría) y las métricas automáticas: NC del
+   sitio A, O a < 3,3 Å del A, compartición máxima de los octaedros y ángulo B–O–B mínimo.
+3. Rellena las columnas vacías:
+   - `clasificacion_manual`: `perovskita`, `politipo_hexagonal`, `no_perovskita`, `polianion`
+     o `dudosa`;
+   - `coincide`: `si` o `no`, comparando con `clasificacion_automatica` (un caso
+     `perovskite_borderline` coincide si lo clasificas como `perovskita`);
+   - `motivo_referencia`: una frase, con la referencia bibliográfica si la usas;
+   - `revisora` y `fecha`.
+4. Se puede hacer por tandas. Cuando termines, la concordancia y los ajustes del criterio se
+   calculan con un script (pendiente: `scripts/report_f1_4.py`).
+
+**Observaciones previas de la preparación (a confirmar en la revisión)**
+
+- Casos 47–51 (NC(A) = 0): estructuras cúbicas marcadas como experimentales en MP en las que
+  el catión **grande** ocupa el sitio octaédrico (p. ej. La en el sitio B de LaGaO₃). Podrían
+  ser asignaciones de sitio invertidas en MP. El algoritmo no las acepta como perovskitas.
+- Casos 4 y 8 (AgSbO₃, KSbO₃, Fd-3m): probablemente pirocloros, una red de vértices que no es
+  perovskita. El algoritmo los deja como caso límite por la NC(A) = 6.
+- Caso 46 (PbVO₃ P4mm): V en pirámide de base cuadrada (VO₅). La fase de alta presión
+  conocida es una perovskita tetragonal muy distorsionada: decidir si cuenta.
 
 ## Resumen
 
-- Casos revisados: 0 / 50
+- Casos preparados: 59 (≥ 50). Revisados: 0
 - Desacuerdos: —
 - Ajustes de criterios derivados (registrar también en la bitácora del ROADMAP): —

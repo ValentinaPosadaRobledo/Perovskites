@@ -49,8 +49,10 @@ select = ["E", "F", "W", "I", "UP", "B", "SIM", "NPY", "RUF"]
 ignore = ["RUF001", "RUF002", "RUF003"]
 
 [tool.ruff.lint.per-file-ignores]
-# Los scripts de informe contienen plantillas Markdown cuyas filas de tabla no se pueden partir.
+# Los scripts de informe y de preparación contienen plantillas Markdown y textos para la
+# revisora que no se pueden partir sin perder legibilidad.
 "scripts/report_*.py" = ["E501"]
+"scripts/prepare_*.py" = ["E501"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["perovskite_pu"]
