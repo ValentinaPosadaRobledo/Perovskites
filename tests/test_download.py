@@ -73,7 +73,7 @@ def test_build_manifest_records_versions_and_hashes(tmp_path):
         [f], "2026.09.28", {"formula_anonymous": "ABC3"}, {"n": 1}, {"description": "d"}
     )
     assert m["mp_database_version"] == "2026.09.28"
-    assert m["description"] == "d"
+    assert "db_version" in m["description"]
     assert set(m) >= {
         "mp_api_version",
         "emmet_core_version",

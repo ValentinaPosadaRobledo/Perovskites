@@ -124,7 +124,10 @@ def build_manifest(
     counts: dict[str, int],
     previous: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Construye `data/MANIFEST.json` y conserva la descripción del manifiesto anterior."""
+    """Construye el contenido de `data/MANIFEST.json`.
+
+    `previous` (el manifiesto anterior) se acepta por compatibilidad; ya no se usa.
+    """
     versions = {}
     for pkg in ("mp-api", "emmet-core", "pymatgen"):
         try:
@@ -136,7 +139,11 @@ def build_manifest(
     except Exception:  # fuera de un repositorio git (p. ej. en tests aislados)
         code = {"git_commit": None, "git_dirty": None}
     return {
-        "description": (previous or {}).get("description", "Registro de los datos crudos."),
+        "description": (
+            "Registro de los datos crudos (data/raw/, no versionados): versión de la base de "
+            "datos de MP (MPRester().db_version), versiones de paquetes, commit del código que "
+            "descargó, fecha, parámetros de la consulta y SHA-256 de cada archivo."
+        ),
         **code,
         "mp_database_version": db_version,
         "mp_api_version": versions["mp-api"],
@@ -202,6 +209,8 @@ def download(config_path: Path, out_dir: Path, dry_run: bool = False) -> dict[st
 
         n_abc3 = len(docs)
         docs = [d for d in docs if is_abo3_oxide(d["formula_pretty"])]
+        # Orden estable: el orden de la API puede variar y cambiaría el SHA-256 del archivo.
+        docs.sort(key=lambda d: str(d["material_id"]))
         ids = [str(d["material_id"]) for d in docs]
         types = list(cfg["thermo_types"]) + list(cfg.get("sensitivity_thermo_types", []))
         thermo = _thermo_docs(mpr, ids, types, int(cfg.get("thermo_chunk_size", 500)))
