@@ -1,11 +1,13 @@
 # Preregistro — BORRADOR
 
-> **Estado:** borrador (F0.4, pendiente). **No congelado.** Se congela y se deposita en
-> OSF en la tarea F4.0, **antes** de abrir el holdout (F4.1). Toda desviación posterior se
-> declara explícitamente en el artículo.
+> **Estado:** borrador (F0.4). **No congelado.** Se congela y se deposita en OSF en la
+> tarea F4.0, **antes** de abrir el holdout (F4.1). Toda desviación posterior se declara
+> explícitamente en el artículo.
 >
-> Los valores marcados **[PROPUESTA]** son propuestas iniciales que la autora debe
-> confirmar o modificar antes de congelar.
+> **Fijado el 2026-11-13, antes de descargar ningún dato:** δ₁, δ₂, el punto de operación,
+> las reglas de decisión de H1–H3 y los parámetros del bootstrap (secciones 7–9).
+> Los valores que siguen marcados **[PROPUESTA]** (tolerancias de identificación, k de
+> `cluster`, n_iter) se fijan en F1 y deben estar cerrados antes de F4.0.
 
 **Título:** Evaluación de la generalización de modelos de aprendizaje positivo–no
 etiquetado (PU learning) para predecir la sintetizabilidad de perovskitas óxido ABO₃ con
@@ -77,7 +79,8 @@ por grupo.
 
 ## 6. Modelos y líneas base
 
-- **Modelos PU:** bagging PU (Mordelet y Vert, 2014) con Random Forest y Gradient Boosting.
+- **Modelos PU:** bagging PU (Mordelet y Vert, 2014) con Random Forest o Gradient
+  Boosting (el aprendiz base se elige en el bucle interno, sección 7.1).
 - **Familias de features:** `pre_dft` (MAGPIE, t, μ, τ) y `post_dft` (+ E_hull, ΔHf),
   reportadas por separado; `post_dft` es una cota superior informada por el hull.
 - **Modelo de grafos:** Gu et al. (2022), reevaluado bajo las particiones por grupos.
@@ -86,63 +89,175 @@ por grupo.
 - **Protocolo:** CV anidada; bucle interno con búsqueda aleatoria de presupuesto fijo
   (n_iter = 15 **[PROPUESTA]**) y selección del umbral; 10 semillas (0–9).
 
-## 7. Punto de operación y métricas
+## 7. Punto de operación y métricas *(fijado 2026-11-13)*
 
-- **Punto de operación principal:** el umbral elegido en el bucle interno, que apunta a
-  P(ŷ = 1) = 0,10 **[PROPUESTA]**.
-- **Punto de operación secundario:** TPR a P(ŷ = 1) fija ∈ {0,05; 0,10; 0,20}
-  **[PROPUESTA]**, para comparar con τ (umbral externo de 4,18).
-- **Métrica principal:** TPR sobre positivos reservados. **Control:** P(ŷ = 1 | U).
-- **Lee y Liu (2003):** solo para ordenar modelos (SCAR no se cumple).
-- **`loeo_A` / `loeo_B`:** TPR micro-agregado sobre folds + distribución por elemento.
-- **Cotas inferiores:** accuracy, F1 y ROC-AUC con U como negativo, etiquetadas como tales.
-- **Prior de clase π:** ≥ 2 métodos (Elkan–Noto, TIcE o KM2), con análisis de sensibilidad.
+### 7.1 Punto de operación principal: recall nominal 0,90 calibrado en el bucle interno
 
-## 8. Hipótesis
+Se usa para H1 y para el reporte de cada modelo PU por separado.
+
+1. En cada fold externo, el bucle interno (3 folds sobre el train externo) produce
+   puntuaciones **fuera de fold** para todas las composiciones del train externo.
+2. Para cada configuración de hiperparámetros, el umbral t* es el **percentil 10 de las
+   puntuaciones fuera de fold de los positivos**: el 90 % de los positivos internos queda
+   por encima (`threshold_for_recall` en `perovskite_pu.evaluation.metrics`).
+3. **Selección de la configuración:** la de menor P(ŷ = 1) fuera de fold al umbral t*. A
+   recall fijo, equivale a maximizar Lee–Liu (que aquí solo **ordena** configuraciones).
+   El aprendiz base (Random Forest o Gradient Boosting) es un hiperparámetro más, así que
+   "el mejor modelo PU `pre_dft`" queda definido por el propio protocolo y no se elige
+   mirando resultados externos.
+4. La configuración elegida se reentrena con todo el train externo y t* se aplica **sin
+   modificar** al test externo. (El reentrenamiento con más datos puede desplazar algo la
+   escala de las puntuaciones; ese efecto forma parte de lo que se mide.)
+5. **Métrica:** TPR en el test externo, micro-agregada sobre folds (Σ aciertos / Σ
+   positivos), junto a P(ŷ = 1 | U) como control. Si la TPR externa queda por debajo de 0,90,
+   eso cuantifica cuánto se degrada un umbral calibrado al exigir extrapolación.
+
+**Justificación.** Un objetivo de recall no depende de la fracción de positivos ni de la
+prior π, que todavía se desconocen. El borrador anterior proponía P(ŷ = 1) = 0,10; se
+descarta porque, si la fracción de positivos etiquetados en ABO₃ resulta cercana a 0,10, ese
+objetivo limitaría la TPR de forma artificial. El valor 0,90 deja margen por debajo de la
+TPR = 0,957 reportada por Gu et al. (2022) con partición aleatoria. Recalls nominales de
+0,80 y 0,95 se analizan como sensibilidad (sección 10).
+
+### 7.2 Comparaciones entre modelos: a igual P(ŷ = 1) en cada fold de test
+
+Los modelos con umbrales de origen distinto solo se comparan a la misma tasa de predicción
+positiva. El umbral de cada modelo se ajusta en el fold de test usando **solo la
+distribución de puntuaciones** (no las etiquetas), con `threshold_for_ppr`.
+
+- **H2 (PU frente a τ):** la P(ŷ = 1) de referencia es la que produce τ con su umbral externo
+  de 4,18 (τ < 4,18 → perovskita) en ese fold, sobre las composiciones con τ definido. El
+  modelo PU se umbraliza para igualarla.
+- **H3 (grafos frente a composición):** la P(ŷ = 1) de referencia es la que alcanza el modelo
+  PU `pre_dft` en su punto de operación principal (7.1) en ese fold. El modelo de grafos y la
+  línea base de solo simetría se umbralizan para igualarla.
+
+### 7.3 Métricas secundarias
+
+- TPR a P(ŷ = 1) fija ∈ {0,05; 0,10; 0,20} y curvas completas TPR frente a P(ŷ = 1) para
+  todos los modelos y líneas base.
+- Lee y Liu (2003): solo para ordenar modelos (SCAR no se cumple).
+- `loeo_A` / `loeo_B`: distribución de la TPR por elemento, además de la micro-agregada.
+- Accuracy, F1 y ROC-AUC con U como negativo, etiquetadas como **cotas inferiores**.
+- Prior de clase π: ≥ 2 métodos (Elkan–Noto, TIcE o KM2), con análisis de sensibilidad.
+
+## 8. Hipótesis *(márgenes fijados 2026-11-13)*
+
+**Márgenes:** δ₁ = **0,05** y δ₂ = **0,05**, ambos en TPR absoluta. Se usa una única
+diferencia mínima relevante de 0,05 en TPR, es decir, 1 de cada 20 perovskitas conocidas.
+Si una caída de 0,05 se considera relevante en H1, coherentemente un déficit menor que 0,05
+frente a τ se considera irrelevante en H2. Justificación numérica en la sección 8.4.
+
+**Unidad de análisis común.** Todas las diferencias son **pareadas por composición**. Para
+cada positivo c del pool de entrenamiento, h_M,e(c) es la fracción de las 10 semillas en
+que el modelo M acierta con c en el esquema e. Cada positivo se evalúa exactamente una vez
+por semilla en cada esquema. Entonces TPR_M,e = media_c h_M,e(c), que coincide con la TPR
+micro-agregada.
+
+**Esquemas confirmatorios:** `loeo_A`, `loeo_B`, `family` y `cluster` (4 esquemas por
+hipótesis). `group_system` es diagnóstico y `temporal` es una ampliación; ninguno es
+confirmatorio.
 
 ### H1 — Efecto de la partición
-El TPR en el punto de operación fijo cae al pasar de `random` a cada esquema por grupos
-(`loeo_A`, `loeo_B`, `family`, `cluster`).
+El TPR en el punto de operación principal cae al pasar de `random` a cada esquema por grupos.
 
-- **Criterio de apoyo:** el IC 95 % de ΔTPR = TPR_random − TPR_grupo (bootstrap jerárquico
-  por grupo) excluye 0 **y** la estimación puntual es ≥ **δ₁ = 0,05 [PROPUESTA]**.
-- **Se evalúa para:** modelos PU composicionales, modelo de grafos y líneas base.
+- **Modelo confirmatorio:** el modelo PU `pre_dft` (7.1). Para el modelo de grafos,
+  `post_dft` y las líneas base, el mismo contraste se reporta como **descriptivo**.
+- **Estadístico:** ΔTPR_g = media_c [h_random(c) − h_g(c)] para cada esquema g.
+- **Criterio por esquema:** el valor p bootstrap bilateral, ajustado por Holm sobre los 4
+  esquemas, es < 0,05 **y** ΔTPR_g ≥ δ₁ = 0,05.
+- **Conclusión global:** H1 se sostiene si el criterio se cumple en los 4 esquemas (test de
+  intersección-unión). Si se cumple en algunos, se reporta como apoyo parcial, esquema por
+  esquema.
 - **Resultado nulo:** publicable; indicaría que la sobreestimación es menor de lo esperado.
 
 ### H2 — No inferioridad frente a τ
-Bajo los esquemas por grupos, el mejor modelo PU `pre_dft` es no inferior a τ (Bartel et
-al., 2019) en TPR a igual P(ŷ = 1).
+Bajo los esquemas por grupos, el modelo PU `pre_dft` es no inferior a τ (Bartel et al.,
+2019) en TPR a igual P(ŷ = 1) (7.2).
 
-- **Criterio:** test unilateral de no inferioridad; la cota inferior del IC 95 % de
-  (TPR_PU − TPR_τ) es > −**δ₂**, con **δ₂ = 0,03 [PROPUESTA]**.
-- **Superioridad:** solo si la cota inferior es > 0.
-- τ sobre el subconjunto de Bartel se declara **in-sample**.
+- **Estadístico:** Δ_g = media_c [h_PU,g(c) − h_τ,g(c)], sobre los positivos con τ definido
+  (τ es determinista: h_τ ∈ {0, 1}).
+- **Criterio por esquema:** la cota inferior del IC 95 % bilateral de Δ_g es > −δ₂ = −0,05
+  (equivale a un test unilateral con α = 0,025). La multiplicidad se controla aplicando Holm
+  sobre los 4 valores p de H₀: Δ_g ≤ −δ₂.
+- **Conclusión global:** no inferioridad en los 4 esquemas (intersección-unión).
+- **Superioridad:** solo si además la cota inferior es > 0 (secundaria, también con Holm).
+- **Análisis principal:** incluye los compuestos del conjunto de Bartel, donde τ es
+  *in-sample*. Eso favorece a τ, así que es conservador para el modelo PU.
+- **Sensibilidad:** se repite el análisis excluyendo esos compuestos (τ fuera de muestra).
 
 ### H3 — Grafos frente a composición bajo extrapolación
-La ventaja del modelo de grafos sobre el mejor modelo composicional se reduce al exigir
+La ventaja del modelo de grafos sobre el modelo PU composicional se reduce al exigir
 extrapolación.
 
-- **Criterio:** [ΔTPR(grafo − composicional)]_random − [ΔTPR(grafo − composicional)]_grupos
-  > 0, con IC 95 % que excluya 0.
-- **Control obligatorio:** línea base de solo grupo espacial/simetría (riesgo de que el
-  grafo aprenda la procedencia de la estructura: experimentales distorsionadas frente a
-  prototipos cúbicos hipotéticos).
-- **Regla de parada:** si la reproducción del modelo de grafos (F3.5) falla en 3 semanas y
-  el plan B (CGCNN/ALIGNN propio) también, H3 se reformula como pregunta exploratoria y se
+- **Estadístico:** D_g = media_c {[h_graf,random(c) − h_comp,random(c)] −
+  [h_graf,g(c) − h_comp,g(c)]}, a igual P(ŷ = 1) (7.2).
+- **Criterio por esquema:** IC 95 % de D_g > 0 y que excluye 0, con Holm sobre los 4
+  esquemas. Conclusión global por intersección-unión, como en H1.
+- **Control obligatorio por procedencia de la estructura:** el mismo contraste se calcula
+  para la línea base de solo grupo espacial/simetría. **Regla de interpretación
+  preregistrada:** si en `random` esa línea base alcanza ≥ 50 % de la ventaja del modelo de
+  grafos sobre el composicional, la ventaja del grafo se interpreta como posiblemente debida
+  a la procedencia de la estructura (experimental distorsionada frente a prototipo cúbico
+  hipotético), y no a la sintetizabilidad.
+- **Regla de parada:** si la reproducción del modelo de grafos (F3.5) falla en 3 semanas y el
+  plan B (CGCNN/ALIGNN propio) también, H3 se reformula como pregunta exploratoria y se
   declara como desviación.
 
-### OE4 (exploratorio, solo tesis)
-Priorización de candidatos por estabilidad acuosa (ΔG_pbx) en condiciones fisiológicas.
-**No es una hipótesis** (un enunciado de existencia no es falsable).
+### 8.4 Justificación de los márgenes: potencia aproximada
 
-## 9. Análisis estadístico
+Cálculo hecho **antes de tener datos**, con `scripts/potencia_preregistro.py`. Usa una
+aproximación normal para la diferencia pareada de aciertos, con efecto de diseño por
+agrupamiento químico (~30 elementos B). Supuestos: N positivos, discordancia d (fracción de
+positivos en que los dos resultados difieren) y correlación intragrupo ρ ∈ {0; 0,05}.
 
-| Comparación | Test |
+**H2:** probabilidad de declarar no inferioridad cuando el modelo PU es **exactamente igual**
+a τ (N = 250).
+
+| d | δ₂ = 0,03 | δ₂ = 0,05 |
+|---|---|---|
+| 0,10 | 0,25–0,32 | 0,57–0,71 |
+| 0,20 | 0,15–0,18 | 0,33–0,42 |
+
+**H1:** probabilidad de declarar una caída relevante con δ₁ = 0,05 (N = 250, d = 0,20–0,30).
+
+| Caída real | 0,05 | 0,10 | 0,15 |
+|---|---|---|---|
+| Potencia | 0,24–0,43 | 0,71–0,95 | 0,97–1,00 |
+
+**Conclusiones del cálculo:**
+
+1. Con δ₂ = 0,03 (propuesta inicial), H2 casi siempre terminaría inconclusa aunque el modelo
+   PU fuera igual a τ. Por eso se fija δ₂ = 0,05, que además coincide con δ₁.
+2. Aun con δ₂ = 0,05, la potencia de H2 es moderada. **Un resultado inconclusivo se reportará
+   como tal**, sin reinterpretarlo como inferioridad ni como equivalencia.
+3. H1 detecta bien caídas ≥ 0,10. Una caída real cercana a δ₁ tiene, por construcción, ~50 %
+   o menos de probabilidad de superar el criterio de estimación puntual.
+4. Si en F1.6 el número de positivos resulta muy distinto de 150–350, se recalcula la
+   potencia **antes de F4.0**, sin cambiar δ₁ ni δ₂, y se informa en el preregistro.
+
+## 9. Análisis estadístico *(fijado 2026-11-13)*
+
+| Uso | Test |
 |---|---|
-| CV repetida con folds aleatorios (`random`, `cluster`) | t-test corregido de Nadeau y Bengio |
-| Esquemas leave-one-group-out (`loeo_A`, `loeo_B`, `family`) | Bootstrap jerárquico por grupo (B = 10 000 **[PROPUESTA]**) o permutación por grupo |
-| H2 | No inferioridad unilateral con margen δ₂ |
-| Comparaciones múltiples | Corrección de Holm (α = 0,05) |
+| H1, H2, H3 (confirmatorios, los 4 esquemas por grupos) | Bootstrap jerárquico pareado por composición (abajo) |
+| Comparaciones secundarias entre modelos dentro de `random` y `cluster` (CV repetida) | t-test corregido de Nadeau y Bengio |
+| Multiplicidad | Holm (α = 0,05) dentro de cada hipótesis, sobre sus 4 esquemas |
+
+**Bootstrap jerárquico:**
+
+- **B = 10 000** remuestreos; IC por percentiles.
+- **Nivel 1:** se remuestrean con reemplazo las unidades químicas. Es el elemento A en
+  `loeo_A` y el elemento B en `loeo_B`, `family` y `cluster`. En `family`, el remuestreo de
+  elementos B se estratifica por familia, porque con solo 4 familias no se pueden
+  remuestrear las familias mismas.
+- **Nivel 2:** se remuestrean con reemplazo los positivos dentro de cada unidad elegida.
+- Por composición se usa h(c), la media sobre las 10 semillas. La variabilidad entre
+  semillas se reporta aparte, como DE.
+- **Valor p:** bilateral, 2·min{P*(Δ* ≤ 0), P*(Δ* ≥ 0)}. En H2 es unilateral,
+  P*(Δ* ≤ −δ₂).
+- **Semilla:** `bootstrap_seed: 20261113` en `configs/seeds.yaml`, distinta de todas las
+  demás semillas del proyecto.
 
 ## 10. Análisis de sensibilidad previstos
 
@@ -153,6 +268,8 @@ Priorización de candidatos por estabilidad acuosa (ΔG_pbx) en condiciones fisi
 5. Tolerancias de identificación (ángulo B–O–B, StructureMatcher).
 6. Política de grupos pequeños en `loeo_B` (fusionar por familia frente a reportar aparte).
 7. Validación de formabilidad (negativos de Bartel y sintetizadas no perovskita).
+8. Recall nominal del punto de operación 0,80 y 0,95 (en lugar de 0,90).
+9. H2 excluyendo los compuestos del conjunto de Bartel (τ fuera de muestra).
 
 ## 11. Decisiones contingentes preregistradas
 

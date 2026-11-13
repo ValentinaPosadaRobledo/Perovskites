@@ -84,6 +84,29 @@ def threshold_for_ppr(scores: Iterable[float], target_ppr: float) -> float:
     return float(scores[k - 1])
 
 
+def threshold_for_recall(
+    s: Iterable[int], scores: Iterable[float], target_recall: float = 0.90
+) -> float:
+    """Umbral que deja al menos ``target_recall`` de los positivos por encima.
+
+    Es el punto de operación principal preregistrado (sección 7.1 de docs/preregistro.md):
+    en el bucle interno se calcula sobre las puntuaciones FUERA DE FOLD de los positivos y
+    luego se aplica sin cambios al test externo. Equivale a :func:`threshold_for_ppr`
+    restringido a los positivos: con n positivos se toman los ``ceil(target_recall · n)``
+    de mayor puntuación (para 0,90, el percentil 10 de sus puntuaciones).
+
+    Raises:
+        ValueError: si no hay positivos o ``target_recall`` no está en (0, 1].
+    """
+    if not 0.0 < target_recall <= 1.0:
+        raise ValueError("`target_recall` debe estar en (0, 1].")
+    s = _as_binary(s, "s")
+    scores = np.asarray(scores, dtype=float)
+    if not (s == 1).any():
+        raise ValueError("No hay positivos para calibrar el umbral.")
+    return threshold_for_ppr(scores[s == 1], target_recall)
+
+
 def tpr_at_ppr(s: Iterable[int], scores: Iterable[float], target_ppr: float) -> tuple[float, float]:
     """TPR a una P(ŷ = 1) fija, para comparar modelos con umbrales distintos (incluido τ).
 

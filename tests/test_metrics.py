@@ -13,6 +13,7 @@ from perovskite_pu.evaluation.metrics import (
     micro_tpr,
     predicted_positive_rate,
     threshold_for_ppr,
+    threshold_for_recall,
     tpr_at_ppr,
     tpr_ppr_curve,
     true_positive_rate,
@@ -116,3 +117,31 @@ def test_lower_bound_metrics_are_labelled_as_such():
     assert set(out) == {"accuracy_lower_bound", "f1_lower_bound", "roc_auc_lower_bound"}
     # accuracy con U como negativo: aciertos en posiciones 0, 1, 5 -> 3/6
     assert out["accuracy_lower_bound"] == pytest.approx(0.5)
+
+
+def test_threshold_for_recall_keeps_target_fraction_of_positives():
+    """10 positivos con puntuaciones 0,1…1,0: recall 0,90 -> 9 por encima -> umbral 0,2."""
+    pos_scores = [round(0.1 * i, 1) for i in range(1, 11)]
+    s = [1] * 10 + [0, 0]
+    scores = [*pos_scores, 0.95, 0.05]  # los no etiquetados no influyen en el umbral
+    thr = threshold_for_recall(s, scores, 0.90)
+    assert thr == pytest.approx(0.2)
+    assert true_positive_rate(s, (np.asarray(scores) >= thr).astype(int)) == pytest.approx(0.9)
+
+
+def test_threshold_for_recall_rounds_up_to_reach_target():
+    """Con 7 positivos, 0,90 · 7 = 6,3 -> se exigen 7: recall alcanzado ≥ objetivo."""
+    s = [1] * 7
+    scores = [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3]
+    assert threshold_for_recall(s, scores, 0.90) == pytest.approx(0.3)
+
+
+@pytest.mark.parametrize("target", [0.0, 1.5])
+def test_threshold_for_recall_rejects_invalid_target(target):
+    with pytest.raises(ValueError):
+        threshold_for_recall([1, 0], [0.5, 0.1], target)
+
+
+def test_threshold_for_recall_requires_positives():
+    with pytest.raises(ValueError, match="positivos"):
+        threshold_for_recall([0, 0], [0.5, 0.1])

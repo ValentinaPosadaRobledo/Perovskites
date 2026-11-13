@@ -11,6 +11,10 @@ seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 # Es independiente de las semillas de los experimentos y no debe coincidir con ninguna.
 holdout_seed: 2026
 
+# Semilla del bootstrap jerárquico de los tests confirmatorios (F4.2), fijada en el
+# preregistro (sección 9) el 2026-11-13. Distinta de todas las demás.
+bootstrap_seed: 20261113
+
 # Desarrollo incremental: número de semillas para medir tiempos antes de lanzar las 10.
 # Una tarea solo se marca completada con las 10 semillas.
 dev_n_seeds: 3

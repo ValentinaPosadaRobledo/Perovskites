@@ -111,6 +111,10 @@ al. (2022). **No** se propone un algoritmo nuevo.
 ## 2.3 Métricas PU
 
 - **Principal:** TPR sobre positivos reservados en un punto de operación fijo.
+  **Preregistrado (2026-11-13):** umbral calibrado en el bucle interno a recall nominal
+  0,90 (`threshold_for_recall` sobre puntuaciones fuera de fold) y aplicado sin cambios al
+  test externo. Las comparaciones entre modelos (H2, H3) se hacen a igual P(ŷ = 1) en cada
+  fold. δ₁ = δ₂ = 0,05. Detalle en `docs/preregistro.md`, secciones 7–9.
 - **Control:** P(ŷ = 1 | U).
 - **Curvas:** TPR frente a P(ŷ = 1) para todos los modelos y líneas base; TPR a varias
   P(ŷ = 1) fijas (para comparar con τ, cuyo umbral 4,18 viene de fuera).

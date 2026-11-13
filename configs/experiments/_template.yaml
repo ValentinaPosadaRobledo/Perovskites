@@ -20,7 +20,7 @@ splits:
 
 model:
   type: pu_bagging                   # pu_bagging | baseline_<nombre>
-  base_estimator: random_forest      # random_forest | gradient_boosting
+  # El aprendiz base se elige en el bucle interno (search_space.base_estimator).
   fixed_params:
     n_jobs: 1                        # paralelizar SOLO en el nivel semilla × fold
   pu_bagging:
@@ -31,18 +31,23 @@ inner_cv:                            # bucle interno: hiperparámetros + umbral
   n_splits: 3
   search: random
   n_iter: 15                         # presupuesto fijo (~10–20)
-  selection_metric: lee_liu          # solo para ORDENAR configuraciones (no cumple SCAR)
+  # Preregistro 7.1: menor P(ŷ=1) fuera de fold al umbral de recall 0,90
+  # (equivale a máxima Lee–Liu a recall fijo; solo ORDENA configuraciones).
+  selection_metric: min_ppr_at_target_recall
   search_space:
+    base_estimator: [random_forest, gradient_boosting]
     max_depth: [null, 5, 10, 20]
     min_samples_leaf: [1, 2, 5, 10]
     max_features: [sqrt, 0.3, 0.5]
-  threshold:
-    criterion: target_ppr            # target_ppr | max_lee_liu
-    target_ppr: 0.10
+  threshold:                         # punto de operación principal (preregistro 7.1)
+    criterion: target_recall         # percentil de las puntuaciones fuera de fold de positivos
+    target_recall: 0.90              # sensibilidad: 0.80 y 0.95
 
 evaluation:
-  primary_metric: tpr                # TPR en el punto de operación del bucle interno
-  fixed_ppr: [0.05, 0.10, 0.20]      # TPR a P(ŷ=1) fija para comparar con τ
+  primary_metric: tpr                # TPR micro-agregada al umbral calibrado en el bucle interno
+  # Comparaciones entre modelos a igual P(ŷ=1) en cada fold (preregistro 7.2):
+  # H2 a la P(ŷ=1) de τ < 4,18; H3 a la del PU pre_dft en su punto de operación.
+  fixed_ppr: [0.05, 0.10, 0.20]      # métricas secundarias (preregistro 7.3)
   report_lower_bounds: true          # accuracy/F1/AUC con U como negativo, etiquetadas así
 
 execution:

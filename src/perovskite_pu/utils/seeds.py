@@ -31,6 +31,7 @@ class SeedConfig:
 
     seeds: tuple[int, ...]
     holdout_seed: int
+    bootstrap_seed: int
     dev_n_seeds: int = 3
 
     def active_seeds(self, dev_mode: bool = False) -> tuple[int, ...]:
@@ -43,7 +44,7 @@ def load_seed_config(path: Path | str | None = None) -> SeedConfig:
 
     Raises:
         ValueError: si hay semillas repetidas, no enteras o negativas, o si
-            ``holdout_seed`` coincide con alguna semilla de experimento.
+            ``holdout_seed`` o ``bootstrap_seed`` coinciden con otra semilla.
     """
     path = Path(path) if path is not None else CONFIGS_DIR / "seeds.yaml"
     with open(path, encoding="utf-8") as fh:
@@ -51,6 +52,7 @@ def load_seed_config(path: Path | str | None = None) -> SeedConfig:
 
     seeds = raw.get("seeds")
     holdout_seed = raw.get("holdout_seed")
+    bootstrap_seed = raw.get("bootstrap_seed")
     dev_n_seeds = raw.get("dev_n_seeds", 3)
 
     # Validaciones: enteros no negativos y sin duplicados (bool es subclase de int: se excluye).
@@ -60,14 +62,22 @@ def load_seed_config(path: Path | str | None = None) -> SeedConfig:
         raise ValueError("Las semillas deben ser no negativas.")
     if len(set(seeds)) != len(seeds):
         raise ValueError("Hay semillas repetidas en `seeds`.")
-    if not isinstance(holdout_seed, int) or isinstance(holdout_seed, bool):
-        raise ValueError("`holdout_seed` debe ser un entero.")
-    if holdout_seed in seeds:
-        raise ValueError("`holdout_seed` debe ser independiente de las semillas de experimento.")
+    for name, value in (("holdout_seed", holdout_seed), ("bootstrap_seed", bootstrap_seed)):
+        if not isinstance(value, int) or isinstance(value, bool):
+            raise ValueError(f"`{name}` debe ser un entero.")
+        if value in seeds:
+            raise ValueError(f"`{name}` debe ser independiente de las semillas de experimento.")
+    if holdout_seed == bootstrap_seed:
+        raise ValueError("`holdout_seed` y `bootstrap_seed` deben ser distintas.")
     if not 1 <= dev_n_seeds <= len(seeds):
         raise ValueError("`dev_n_seeds` debe estar entre 1 y len(seeds).")
 
-    return SeedConfig(seeds=tuple(seeds), holdout_seed=holdout_seed, dev_n_seeds=dev_n_seeds)
+    return SeedConfig(
+        seeds=tuple(seeds),
+        holdout_seed=holdout_seed,
+        bootstrap_seed=bootstrap_seed,
+        dev_n_seeds=dev_n_seeds,
+    )
 
 
 def spawn_streams(seed: int) -> dict[str, np.random.SeedSequence]:

@@ -40,17 +40,22 @@ def test_project_seed_config():
     assert cfg.seeds == tuple(range(10))
     assert cfg.holdout_seed == 2026
     assert cfg.holdout_seed not in cfg.seeds
+    assert cfg.bootstrap_seed == 20261113  # fijada en el preregistro (sección 9)
+    assert cfg.bootstrap_seed not in (*cfg.seeds, cfg.holdout_seed)
     assert cfg.active_seeds(dev_mode=True) == (0, 1, 2)
 
 
 @pytest.mark.parametrize(
     "content",
     [
-        "seeds: [0, 1, 1]\nholdout_seed: 2026\n",  # repetidas
-        "seeds: [0, 1, 2]\nholdout_seed: 1\n",  # holdout_seed coincide
-        "seeds: []\nholdout_seed: 2026\n",  # vacía
-        "seeds: [0, -1]\nholdout_seed: 2026\n",  # negativa
-        "seeds: [0, 1]\nholdout_seed: 2026\ndev_n_seeds: 5\n",  # dev_n_seeds > len
+        "seeds: [0, 1, 1]\nholdout_seed: 2026\nbootstrap_seed: 7\n",  # repetidas
+        "seeds: [0, 1, 2]\nholdout_seed: 1\nbootstrap_seed: 7\n",  # holdout_seed coincide
+        "seeds: [0, 1, 2]\nholdout_seed: 2026\nbootstrap_seed: 2\n",  # bootstrap coincide
+        "seeds: [0, 1, 2]\nholdout_seed: 2026\nbootstrap_seed: 2026\n",  # iguales entre sí
+        "seeds: [0, 1, 2]\nholdout_seed: 2026\n",  # falta bootstrap_seed
+        "seeds: []\nholdout_seed: 2026\nbootstrap_seed: 7\n",  # vacía
+        "seeds: [0, -1]\nholdout_seed: 2026\nbootstrap_seed: 7\n",  # negativa
+        "seeds: [0, 1]\nholdout_seed: 2026\nbootstrap_seed: 7\ndev_n_seeds: 5\n",  # > len
     ],
 )
 def test_seed_config_validation(tmp_path, content):
