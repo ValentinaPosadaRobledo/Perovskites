@@ -1,0 +1,174 @@
+{
+  "code_commit": "a2f0a73181911d1ec0574b2581eb60e7a02126f7",
+  "code_dirty": false,
+  "identification_table_sha256": "ebe26313fd36b6b8578f1859808df7ee6164a3b1fc537ca2846ccfdbf901ef46",
+  "criteria": {
+    "min_b_o_b_angle_deg": 135.0,
+    "a_site_cn": [
+      8,
+      12
+    ],
+    "lone_pair_a_rule": {
+      "elements": [
+        "Bi",
+        "Pb",
+        "Sn",
+        "Sb",
+        "Tl",
+        "Hg"
+      ],
+      "cutoff_ang": 3.3,
+      "min_o": 8
+    }
+  },
+  "entries_by_class": {
+    "perovskite": 1244,
+    "non_perovskite": 611,
+    "polyanion": 390,
+    "perovskite_borderline": 255,
+    "hexagonal_polytype": 63
+  },
+  "experimental_entries_by_class": {
+    "perovskite": 329,
+    "polyanion": 210,
+    "non_perovskite": 194,
+    "perovskite_borderline": 65,
+    "hexagonal_polytype": 31
+  },
+  "oxidation": {
+    "bv": 1754,
+    "guess": 188,
+    "none_non_polyanion": 231,
+    "ambiguous": 683
+  },
+  "bartel_validation_main": {
+    "n": 317,
+    "recall": 0.9312169312169312,
+    "tp": 176,
+    "fn": 13,
+    "fp": 2,
+    "fp_rate": 0.015625,
+    "fp_list": [
+      "SrSiO3",
+      "TiMnO3"
+    ],
+    "missed": [
+      "CsIO3",
+      "KIO3",
+      "LaErO3",
+      "LaHoO3",
+      "LaYO3",
+      "NaIO3",
+      "RbIO3",
+      "RbNbO3",
+      "RbTaO3",
+      "ScBiO3",
+      "ScCrO3",
+      "TlIO3",
+      "YGaO3"
+    ],
+    "positive_compositions": 223
+  },
+  "bartel_validation_sens_strict140": {
+    "n": 317,
+    "recall": 0.8359788359788359,
+    "tp": 158,
+    "fn": 31,
+    "fp": 2,
+    "fp_rate": 0.015625,
+    "fp_list": [
+      "SrSiO3",
+      "TiMnO3"
+    ],
+    "missed": [
+      "AlBiO3",
+      "CaPbO3",
+      "CsIO3",
+      "DyScO3",
+      "ErMnO3",
+      "ErVO3",
+      "GdScO3",
+      "HoMnO3",
+      "HoScO3",
+      "InBiO3",
+      "KIO3",
+      "LaErO3",
+      "LaHoO3",
+      "LaTmO3",
+      "LaYO3",
+      "LuCrO3",
+      "LuFeO3",
+      "LuMnO3",
+      "NaIO3",
+      "PrLuO3",
+      "RbIO3",
+      "RbNbO3",
+      "RbTaO3",
+      "ScBiO3",
+      "ScCrO3",
+      "TbRhO3",
+      "TiHgO3",
+      "TlIO3",
+      "TmFeO3",
+      "YGaO3",
+      "YScO3"
+    ],
+    "positive_compositions": 199
+  },
+  "conflicts_bartel_gu": [
+    {
+      "type": "bartel_no_gu_si",
+      "nuestra_clase": "non_perovskite",
+      "n": 1
+    },
+    {
+      "type": "bartel_no_gu_si",
+      "nuestra_clase": "perovskite",
+      "n": 2
+    },
+    {
+      "type": "bartel_no_gu_si",
+      "nuestra_clase": "perovskite_borderline",
+      "n": 2
+    },
+    {
+      "type": "bartel_no_gu_si",
+      "nuestra_clase": "polyanion",
+      "n": 11
+    },
+    {
+      "type": "bartel_si_gu_virtual",
+      "nuestra_clase": "non_perovskite",
+      "n": 3
+    },
+    {
+      "type": "bartel_si_gu_virtual",
+      "nuestra_clase": "perovskite",
+      "n": 5
+    },
+    {
+      "type": "bartel_si_gu_virtual",
+      "nuestra_clase": "polyanion",
+      "n": 1
+    },
+    {
+      "type": "bartel_si_gu_virtual",
+      "nuestra_clase": "sin entrada experimental en MP",
+      "n": 32
+    }
+  ],
+  "prototype_vs_connectivity": {
+    "coincide con prototipo": {
+      "hexagonal_polytype": 0,
+      "non_perovskite": 2,
+      "perovskite": 1164,
+      "perovskite_borderline": 84
+    },
+    "no coincide": {
+      "hexagonal_polytype": 63,
+      "non_perovskite": 609,
+      "perovskite": 80,
+      "perovskite_borderline": 171
+    }
+  }
+}

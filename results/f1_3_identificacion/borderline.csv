@@ -1,0 +1,256 @@
+material_id,legacy_id,reduced_formula,spacegroup_symbol,experimental,a_element,b_element,a_cn_min,a_cn_max,a_o_within_3p3,bob_angle_min,matches_cubic_prototype,reasons
+mp-aaabeucu,mp-540872,AgSbO3,Fd-3m,True,Ag,Sb,6.0,6.0,6.0,134.26171573904733,False,ambos cationes octaédricos;ángulo B–O–B mínimo 134.3°;NC(A) 6–6
+mp-aaaaaexo,mp-3316,BaCeO3,Imma,True,Ba,Ce,7.0,7.0,7.0,153.9617350702274,True,NC(A) 7–7
+mp-aaabfyty,mp-561598,BaPbO3,Pm-3m,True,Pb,Ba,0.0,0.0,0.0,180.0,True,NC(A) 0–0
+mp-aaaaakft,mp-6909,BaPrO3,Imma,True,Ba,Pr,7.0,7.0,5.0,148.04973982493303,True,NC(A) 7–7
+mp-aaaaaimp,mp-5735,BaTbO3,Imma,True,Ba,Tb,7.0,7.0,7.0,153.50973416811604,True,NC(A) 7–7
+mp-aaacqpce,mp-1205364,CaTiO3,Cmcm,True,Ca,Ti,4.0,10.0,12.0,152.6207098445825,True,NC(A) 4–10
+mp-aaaabhiy,mp-22540,CeGaO3,Pm-3m,True,Ga,Ce,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaaabchd,mp-19113,CoTeO3,Pnma,True,Te,Co,3.0,3.0,8.0,127.93277563168724,False,ángulo B–O–B mínimo 127.9°;NC(A) 3–3
+mp-aaabraop,mp-756147,CrInO3,Pnma,True,In,Cr,6.0,6.0,9.0,137.9356217732595,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaacjjer,mp-1078341,EuNbO3,Imma,True,Eu,Nb,5.0,5.0,12.0,156.5800227481821,True,NC(A) 5–5
+mp-aaabfruy,mp-556892,InBiO3,Pna2_1,True,Bi,In,6.0,6.0,6.0,138.7804135682377,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaackxvn,mp-1105819,InRhO3,Pnma,True,In,Rh,6.0,6.0,8.0,134.58704356511797,False,ambos cationes octaédricos;ángulo B–O–B mínimo 134.6°;NC(A) 6–6
+mp-aaacqlxs,mp-1203220,InRhO3,P2_1/c,True,In,Rh,6.0,6.0,8.0,132.74622918768597,False,ambos cationes octaédricos;ángulo B–O–B mínimo 132.7°;NC(A) 6–6
+mp-aaaabscd,mp-29799,KBiO3,Pn-3,True,Bi,K,6.0,6.0,6.0,94.32812330991317,False,ambos cationes octaédricos;ángulo B–O–B mínimo 94.3°;NC(A) 6–6
+mp-aaabkkmd,mp-639811,KIrO3,Pn-3,True,Ir,K,6.0,6.0,6.0,93.12059990817676,False,ambos cationes octaédricos;ángulo B–O–B mínimo 93.1°;NC(A) 6–6
+mp-aaaaavpv,mp-14607,KSbO3,Pn-3,True,Sb,K,6.0,6.0,6.0,92.20093222026856,False,ambos cationes octaédricos;ángulo B–O–B mínimo 92.2°;NC(A) 6–6
+mp-aaaaaycr,mp-16293,KSbO3,Fd-3m,True,K,Sb,6.0,6.0,6.0,136.36180005333736,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaaaaldy,mp-7538,LaErO3,Pnma,True,La,Er,6.0,6.0,8.0,137.6789926054299,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaaaaood,mp-9831,LaGaO3,Pm-3m,True,Ga,La,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaabrapi,mp-756166,LaHoO3,Pnma,True,La,Ho,6.0,6.0,8.0,136.93291669298367,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaaaapld,mp-10429,LaYO3,Pnma,True,La,Y,6.0,6.0,8.0,135.79570077853387,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaaaafnn,mp-3731,LiNbO3,R3c,True,Li,Nb,6.0,6.0,6.0,137.70712093154037,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaabfllk,mp-552588,LiNbO3,R-3c,True,Li,Nb,3.0,3.0,12.0,143.29711892841016,True,NC(A) 3–3
+mp-aaacjiyu,mp-1078188,LiOsO3,R-3c,True,Li,Os,3.0,3.0,12.0,140.8378387604842,False,NC(A) 3–3
+mp-aaacjjfi,mp-1078358,LiOsO3,R3c,True,Li,Os,6.0,6.0,12.0,139.9569556124038,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaaaamcz,mp-8189,LiReO3,R3c,True,Li,Re,6.0,6.0,12.0,145.2593958268777,True,ambos cationes octaédricos;NC(A) 6–6
+mp-aaaaafla,mp-3666,LiTaO3,R3c,True,Li,Ta,6.0,6.0,9.0,140.4328374897979,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaackxau,mp-1105280,LiTaO3,Pnma,True,Ta,Li,6.0,6.0,7.0,121.43634408981131,False,ambos cationes octaédricos;ángulo B–O–B mínimo 121.4°;NC(A) 6–6
+mp-aaackxco,mp-1105326,LiTaO3,Pnma,True,Ta,Li,4.0,4.0,6.0,132.00312654810713,False,ángulo B–O–B mínimo 132.0°;NC(A) 4–4
+mp-aaaaalvz,mp-8007,LiUO3,R3c,True,Li,U,3.0,3.0,6.0,136.41763114565248,False,NC(A) 3–3
+mp-aaacqpcg,mp-1205366,LuRhO3,Pnma,True,Lu,Rh,8.0,8.0,9.0,132.6899738871212,False,ángulo B–O–B mínimo 132.7°
+mp-aaaaagrq,mp-4514,NaNbO3,R3c,True,Na,Nb,6.0,6.0,12.0,153.4367951940281,True,ambos cationes octaédricos;NC(A) 6–6
+mp-aaaaagyb,mp-4681,NaNbO3,Pmc2_1,True,Na,Nb,3.0,8.0,10.0,148.40861885420236,True,NC(A) 3–8
+mp-aaaaahaq,mp-4748,NaNbO3,Cmcm,True,Na,Nb,4.0,10.0,12.0,154.10352310567646,True,NC(A) 4–10
+mp-aaabfuuy,mp-558920,NaNbO3,Pca2_1,True,Na,Nb,3.0,8.0,10.0,147.29844697387057,True,NC(A) 3–8
+mp-aaacpqeq,mp-1188528,NaNbO3,Pna2_1,True,Na,Nb,6.0,6.0,11.0,149.81182067325412,True,ambos cationes octaédricos;NC(A) 6–6
+mp-aaacqayl,mp-1195803,NaNbO3,Pnma,True,Na,Nb,3.0,11.0,12.0,151.0494366283491,True,NC(A) 3–11
+mp-aaaabdpr,mp-20011,NaSbO3,Fd-3m,True,Na,Sb,6.0,6.0,6.0,132.42323494474994,False,ambos cationes octaédricos;ángulo B–O–B mínimo 132.4°;NC(A) 6–6
+mp-aaaaagyt,mp-4699,NaTaO3,Cmcm,True,Na,Ta,4.0,10.0,12.0,153.614296368323,True,NC(A) 4–10
+mp-aaacqmht,mp-1203481,NbAgO3,Pmc2_1,True,Ag,Nb,3.0,8.0,10.0,149.75956617408815,True,NC(A) 3–8
+mp-aaaaaoog,mp-9834,NdGaO3,Pm-3m,True,Ga,Nd,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaackxrq,mp-1105718,NiBiO3,P-1,True,Bi,Ni,6.0,7.0,8.0,132.59971488585603,False,A con par libre: 8 O a < 3.3 Å;ángulo B–O–B mínimo 132.6°
+mp-aaabmths,mp-680932,OsPbO3,Fd-3m,True,Pb,Os,6.0,6.0,6.0,137.00176424719947,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaaaaoof,mp-9833,PrGaO3,Pm-3m,True,Ga,Pr,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaabfpmf,mp-555313,ScBiO3,Cc,True,Bi,Sc,4.0,5.0,7.0,144.4972731803001,True,NC(A) 4–5
+mp-aaaabcbh,mp-18961,ScCrO3,Pnma,True,Sc,Cr,6.0,6.0,9.0,134.11396513674583,False,ambos cationes octaédricos;ángulo B–O–B mínimo 134.1°;NC(A) 6–6
+mp-aaackxvf,mp-1105811,ScMnO3,P2_1/c,True,Sc,Mn,7.0,7.0,8.0,129.477623422502,False,ángulo B–O–B mínimo 129.5°;NC(A) 7–7
+mp-aaacqcog,mp-1196890,ScRhO3,P2_1/c,True,Sc,Rh,6.0,6.0,8.0,129.93812186161455,False,ambos cationes octaédricos;ángulo B–O–B mínimo 129.9°;NC(A) 6–6
+mp-aaabcsjn,mp-504543,SnPbO3,Fd-3m,True,Pb,Sn,6.0,6.0,6.0,130.67449717810496,False,ambos cationes octaédricos;ángulo B–O–B mínimo 130.7°;NC(A) 6–6
+mp-aaaaagxt,mp-4673,SrHfO3,Cmcm,True,Sr,Hf,4.0,10.0,10.0,156.29056507162068,True,NC(A) 4–10
+mp-aaaabehc,mp-20464,SrPrO3,Pnma,True,Sr,Pr,6.0,6.0,6.0,135.56663844086464,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaaaataw,mp-12866,SrSnO3,Imma,True,Sr,Sn,5.0,5.0,12.0,156.4113957524558,True,NC(A) 5–5
+mp-aaacjkqw,mp-1079334,SrTcO3,Imma,True,Sr,Tc,5.0,5.0,12.0,158.0015681064239,True,NC(A) 5–5
+mp-aaaaafjm,mp-3626,SrZrO3,Cmcm,True,Sr,Zr,4.0,10.0,10.0,153.61015580645292,True,NC(A) 4–10
+mp-aaabixkk,mp-613402,SrZrO3,Pm-3m,True,Zr,Sr,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaabncoz,mp-687205,TcPbO3,Fd-3m,True,Pb,Tc,6.0,6.0,6.0,137.14327298100744,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaaabhbl,mp-22345,TiCdO3,Pm-3m,True,Ti,Cd,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaaabcne,mp-19270,TiFeO3,R3c,True,Fe,Ti,6.0,6.0,6.0,136.716837100034,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaaabcrg,mp-19376,TiMnO3,R3c,True,Mn,Ti,6.0,6.0,9.0,140.91934465719763,True,ambos cationes octaédricos;NC(A) 6–6
+mp-aaacjjjq,mp-1078470,TiZnO3,R3c,True,Zn,Ti,6.0,6.0,6.0,138.70620994628788,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaackwwl,mp-1105167,VCuO3,Im-3,True,Cu,V,4.0,12.0,12.0,141.59024663113198,True,NC(A) 4–12
+mp-aaacjjef,mp-1078329,ZnPbO3,R3c,True,Pb,Zn,6.0,6.0,6.0,133.2966552321617,False,ambos cationes octaédricos;ángulo B–O–B mínimo 133.3°;NC(A) 6–6
+mp-aaaaatsw,mp-13334,ZnSnO3,R3c,True,Zn,Sn,6.0,6.0,6.0,135.39677050946702,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaaabecf,mp-20337,ZrPbO3,Amm2,True,Pb,Zr,7.0,7.0,7.0,162.2942114440937,True,NC(A) 7–7
+mp-aaabkvyb,mp-647557,ZrPbO3,Pba2,True,Pb,Zr,3.0,7.0,7.0,156.21230944313643,True,NC(A) 3–7
+mp-aaabseen,mp-776165,AgAuO3,Fd-3m,False,Ag,Au,6.0,6.0,6.0,125.3765877033094,False,ambos cationes octaédricos;ángulo B–O–B mínimo 125.4°;NC(A) 6–6
+mp-aaabseeq,mp-776168,AgRuO3,Fd-3m,False,Ag,Ru,6.0,6.0,6.0,135.84540022302613,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaactihc,mp-1253488,AlAgO3,Pnma,False,Al,Ag,4.0,4.0,4.0,120.47935434789062,False,ángulo B–O–B mínimo 120.5°;NC(A) 4–4
+mp-aaadcsho,mp-1418444,AlAgO3,Pm-3m,False,Al,Ag,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaacynbm,mp-1344602,AlBiO3,Pnma,False,Al,Bi,4.0,4.0,4.0,110.35324811984755,False,ángulo B–O–B mínimo 110.4°;NC(A) 4–4
+mp-aaadckzv,mp-1413511,AlBiO3,Pm-3m,False,Al,Bi,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaadaloy,mp-1378752,AlCoO3,Pnma,False,Al,Co,6.0,6.0,9.0,130.86253194385685,False,ambos cationes octaédricos;ángulo B–O–B mínimo 130.9°;NC(A) 6–6
+mp-aaacyoip,mp-1345463,AlCrO3,Pnma,False,Al,Cr,4.0,4.0,8.0,126.99280712903563,False,ángulo B–O–B mínimo 127.0°;NC(A) 4–4
+mp-aaacyrbx,mp-1347317,AlCuO3,Pnma,False,Al,Cu,6.0,6.0,7.0,121.84918331307722,False,ambos cationes octaédricos;ángulo B–O–B mínimo 121.8°;NC(A) 6–6
+mp-aaabseec,mp-776154,AlFeO3,Pnma,False,Fe,Al,6.0,6.0,9.0,135.6539672382689,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaactjll,mp-1254277,AlFeO3,Pnma,False,Al,Fe,4.0,4.0,10.0,129.76980933396075,False,ángulo B–O–B mínimo 129.8°;NC(A) 4–4
+mp-aaactrqo,mp-1259818,AlFeO3,P2_1/c,False,Al,Fe,4.0,4.0,8.0,123.56409667958616,False,ángulo B–O–B mínimo 123.6°;NC(A) 4–4
+mp-aaactzgo,mp-1264966,AlFeO3,P-1,False,Al,Fe,4.0,4.0,8.0,123.09488597161116,False,ángulo B–O–B mínimo 123.1°;NC(A) 4–4
+mp-aaabrbji,mp-756686,AlGaO3,Pnma,False,Ga,Al,4.0,4.0,10.0,135.6174734207502,False,NC(A) 4–4
+mp-aaadaedv,mp-1373731,AlMoO3,Pnma,False,Al,Mo,4.0,4.0,8.0,120.44966130549224,False,ángulo B–O–B mínimo 120.4°;NC(A) 4–4
+mp-aaaddpds,mp-1433892,AlMoO3,Pm-3m,False,Al,Mo,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaadaivv,mp-1376903,AlNiO3,Pnma,False,Al,Ni,6.0,6.0,9.0,127.1736381957204,False,ambos cationes octaédricos;ángulo B–O–B mínimo 127.2°;NC(A) 6–6
+mp-aaadaatz,mp-1371447,AlSbO3,Pnma,False,Al,Sb,4.0,4.0,4.0,113.35765475250163,False,ángulo B–O–B mínimo 113.4°;NC(A) 4–4
+mp-aaadcwvn,mp-1421511,AlSbO3,Pm-3m,False,Al,Sb,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaadddpu,mp-1426094,AlSnO3,Pm-3m,False,Al,Sn,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaactanr,mp-1248251,AlVO3,Pnma,False,Al,V,4.0,4.0,8.0,125.57680724561204,False,ángulo B–O–B mínimo 125.6°;NC(A) 4–4
+mp-aaachons,mp-1046804,AlWO3,Pnma,False,Al,W,4.0,4.0,4.0,126.98158387734127,False,ángulo B–O–B mínimo 127.0°;NC(A) 4–4
+mp-aaadcrcz,mp-1417649,AlWO3,Pm-3m,False,Al,W,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaaabduf,mp-20129,BaTbO3,Pnma,False,Ba,Tb,5.0,5.0,7.0,153.76490675285388,True,NC(A) 5–5
+mp-aaacphst,mp-1182811,BaTbO3,P-1,False,Ba,Tb,7.0,7.0,7.0,148.27397713052798,True,NC(A) 7–7
+mp-aaabcsqd,mp-504715,BaTiO3,Pm-3m,False,Ti,Ba,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaabraev,mp-755893,CaBiO3,P2_1/c,False,Ca,Bi,8.0,8.0,8.0,134.74236936767082,False,ángulo B–O–B mínimo 134.7°
+mp-aaacpbir,mp-1178493,CaBiO3,Pnma,False,Bi,Ca,4.0,4.0,8.0,123.67045414226904,False,A con par libre: 8 O a < 3.3 Å;ángulo B–O–B mínimo 123.7°
+mp-aaadalxd,mp-1378965,CaBiO3,Pnma,False,Ca,Bi,6.0,6.0,8.0,135.44740816218368,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaabrawz,mp-756365,CaCeO3,Pnma,False,Ca,Ce,6.0,6.0,8.0,135.67821911779234,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaabrbke,mp-756708,CaPrO3,Pnma,False,Ca,Pr,6.0,6.0,6.0,121.1409976275365,False,ambos cationes octaédricos;ángulo B–O–B mínimo 121.1°;NC(A) 6–6
+mp-aaabfqmt,mp-556003,CaTiO3,Imma,False,Ca,Ti,5.0,5.0,12.0,153.15409095112048,True,NC(A) 5–5
+mp-aaaddllm,mp-1431390,CaWO3,Cm,False,Ca,W,7.0,7.0,11.0,171.8134799895155,True,NC(A) 7–7
+mp-aaabsdzc,mp-776024,CaZrO3,Pba2,False,Ca,Zr,5.0,6.0,7.0,142.48855193573286,True,NC(A) 5–6
+mp-aaacrbpc,mp-1213812,CeCdO3,Cmcm,False,Cd,Ce,4.0,6.0,6.0,135.9003150020354,False,NC(A) 4–6
+mp-aaacrcnf,mp-1214439,CePbO3,Cmcm,False,Ce,Pb,6.0,6.0,6.0,111.84548401495915,False,ambos cationes octaédricos;ángulo B–O–B mínimo 111.8°;NC(A) 6–6
+mp-aaacrbpq,mp-1213826,CeRhO3,Pnma,False,Ce,Rh,8.0,8.0,8.0,134.5241903055331,False,ángulo B–O–B mínimo 134.5°
+mp-aaaacffx,mp-38685,CeSbO3,Fd-3m,False,Sb,Ce,6.0,6.0,6.0,117.5624317056994,False,ambos cationes octaédricos;ángulo B–O–B mínimo 117.6°;NC(A) 6–6
+mp-aaacpjds,mp-1183772,CoMoO3,Pm-3m,False,Co,Mo,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaabqvir,mp-752613,CoSnO3,Pnma,False,Co,Sn,4.0,4.0,8.0,133.1498763632956,False,ángulo B–O–B mínimo 133.1°;NC(A) 4–4
+mp-aaacrubx,mp-1226313,CrMoO3,R3,False,Mo,Cr,6.0,6.0,6.0,141.1499830086358,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaacpjjt,mp-1183929,CsNaO3,Pm-3m,False,Na,Cs,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaacqrnc,mp-1207000,DyBiO3,Pm-3m,False,Dy,Bi,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaacpbdo,mp-1178360,DyInO3,Pnma,False,Dy,In,6.0,6.0,8.0,132.15163637008877,False,ambos cationes octaédricos;ángulo B–O–B mínimo 132.2°;NC(A) 6–6
+mp-aaabrbaz,mp-756469,DyLuO3,Pnma,False,Dy,Lu,4.0,4.0,8.0,133.36469456062312,False,ángulo B–O–B mínimo 133.4°;NC(A) 4–4
+mp-aaabqvbv,mp-752435,DyTmO3,Pnma,False,Dy,Tm,6.0,6.0,8.0,131.5713870162203,False,ambos cationes octaédricos;ángulo B–O–B mínimo 131.6°;NC(A) 6–6
+mp-aaabqyuh,mp-754943,ErBiO3,R3c,False,Bi,Er,6.0,6.0,6.0,140.6547601865042,True,ambos cationes octaédricos;NC(A) 6–6
+mp-aaabqxsa,mp-754208,ErInO3,Pnma,False,Er,In,6.0,6.0,8.0,130.9565848432995,False,ambos cationes octaédricos;ángulo B–O–B mínimo 131.0°;NC(A) 6–6
+mp-aaabshcx,mp-778151,ErLuO3,Pnma,False,Er,Lu,4.0,4.0,8.0,132.4747582836779,False,ángulo B–O–B mínimo 132.5°;NC(A) 4–4
+mp-aaacraks,mp-1213022,ErRhO3,Pnma,False,Er,Rh,8.0,8.0,9.0,134.832251267918,False,ángulo B–O–B mínimo 134.8°
+mp-aaacfnyq,mp-1011260,EuFeO3,Imma,False,Eu,Fe,7.0,7.0,12.0,152.40840088240478,True,NC(A) 7–7
+mp-aaacpaxy,mp-1178214,FeSnO3,Pnma,False,Fe,Sn,4.0,4.0,8.0,134.851677507482,False,ángulo B–O–B mínimo 134.9°;NC(A) 4–4
+mp-aaacrabi,mp-1212778,GdInO3,Pnma,False,Gd,In,8.0,8.0,8.0,134.06119564475566,False,ángulo B–O–B mínimo 134.1°
+mp-aaabrakc,mp-756030,GdTmO3,Pnma,False,Gd,Tm,8.0,8.0,8.0,133.96028620620504,False,ángulo B–O–B mínimo 134.0°
+mp-aaabqwsc,mp-753534,HfCoO3,Pnma,False,Co,Hf,4.0,4.0,8.0,133.37849084699695,False,ángulo B–O–B mínimo 133.4°;NC(A) 4–4
+mp-aaabravi,mp-756322,HfCrO3,Pnma,False,Hf,Cr,6.0,6.0,6.0,122.00787419780649,False,ambos cationes octaédricos;ángulo B–O–B mínimo 122.0°;NC(A) 6–6
+mp-aaabqxby,mp-753790,HfFeO3,Pnma,False,Hf,Fe,6.0,6.0,6.0,124.56252662782684,False,ambos cationes octaédricos;ángulo B–O–B mínimo 124.6°;NC(A) 6–6
+mp-aaabqxem,mp-753856,HfFeO3,Pnma,False,Fe,Hf,4.0,4.0,8.0,135.57569178235332,False,NC(A) 4–4
+mp-aaacpayd,mp-1178219,HfNiO3,P2_1/c,False,Hf,Ni,6.0,6.0,9.0,130.26545947112024,False,ambos cationes octaédricos;ángulo B–O–B mínimo 130.3°;NC(A) 6–6
+mp-aaabrwhi,mp-770830,HoBiO3,Pnma,False,Bi,Ho,8.0,8.0,8.0,134.4033616549661,False,ángulo B–O–B mínimo 134.4°
+mp-aaacpavy,mp-1178162,HoBiO3,R3c,False,Bi,Ho,6.0,6.0,6.0,139.8298813215022,True,ambos cationes octaédricos;NC(A) 6–6
+mp-aaabsfka,mp-776984,HoInO3,Pnma,False,Ho,In,6.0,6.0,8.0,131.575486681045,False,ambos cationes octaédricos;ángulo B–O–B mínimo 131.6°;NC(A) 6–6
+mp-aaabrvto,mp-770472,HoLuO3,Pnma,False,Ho,Lu,6.0,6.0,8.0,132.71538262793257,False,ambos cationes octaédricos;ángulo B–O–B mínimo 132.7°;NC(A) 6–6
+mp-aaacpawo,mp-1178178,HoTmO3,Pnma,False,Ho,Tm,6.0,6.0,8.0,130.95313384342995,False,ambos cationes octaédricos;ángulo B–O–B mínimo 131.0°;NC(A) 6–6
+mp-aaacqzfj,mp-1212207,InRhO3,Pnma,False,Rh,In,6.0,6.0,8.0,123.78298362836354,False,ambos cationes octaédricos;ángulo B–O–B mínimo 123.8°;NC(A) 6–6
+mp-aaabrsoi,mp-768308,LaAgO3,R3c,False,La,Ag,6.0,6.0,9.0,146.87009830545142,True,ambos cationes octaédricos;NC(A) 6–6
+mp-aaacphki,mp-1182592,LaAlO3,P6/mmm,False,Al,La,0.0,0.0,0.0,180.0,False,NC(A) 0–0
+mp-aaabrsok,mp-768310,LaBiO3,R3c,False,La,Bi,6.0,6.0,6.0,132.90373586706414,False,ambos cationes octaédricos;ángulo B–O–B mínimo 132.9°;NC(A) 6–6
+mp-aaabdbix,mp-510611,LaCoO3,Pm-3m,False,Co,La,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaadhpgm,mp-1504268,LaCoO3,Imma,False,La,Co,7.0,7.0,12.0,154.73120943939364,True,NC(A) 7–7
+mp-aaabratk,mp-756272,LaDyO3,Pna2_1,False,La,Dy,7.0,7.0,8.0,136.73112425329046,False,NC(A) 7–7
+mp-aaabilmi,mp-605340,LaFeO3,Pmn2_1,False,Fe,La,3.0,3.0,4.0,125.1469360842149,False,ángulo B–O–B mínimo 125.1°;NC(A) 3–3
+mp-aaabfryl,mp-556983,LaGaO3,Imma,False,La,Ga,5.0,5.0,12.0,153.81446181080074,True,NC(A) 5–5
+mp-aaacperb,mp-1180739,LaGaO3,Pnma,False,La,Ga,5.0,5.0,12.0,153.91360311758217,True,NC(A) 5–5
+mp-aaabrvrh,mp-770413,LaHoO3,P2_1/c,False,La,Ho,7.0,7.0,7.0,140.45162426033409,False,NC(A) 7–7
+mp-aaabshok,mp-778450,LaSmO3,Pna2_1,False,La,Sm,6.0,6.0,7.0,132.964055445505,False,ambos cationes octaédricos;ángulo B–O–B mínimo 133.0°;NC(A) 6–6
+mp-aaabmjoz,mp-674361,LiNbO3,P1,False,Li,Nb,6.0,6.0,6.0,139.12064429397174,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaabmkqf,mp-675069,LiNbO3,P1,False,Li,Nb,6.0,6.0,6.0,138.39566795950435,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaabmnas,mp-676694,LiNbO3,P1,False,Li,Nb,6.0,6.0,6.0,138.72908329072814,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaabmzyb,mp-685413,LiNbO3,P1,False,Li,Nb,4.0,6.0,6.0,120.21017229671158,False,ángulo B–O–B mínimo 120.2°;NC(A) 4–6
+mp-aaabnawv,mp-686057,LiNbO3,P1,False,Li,Nb,6.0,6.0,6.0,138.84463128523606,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaabseci,mp-776108,LiNbO3,Pbcm,False,Li,Nb,3.0,8.0,9.0,136.45673298315813,False,NC(A) 3–8
+mp-aaacpljb,mp-1185263,LiPaO3,Pm-3m,False,Li,Pa,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaabqvjo,mp-752636,LiSbO3,P2_13,False,Li,Sb,6.0,6.0,6.0,134.21795768316187,False,ambos cationes octaédricos;ángulo B–O–B mínimo 134.2°;NC(A) 6–6
+mp-aaabxcli,mp-862870,LiTcO3,Pm-3m,False,Li,Tc,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaabfbgy,mp-545712,LiUO3,Pm-3m,False,Li,U,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaacoykb,mp-1176501,LuBiO3,R3c,False,Bi,Lu,6.0,6.0,6.0,142.7162519271258,True,ambos cationes octaédricos;NC(A) 6–6
+mp-aaabseuz,mp-776593,LuScO3,Pnma,False,Lu,Sc,8.0,8.0,8.0,134.58208592571867,False,ángulo B–O–B mínimo 134.6°
+mp-aaadaiuh,mp-1376863,MgBiO3,Pnma,False,Mg,Bi,4.0,4.0,8.0,125.36795959656052,False,ángulo B–O–B mínimo 125.4°;NC(A) 4–4
+mp-aaacykct,mp-1342607,MgMoO3,Pnma,False,Mg,Mo,4.0,4.0,8.0,134.11089396386876,False,ángulo B–O–B mínimo 134.1°;NC(A) 4–4
+mp-aaacyjmg,mp-1342178,MgSbO3,P2_1/m,False,Mg,Sb,4.0,4.0,8.0,125.8421306101812,False,ángulo B–O–B mínimo 125.8°;NC(A) 4–4
+mp-aaacyqyj,mp-1347225,MgSbO3,P2_1/c,False,Mg,Sb,4.0,4.0,8.0,127.72377659456403,False,ángulo B–O–B mínimo 127.7°;NC(A) 4–4
+mp-aaabruci,mp-769348,MgSnO3,Pnma,False,Mg,Sn,4.0,4.0,8.0,132.38376186684755,False,ángulo B–O–B mínimo 132.4°;NC(A) 4–4
+mp-aaacxmht,mp-1326513,MgWO3,Pnma,False,Mg,W,4.0,4.0,8.0,133.44321189836927,False,ángulo B–O–B mínimo 133.4°;NC(A) 4–4
+mp-aaadclhj,mp-1413707,MgWO3,Cm,False,Mg,W,5.0,5.0,5.0,161.7304019429205,False,NC(A) 5–5
+mp-aaacfwlk,mp-1017000,MgZrO3,Pm-3m,False,Mg,Zr,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaaczxdo,mp-1368992,MnAlO3,Pnma,False,Al,Mn,4.0,4.0,8.0,123.99705632533271,False,ángulo B–O–B mínimo 124.0°;NC(A) 4–4
+mp-aaabnija,mp-691106,MnSnO3,R3c,False,Mn,Sn,6.0,6.0,6.0,138.4413157110549,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaacoygv,mp-1176417,MnTeO3,Pnma,False,Te,Mn,3.0,3.0,8.0,124.5517521691278,False,ángulo B–O–B mínimo 124.6°;NC(A) 3–3
+mp-aaacqwxe,mp-1210642,MnTeO3,Pnma,False,Mn,Te,4.0,4.0,8.0,130.08618900768232,False,ángulo B–O–B mínimo 130.1°;NC(A) 4–4
+mp-aaacqekk,mp-1198142,NaNbO3,Pmmn,False,Na,Nb,4.0,10.0,12.0,158.33841877956883,True,NC(A) 4–10
+mp-aaacqgof,mp-1199593,NaNbO3,Pmmn,False,Na,Nb,4.0,12.0,12.0,156.75024288010135,True,NC(A) 4–12
+mp-aaacqman,mp-1203293,NaNbO3,Pnma,False,Na,Nb,7.0,10.0,12.0,154.20471185155844,True,NC(A) 7–10
+mp-aaabqypm,mp-754818,NaTaO3,Fd-3m,False,Na,Ta,6.0,6.0,6.0,136.8565228106874,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaaabyfc,mp-33932,NbHO3,P1,False,H,Nb,1.0,1.0,7.0,133.992826687678,False,ángulo B–O–B mínimo 134.0°;NC(A) 1–1
+mp-aaabjqvg,mp-626528,NbHO3,P1,False,H,Nb,1.0,1.0,7.0,135.20145567616078,False,NC(A) 1–1
+mp-aaabjqvo,mp-626536,NbHO3,P1,False,H,Nb,1.0,1.0,7.0,135.32509433948695,False,NC(A) 1–1
+mp-aaabrctw,mp-757636,NbTlO3,P1,False,Tl,Nb,6.0,6.0,6.0,137.5774999947123,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaackrjy,mp-1101462,NbTlO3,Cc,False,Tl,Nb,6.0,6.0,6.0,137.66767481451492,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaabrwsx,mp-771131,NdZrO3,C2/m,False,Nd,Zr,5.0,5.0,8.0,144.61031105777909,True,NC(A) 5–5
+mp-aaackrte,mp-1101702,NdZrO3,Pbam,False,Nd,Zr,5.0,5.0,6.0,142.34523737332051,True,NC(A) 5–5
+mp-aaaabldg,mp-25096,NiBiO3,P2_1/m,False,Bi,Ni,8.0,8.0,8.0,133.77956606539053,False,ángulo B–O–B mínimo 133.8°
+mp-aaacjjrg,mp-1078668,NiPbO3,R3c,False,Pb,Ni,6.0,6.0,6.0,140.43063456560574,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaacpmps,mp-1186112,NiPtO3,Pm-3m,False,Ni,Pt,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaacqvre,mp-1209810,NiTeO3,Pnma,False,Te,Ni,3.0,3.0,8.0,128.93456340591374,False,ángulo B–O–B mínimo 128.9°;NC(A) 3–3
+mp-aaacqvxr,mp-1209979,NiTeO3,Pnma,False,Ni,Te,4.0,4.0,8.0,126.69981491473472,False,ángulo B–O–B mínimo 126.7°;NC(A) 4–4
+mp-aaacpnhj,mp-1186571,PmEuO3,Pm-3m,False,Eu,Pm,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaacdney,mp-975596,PuIrO3,Pm-3m,False,Ir,Pu,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaabjqhy,mp-626182,SbHO3,I4_1/amd,False,H,Sb,1.0,1.0,5.0,131.73370476883778,False,ángulo B–O–B mínimo 131.7°;NC(A) 1–1
+mp-aaabjqji,mp-626218,SbHO3,Fdd2,False,H,Sb,1.0,1.0,7.0,129.88277816261572,False,ángulo B–O–B mínimo 129.9°;NC(A) 1–1
+mp-aaacdjtl,mp-973269,SbTeO3,Pm-3m,False,Te,Sb,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaabqxkj,mp-754009,ScBiO3,R3c,False,Bi,Sc,6.0,6.0,6.0,149.11309540424017,True,ambos cationes octaédricos;NC(A) 6–6
+mp-aaabqxou,mp-754124,ScCoO3,Pnma,False,Sc,Co,6.0,6.0,9.0,134.31012589848882,False,ambos cationes octaédricos;ángulo B–O–B mínimo 134.3°;NC(A) 6–6
+mp-aaadpnqn,mp-1643785,ScCoO3,P2_1/c,False,Sc,Co,8.0,8.0,9.0,134.45730964282228,False,ángulo B–O–B mínimo 134.5°
+mp-aaabrazb,mp-756419,ScFeO3,P2_1/c,False,Sc,Fe,8.0,8.0,9.0,134.99800599412828,False,ángulo B–O–B mínimo 135.0°
+mp-aaabrure,mp-769734,ScFeO3,Pnma,False,Sc,Fe,6.0,6.0,9.0,133.5984128963217,False,ambos cationes octaédricos;ángulo B–O–B mínimo 133.6°;NC(A) 6–6
+mp-aaabqxtf,mp-754239,ScGaO3,Pnma,False,Sc,Ga,8.0,8.0,9.0,134.8070364502216,False,ángulo B–O–B mínimo 134.8°
+mp-aaacpqbp,mp-1188449,ScRhO3,Pnma,False,Sc,Rh,6.0,6.0,9.0,129.89421257910868,False,ambos cationes octaédricos;ángulo B–O–B mínimo 129.9°;NC(A) 6–6
+mp-aaabqxno,mp-754092,ScTiO3,Pna2_1,False,Sc,Ti,8.0,8.0,8.0,132.05740245120305,False,ángulo B–O–B mínimo 132.1°
+mp-aaabrbdy,mp-756546,ScVO3,Pnma,False,Sc,V,6.0,6.0,9.0,133.28091401865586,False,ambos cationes octaédricos;ángulo B–O–B mínimo 133.3°;NC(A) 6–6
+mp-aaabrbai,mp-756452,SmDyO3,Pnma,False,Sm,Dy,6.0,6.0,8.0,132.6101398991196,False,ambos cationes octaédricos;ángulo B–O–B mínimo 132.6°;NC(A) 6–6
+mp-aaabqxrv,mp-754203,SmErO3,Pnma,False,Sm,Er,6.0,6.0,8.0,133.22682372466286,False,ambos cationes octaédricos;ángulo B–O–B mínimo 133.2°;NC(A) 6–6
+mp-aaabqzyb,mp-755717,SmHoO3,Pnma,False,Sm,Ho,6.0,6.0,8.0,133.27947676438433,False,ambos cationes octaédricos;ángulo B–O–B mínimo 133.3°;NC(A) 6–6
+mp-aaabqyoh,mp-754787,SmTlO3,Pnma,False,Sm,Tl,6.0,6.0,8.0,130.39360437006283,False,ambos cationes octaédricos;ángulo B–O–B mínimo 130.4°;NC(A) 6–6
+mp-aaabsepb,mp-776439,SmTmO3,Pnma,False,Sm,Tm,6.0,6.0,8.0,134.87188428784478,False,ambos cationes octaédricos;ángulo B–O–B mínimo 134.9°;NC(A) 6–6
+mp-aaabqzwv,mp-755685,SmYO3,Pna2_1,False,Sm,Y,6.0,6.0,6.0,132.5204098648609,False,ambos cationes octaédricos;ángulo B–O–B mínimo 132.5°;NC(A) 6–6
+mp-aaaaatkf,mp-13109,SrHfO3,Imma,False,Sr,Hf,5.0,5.0,12.0,156.5075423273944,True,NC(A) 5–5
+mp-aaadjuew,mp-1542758,SrMoO3,C2/m,False,Sr,Mo,6.0,6.0,12.0,155.80704391335678,True,ambos cationes octaédricos;NC(A) 6–6
+mp-aaacqrhe,mp-1206846,SrRhO3,Imma,False,Sr,Rh,5.0,5.0,12.0,154.81740641073887,True,NC(A) 5–5
+mp-aaacjmmp,mp-1080575,SrZrO3,Imma,False,Sr,Zr,5.0,5.0,11.0,153.63199601145095,True,NC(A) 5–5
+mp-aaaabxyf,mp-33753,TaHO3,I4_1/amd,False,H,Ta,1.0,1.0,5.0,133.66051652782127,False,ángulo B–O–B mínimo 133.7°;NC(A) 1–1
+mp-aaabmmkc,mp-676262,TaTlO3,C2/c,False,Tl,Ta,6.0,6.0,6.0,140.37887402539778,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaabrbsv,mp-756933,TaTlO3,Fd-3m,False,Tl,Ta,6.0,6.0,6.0,142.21231303973826,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaabraku,mp-756048,TbErO3,Pnma,False,Tb,Er,6.0,6.0,8.0,131.82837821405326,False,ambos cationes octaédricos;ángulo B–O–B mínimo 131.8°;NC(A) 6–6
+mp-aaabraro,mp-756224,TbGdO3,Pnma,False,Gd,Tb,4.0,4.0,8.0,130.82278374726636,False,ángulo B–O–B mínimo 130.8°;NC(A) 4–4
+mp-aaabqzyy,mp-755740,TbHoO3,Pnma,False,Tb,Ho,6.0,6.0,8.0,130.75666097582788,False,ambos cationes octaédricos;ángulo B–O–B mínimo 130.8°;NC(A) 6–6
+mp-aaabrtzb,mp-769263,TbInO3,Pnma,False,Tb,In,6.0,6.0,8.0,132.5294579499287,False,ambos cationes octaédricos;ángulo B–O–B mínimo 132.5°;NC(A) 6–6
+mp-aaabqxpp,mp-754145,TbLuO3,Pnma,False,Tb,Lu,6.0,6.0,8.0,133.6245707819936,False,ambos cationes octaédricos;ángulo B–O–B mínimo 133.6°;NC(A) 6–6
+mp-aaabranm,mp-756118,TbSmO3,Pnma,False,Sm,Tb,6.0,6.0,8.0,131.11151119721987,False,ambos cationes octaédricos;ángulo B–O–B mínimo 131.1°;NC(A) 6–6
+mp-aaabrbmg,mp-756762,TbTmO3,Pnma,False,Tb,Tm,6.0,6.0,8.0,132.2922701514761,False,ambos cationes octaédricos;ángulo B–O–B mínimo 132.3°;NC(A) 6–6
+mp-aaadfzap,mp-1475723,TiAlO3,Pm-3m,False,Al,Ti,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaacnhwe,mp-1147748,TiCuO3,P4/mmm,False,Cu,Ti,4.0,4.0,4.0,180.0,False,NC(A) 4–4
+mp-aaabwjru,mp-850194,TiNiO3,R3c,False,Ni,Ti,6.0,6.0,6.0,135.49592634175366,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaacrfyp,mp-1216763,TiVO3,R3c,False,V,Ti,6.0,6.0,6.0,135.68213758696936,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaabqxwl,mp-754323,TmBiO3,R3c,False,Bi,Tm,6.0,6.0,6.0,141.23825555576937,True,ambos cationes octaédricos;NC(A) 6–6
+mp-aaackrch,mp-1101263,TmInO3,Pnma,False,Tm,In,6.0,6.0,8.0,130.7559939230554,False,ambos cationes octaédricos;ángulo B–O–B mínimo 130.8°;NC(A) 6–6
+mp-aaacqsof,mp-1207705,TmRhO3,Pnma,False,Tm,Rh,8.0,8.0,9.0,133.94734307465905,False,ángulo B–O–B mínimo 133.9°
+mp-aaackrcx,mp-1101279,TmTlO3,Pnma,False,Tl,Tm,4.0,4.0,8.0,134.1034895132828,False,A con par libre: 8 O a < 3.3 Å;ángulo B–O–B mínimo 134.1°
+mp-aaacrfki,mp-1216392,VCrO3,R3c,False,V,Cr,6.0,6.0,6.0,133.5436581989212,False,ambos cationes octaédricos;ángulo B–O–B mínimo 133.5°;NC(A) 6–6
+mp-aaabqzsu,mp-755580,VGaO3,Pnma,False,Ga,V,4.0,4.0,8.0,129.21115891103602,False,ángulo B–O–B mínimo 129.2°;NC(A) 4–4
+mp-aaacqstw,mp-1207852,VSnO3,Pnma,False,V,Sn,8.0,8.0,8.0,133.44982577661412,False,ángulo B–O–B mínimo 133.4°
+mp-aaadakpi,mp-1378086,VZnO3,Pnma,False,Zn,V,4.0,4.0,10.0,138.3012819937891,False,NC(A) 4–4
+mp-aaackgjh,mp-1094009,YAgO3,Pm-3m,False,Ag,Y,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaaczyll,mp-1369873,YAgO3,Pnma,False,Y,Ag,8.0,8.0,8.0,131.07977314145012,False,ángulo B–O–B mínimo 131.1°
+mp-aaabrskz,mp-768221,YBiO3,R3c,False,Bi,Y,6.0,6.0,6.0,138.3483792907837,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaaczxye,mp-1369528,YBiO3,Pnma,False,Y,Bi,4.0,4.0,8.0,122.97700644158725,False,ángulo B–O–B mínimo 123.0°;NC(A) 4–4
+mp-aaaddbvu,mp-1424898,YBiO3,Pm-3m,False,Y,Bi,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaabqzar,mp-755109,YErO3,Pnma,False,Y,Er,6.0,6.0,8.0,131.43460043741848,False,ambos cationes octaédricos;ángulo B–O–B mínimo 131.4°;NC(A) 6–6
+mp-aaackqys,mp-1101170,YLuO3,Pnma,False,Y,Lu,6.0,6.0,8.0,132.96100375337886,False,ambos cationes octaédricos;ángulo B–O–B mínimo 133.0°;NC(A) 6–6
+mp-aaadamoh,mp-1379411,YMoO3,Pnma,False,Y,Mo,8.0,8.0,8.0,134.72468275417387,False,ángulo B–O–B mínimo 134.7°
+mp-aaacyhog,mp-1340878,YSbO3,Pnma,False,Y,Sb,6.0,6.0,8.0,125.73757566104699,False,ambos cationes octaédricos;ángulo B–O–B mínimo 125.7°;NC(A) 6–6
+mp-aaacykty,mp-1343054,YSnO3,P2_1/c,False,Y,Sn,6.0,6.0,8.0,127.75330397841057,False,ambos cationes octaédricos;ángulo B–O–B mínimo 127.8°;NC(A) 6–6
+mp-aaabqxjv,mp-753995,YTmO3,Pnma,False,Y,Tm,6.0,6.0,8.0,131.24619006229,False,ambos cationes octaédricos;ángulo B–O–B mínimo 131.2°;NC(A) 6–6
+mp-aaaczynk,mp-1369924,YWO3,Pnma,False,Y,W,8.0,8.0,8.0,133.43133181355103,False,ángulo B–O–B mínimo 133.4°
+mp-aaackqyn,mp-1101165,YbBiO3,R3c,False,Bi,Yb,6.0,6.0,6.0,142.55010127464206,True,ambos cationes octaédricos;NC(A) 6–6
+mp-aaadakqb,mp-1378105,ZnBiO3,P2_1/c,False,Zn,Bi,4.0,4.0,8.0,123.76533269310579,False,ángulo B–O–B mínimo 123.8°;NC(A) 4–4
+mp-aaacyidp,mp-1341277,ZnCrO3,Pnma,False,Zn,Cr,4.0,4.0,10.0,136.518967852293,False,NC(A) 4–4
+mp-aaacdhmj,mp-971733,ZnGaO3,Pm-3m,False,Zn,Ga,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaacgbvb,mp-1020631,ZnGeO3,R3c,False,Zn,Ge,6.0,6.0,12.0,142.36747255226675,True,ambos cationes octaédricos;NC(A) 6–6
+mp-aaadamwf,mp-1379617,ZnMoO3,Pnma,False,Zn,Mo,4.0,4.0,8.0,133.11246110706907,False,ángulo B–O–B mínimo 133.1°;NC(A) 4–4
+mp-aaacysqw,mp-1348382,ZnSbO3,P2_1/m,False,Zn,Sb,4.0,4.0,8.0,126.9237822311217,False,ángulo B–O–B mínimo 126.9°;NC(A) 4–4
+mp-aaacycbp,mp-1337169,ZnSnO3,Pnma,False,Zn,Sn,4.0,4.0,8.0,133.10326955976237,False,ángulo B–O–B mínimo 133.1°;NC(A) 4–4
+mp-aaacyhrv,mp-1340971,ZnWO3,Pnma,False,Zn,W,4.0,4.0,8.0,133.32076879784057,False,ángulo B–O–B mínimo 133.3°;NC(A) 4–4
+mp-aaaddfyu,mp-1427680,ZnWO3,Amm2,False,Zn,W,5.0,5.0,11.0,168.2473985831024,True,NC(A) 5–5
+mp-aaacsnck,mp-1239170,ZrBeO3,Pm-3m,False,Be,Zr,0.0,0.0,12.0,180.0,True,NC(A) 0–0
+mp-aaabrbin,mp-756665,ZrCoO3,Pnma,False,Zr,Co,6.0,6.0,9.0,130.35791345575907,False,ambos cationes octaédricos;ángulo B–O–B mínimo 130.4°;NC(A) 6–6
+mp-aaabqyyp,mp-755055,ZrCrO3,Pnma,False,Zr,Cr,6.0,6.0,7.0,123.59422810823213,False,ambos cationes octaédricos;ángulo B–O–B mínimo 123.6°;NC(A) 6–6
+mp-aaabqydt,mp-754513,ZrMnO3,R3c,False,Mn,Zr,6.0,6.0,6.0,137.5194321669896,False,ambos cationes octaédricos;NC(A) 6–6
+mp-aaackqkp,mp-1100803,ZrPbO3,Pm,False,Pb,Zr,6.0,9.0,6.0,161.70605491148686,True,NC(A) 6–9
+mp-aaacfwgx,mp-1016883,ZrZnO3,Pm-3m,False,Zn,Zr,0.0,0.0,12.0,180.0,True,NC(A) 0–0
