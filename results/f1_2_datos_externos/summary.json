@@ -1,0 +1,47 @@
+{
+  "code_commit": "13fbe302b82ae08a5031cd93bc75a10b39d64f02",
+  "code_dirty": false,
+  "mp_database_version": "2026.09.28",
+  "gu": {
+    "crystals": 12907,
+    "positives": 943,
+    "compositions": 6611,
+    "abo3_crystals": 7502,
+    "abo3_positive_crystals": 312,
+    "abo3_compositions": 3203,
+    "abo3_positive_compositions": 262,
+    "test_leakage_all": {
+      "test_positives": 94,
+      "composition_in_train_or_val": 26,
+      "composition_in_train_or_val_frac": 0.2765957446808511,
+      "composition_among_train_val_positives": 21,
+      "composition_among_train_val_positives_frac": 0.22340425531914893
+    },
+    "test_leakage_abo3": {
+      "test_positives": 30,
+      "composition_in_train_or_val": 11,
+      "composition_in_train_or_val_frac": 0.36666666666666664,
+      "composition_among_train_val_positives": 6,
+      "composition_among_train_val_positives_frac": 0.2
+    }
+  },
+  "gu_vs_mp": {
+    "abo3_crystals_with_mp_id": 1182,
+    "abo3_crystals_with_mp_id_found_in_mp2026": 1167,
+    "abo3_compositions_shared": 1303,
+    "mp_compositions_not_in_gu": 16,
+    "shared_gu_positive_mp_experimental": 249,
+    "shared_gu_virtual_mp_experimental": 191,
+    "shared_gu_positive_mp_theoretical_only": 7
+  },
+  "bartel": {
+    "compounds": 576,
+    "abo3_oxides": 369,
+    "abo3_perovskite": 232,
+    "abo3_non_perovskite": 137,
+    "abo3_in_mp2026": 359,
+    "perovskite_but_mp_theoretical_only": 34,
+    "conflicts_bartel_no_gu_si": 16,
+    "conflicts_bartel_si_gu_virtual": 41
+  }
+}

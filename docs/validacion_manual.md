@@ -22,6 +22,18 @@ Al menos unos pocos casos de cada categoría:
 9. Desacuerdos entre CrystalNN y `StructureMatcher`.
 10. Casos con A pequeño (NC del sitio A < 8) o B no octaédrico.
 
+## Candidatos identificados en F1.2
+
+Conflictos de etiqueta entre Bartel et al. (2019) y Gu et al. (2022). La lista completa,
+generada, está en `results/f1_2_datos_externos/conflicts.csv`.
+
+- **Sintetizados NO perovskita para Bartel, positivos para Gu (16):** CdCO₃, CoSeO₃, CoTeO₃,
+  CsBrO₃, CuSeO₃, CuTeO₃, KBrO₃, MgSeO₃, NiSeO₃, RbBrO₃, RbClO₃, SrSiO₃, FeTiO₃ (TiFeO₃ en
+  Gu), MnTiO₃ (TiMnO₃ en Gu), TlBrO₃, ZnSeO₃. Corresponden a las categorías 3 y 6.
+- **Perovskitas para Bartel, solo virtuales en Gu (41):** p. ej. BaHfO₃, CaHfO₃, CeFeO₃,
+  DyTiO₃. Comprobar si nuestra identificación las reconoce y por qué Gu no las tiene como
+  positivas.
+
 ## Registro
 
 | # | material_id | Fórmula | Grupo espacial | NC(B) | NC(A) | Compartición BO₆ | Ángulo B–O–B mín (°) | Clasificación automática | Clasificación manual | ¿Coinciden? | Motivo / referencia | Revisora | Fecha |

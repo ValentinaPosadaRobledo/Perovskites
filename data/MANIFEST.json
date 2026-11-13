@@ -47,5 +47,20 @@
     "mp_abo3_summary.json.gz": "e964cbe7e5fb8dd62cf0b1243dea3c7c4ad05b0d14afaf255198b380e7ce0b5f",
     "mp_abo3_index.parquet": "59182c4ad307c8320272cd67a9058f70bbf9da141df78f8e134a22d485d64f49",
     "mp_abo3_thermo.parquet": "2f32777f123dbd02ad0dc0036ab2ef121e8b3e78596860adbc266c3800d3f3e9"
+  },
+  "external": {
+    "gu2022": {
+      "zenodo_record": 6348981,
+      "md5": "1db13f82d7c32dae0c08c46c75ccd41d",
+      "sha256": "816d50d0a095072e3b68540b1fa9702c822dfcca11f0351ddc24d6322c7aa14f",
+      "extracted_files": 13014
+    },
+    "bartel2019": {
+      "repo": "https://github.com/CJBartel/perovskite-stability",
+      "commit": "965b8de5b379dde09a6cb1f223ae0f0b9d3ce54e",
+      "table": "TableS1.csv",
+      "table_sha256": "bea471ddb1ed63dcb94cc9cbc58c73f3bc1a12918e96cf24818b3aea2cbe3656"
+    },
+    "retrieved_utc": "2026-11-13T19:35:12+00:00"
   }
 }
