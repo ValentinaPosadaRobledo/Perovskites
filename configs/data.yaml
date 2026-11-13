@@ -1,0 +1,104 @@
+# Configuración de datos: consulta a MP, identificación de perovskitas, familias
+# químicas, particiones y holdout. Los valores marcados "PROPUESTA" se validan en
+# la tarea indicada y cualquier cambio se registra en la bitácora del ROADMAP.
+
+# ---------------------------------------------------------------------------
+# F1.1 Consulta a Materials Project
+# ---------------------------------------------------------------------------
+materials_project:
+  api_key_env: MP_API_KEY  # nombre de la variable, no la clave  # pragma: allowlist secret
+  formula_anonymous: ABC3            # PROPUESTA (F1.1): verificar sintaxis en mp-api
+  elements_include: [O]
+  thermo_types: [GGA_GGA+U]          # una sola funcional en el análisis principal
+  sensitivity_thermo_types: [R2SCAN] # solo para el análisis de sensibilidad
+  fields:
+    - material_id
+    - formula_pretty
+    - structure
+    - theoretical
+    - database_IDs
+    - energy_above_hull
+    - formation_energy_per_atom
+    - symmetry
+
+# ---------------------------------------------------------------------------
+# F1.3 Identificación de perovskitas por conectividad (regla 2.1.1)
+# ---------------------------------------------------------------------------
+identification:
+  oxidation_states:
+    method: bv_analyzer              # BVAnalyzer; respaldo: oxi_state_guesses
+    fallback: oxi_state_guesses
+  coordination:
+    method: crystalnn                # CrystalNN / ChemEnv
+    b_site_cn: 6                     # B en coordinación octaédrica
+    a_site_cn_min: 8
+    a_site_cn_max: 12
+  octahedral_connectivity:
+    sharing: corner_only             # BO6 comparten SOLO vértices
+    min_b_o_b_angle_deg: 140.0       # PROPUESTA (F1.3/F1.4): validar con casos límite
+  structure_matcher:                 # tolerancias por defecto de pymatgen (PROPUESTA)
+    ltol: 0.2
+    stol: 0.3
+    angle_tol: 5.0
+    primitive_cell: true
+    scale: true
+    attempt_supercell: true
+  # Formadores de polianiones en el "sitio B": se excluyen (carbonatos,
+  # nitratos, boratos, yodatos, etc.). PROPUESTA (F1.3).
+  polyanion_b_elements: [B, C, N, P, S, Se, Cl, Br, I]
+  # Politipos hexagonales (octaedros que comparten caras): clase aparte.
+  hexagonal_polytypes: [2H, 4H, 6H]
+  manual_validation_min_cases: 50    # F1.4, docs/validacion_manual.md
+
+# ---------------------------------------------------------------------------
+# F1.5 Banderas de sensibilidad (se conservan en el análisis principal)
+# ---------------------------------------------------------------------------
+sensitivity_flags:                   # listas iniciales; ampliar en F1.5
+  high_pressure_or_metastable: [MgSiO3, BiCoO3, PbVO3, BiScO3]
+  ambiguous_oxidation_state: [BiNiO3, CaFeO3]
+
+# ---------------------------------------------------------------------------
+# Familias químicas del elemento B (esquema `family` y estratificación del holdout)
+# PROPUESTA (F1.6): Sc va en 3d, Y en 4d/5d y La en 4f (serie La–Lu).
+# Todo elemento B no listado se asigna a `main_group`.
+# ---------------------------------------------------------------------------
+b_families:
+  3d: [Sc, Ti, V, Cr, Mn, Fe, Co, Ni, Cu, Zn]
+  4d_5d: [Y, Zr, Nb, Mo, Tc, Ru, Rh, Pd, Ag, Cd, Hf, Ta, W, Re, Os, Ir, Pt, Au, Hg]
+  4f_5f: [La, Ce, Pr, Nd, Pm, Sm, Eu, Gd, Tb, Dy, Ho, Er, Tm, Yb, Lu,
+          Ac, Th, Pa, U, Np, Pu, Am, Cm, Bk, Cf, Es, Fm, Md, No, Lr]
+  default_family: main_group
+
+# ---------------------------------------------------------------------------
+# F1.7 Esquemas de partición (regla 2.1.4)
+# ---------------------------------------------------------------------------
+splits:
+  backend: matfold                   # PROPUESTA: si MatFold no es compatible, "own" (bitácora)
+  schemes: [random, group_system, loeo_A, loeo_B, family, cluster, temporal]
+  random:
+    n_splits: 5
+  group_system:                      # SOLO diagnóstico (se espera ≈ random)
+    n_splits: 5
+  loeo_B:
+    min_positives_per_element: 5     # por debajo: fusionar por familia o reportar aparte
+    small_group_policy: merge_family # merge_family | report_separately
+  loeo_A:
+    min_positives_per_element: 5
+    small_group_policy: report_separately
+  cluster:                           # LOCO-CV (Meredig et al., 2018)
+    feature_set: magpie
+    n_clusters: 10                   # PROPUESTA (F1.7)
+  temporal:
+    cutoff_year: null                # se fija en F1.7 si hay años de ICSD
+
+# ---------------------------------------------------------------------------
+# F1.8 Holdout externo congelado por grupos (regla 2.1.5)
+# ---------------------------------------------------------------------------
+holdout:
+  definition: reserved_b_elements    # composiciones cuyo B está en el conjunto reservado
+  stratify_by: b_family
+  target_positive_fraction: [0.10, 0.15]
+  seed_from: configs/seeds.yaml#holdout_seed
+  path: data/splits/holdout_frozen.csv
+  hashes_path: data/splits/HASHES.json
+  train_pool_path: data/processed/train_pool.parquet

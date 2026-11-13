@@ -1,0 +1,36 @@
+# Integración continua: lint + tests con fixtures sintéticas (regla 2.4 de CLAUDE.md).
+# Se ejecuta en Ubuntu y en Windows para detectar problemas de CRLF y de rutas.
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      OMP_NUM_THREADS: "1"  # regla 2.2: sin paralelismo anidado
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Instalar uv
+        uses: astral-sh/setup-uv@v10.3.3  # setup-uv no publica etiqueta mayor "v10"
+        with:
+          enable-cache: true
+
+      - name: Instalar dependencias desde uv.lock
+        run: uv sync --locked
+
+      - name: Lint (ruff)
+        run: uv run ruff check .
+
+      - name: Formato (ruff)
+        run: uv run ruff format --check .
+
+      - name: Tests (pytest -rs)
+        run: uv run pytest -rs

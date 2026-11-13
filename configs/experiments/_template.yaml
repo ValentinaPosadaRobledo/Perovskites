@@ -1,0 +1,50 @@
+# Plantilla de experimento. Copiar como configs/experiments/<nombre>.yaml.
+# Todo parámetro del experimento vive aquí, nunca en el código (regla 2.4).
+# Las semillas NO se definen aquí: se leen de configs/seeds.yaml.
+
+name: template                       # igual al nombre del archivo, sin .yaml
+description: "Describir la pregunta que responde este experimento."
+roadmap_task: F3.3                   # tarea del ROADMAP que alimenta
+hypotheses: [H1]                     # H1 | H2 | H3 | exploratorio
+
+data:
+  config: configs/data.yaml
+  input: data/processed/train_pool.parquet   # nunca el holdout
+  sensitivity_exclusions: []         # p. ej. [high_pressure_or_metastable]
+
+features:
+  set: pre_dft                       # pre_dft | post_dft (se reportan por separado)
+
+splits:
+  schemes: [random, loeo_A, loeo_B, family, cluster]
+
+model:
+  type: pu_bagging                   # pu_bagging | baseline_<nombre>
+  base_estimator: random_forest      # random_forest | gradient_boosting
+  fixed_params:
+    n_jobs: 1                        # paralelizar SOLO en el nivel semilla × fold
+  pu_bagging:
+    n_bags: 50
+    unlabeled_sample_size: n_positive  # tamaño de la muestra de U en cada bolsa
+
+inner_cv:                            # bucle interno: hiperparámetros + umbral
+  n_splits: 3
+  search: random
+  n_iter: 15                         # presupuesto fijo (~10–20)
+  selection_metric: lee_liu          # solo para ORDENAR configuraciones (no cumple SCAR)
+  search_space:
+    max_depth: [null, 5, 10, 20]
+    min_samples_leaf: [1, 2, 5, 10]
+    max_features: [sqrt, 0.3, 0.5]
+  threshold:
+    criterion: target_ppr            # target_ppr | max_lee_liu
+    target_ppr: 0.10
+
+evaluation:
+  primary_metric: tpr                # TPR en el punto de operación del bucle interno
+  fixed_ppr: [0.05, 0.10, 0.20]      # TPR a P(ŷ=1) fija para comparar con τ
+  report_lower_bounds: true          # accuracy/F1/AUC con U como negativo, etiquetadas así
+
+execution:
+  n_jobs: -1                         # joblib (loky) sobre semilla × fold
+  dev_mode: false                    # true: solo dev_n_seeds semillas (para medir tiempos)

@@ -1,0 +1,73 @@
+[project]
+name = "perovskite-pu"
+version = "0.1.0"
+description = "Evaluación de la generalización de modelos PU learning para la sintetizabilidad de perovskitas óxido ABO3 con control de fuga de información."
+readme = "README.md"
+authors = [
+    { name = "Valentina Posada", email = "valentina.posada@utp.edu.co" }
+]
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "matminer>=0.10.1",
+    "matplotlib>=3.11.2",
+    "mp-api>=0.47.2",
+    "numpy>=2.5.4",
+    "pandas>=2.3.3",
+    "pyarrow>=26.0.1",
+    "pymatgen>=2026.10.24",
+    "python-dotenv>=1.2.4",
+    "pyyaml>=6.0.3",
+    "scikit-learn>=1.9.1",
+    "scipy>=1.18.1",
+    "shap>=0.54.1",
+]
+
+[build-system]
+requires = ["uv_build>=0.11.32,<0.12.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "poethepoet>=0.49.0",
+    "pre-commit>=4.7.0",
+    "pytest>=9.2.0",
+    "ruff>=0.17.5",
+]
+
+# ---------------------------------------------------------------------------
+# Herramientas de calidad
+# ---------------------------------------------------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["notebooks"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "NPY", "RUF"]
+# RUF001-003 marcan caracteres Unicode "ambiguos" (á, –, ≥...) que son
+# legítimos en comentarios y docstrings en español.
+ignore = ["RUF001", "RUF002", "RUF003"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["perovskite_pu"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# -rs muestra siempre el motivo de cada test saltado (regla 2.1.9 de CLAUDE.md).
+addopts = "-rs"
+markers = [
+    "requires_data: test que necesita datos reales en data/ (se salta sin ellos, salvo REQUIRE_DATA=1).",
+]
+
+# ---------------------------------------------------------------------------
+# Tareas (poethepoet). En Windows no hay make: usar `uv run poe <tarea>`.
+# ---------------------------------------------------------------------------
+[tool.poe.tasks]
+test = { cmd = "pytest -rs", help = "Ejecuta todos los tests (muestra los saltados)" }
+test-data = { cmd = "pytest -rs", env = { REQUIRE_DATA = "1" }, help = "Tests con REQUIRE_DATA=1: los dependientes de datos fallan si faltan datos" }
+lint = { cmd = "ruff check .", help = "Lint con ruff" }
+format = { cmd = "ruff format .", help = "Formatea con ruff" }
+format-check = { cmd = "ruff format --check .", help = "Verifica el formato sin modificar" }
+check = { sequence = ["lint", "format-check", "test"], help = "Lint + formato + tests (lo mismo que CI)" }
+figures = { cmd = "python paper/scripts/make_all.py", help = "Regenera todas las figuras y tablas del artículo desde results/" }
+roadmap = { cmd = "python scripts/roadmap.py", help = "Actualiza estados del ROADMAP (start/done/block <ID>)" }

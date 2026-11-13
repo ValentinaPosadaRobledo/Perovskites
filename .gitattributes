@@ -1,0 +1,10 @@
+# Normalización de fin de línea: texto en LF dentro del repositorio.
+* text=auto eol=lf
+
+# CSV y parquet se tratan como binarios para que sus SHA-256 no cambien
+# por la conversión CRLF/LF en Windows (regla 2.4 de CLAUDE.md).
+*.csv -text
+*.parquet binary
+*.json.gz binary
+*.png binary
+*.pdf binary

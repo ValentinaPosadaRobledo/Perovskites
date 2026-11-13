@@ -1,0 +1,38 @@
+# --- Secretos -------------------------------------------------------------
+.env
+.env.*
+!.env.example
+
+# --- Python / uv ----------------------------------------------------------
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# --- Datos (no se versionan; se versionan los scripts que los generan) -----
+data/raw/*
+!data/raw/.gitkeep
+data/interim/*
+!data/interim/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+# data/splits/ SÍ se versiona: holdout_frozen.csv contiene solo composiciones
+# (nada licenciado por ICSD) y versionarlo lo hace trazable junto a HASHES.json.
+
+# --- Resultados -----------------------------------------------------------
+# Las corridas crudas se regeneran; summary.csv y runs_index.csv sí se versionan.
+results/**/raw/
+results/**/*.parquet
+
+# --- Notebooks y editores -------------------------------------------------
+.ipynb_checkpoints/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

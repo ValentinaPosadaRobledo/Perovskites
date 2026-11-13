@@ -1,0 +1,16 @@
+# Única fuente de semillas del proyecto (regla 2.2 de CLAUDE.md).
+# No definir semillas en ningún otro lugar del código ni de los YAML de experimentos.
+
+# Semillas de los experimentos. Cada experimento se ejecuta con TODAS.
+# De cada semilla se derivan 3 flujos independientes con
+# np.random.SeedSequence(seed).spawn(3): asignación de folds, muestreo de
+# no etiquetados (bagging PU) e inicialización de modelos.
+seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+# Semilla exclusiva para crear el holdout congelado (una sola vez, F1.8).
+# Es independiente de las semillas de los experimentos y no debe coincidir con ninguna.
+holdout_seed: 2026
+
+# Desarrollo incremental: número de semillas para medir tiempos antes de lanzar las 10.
+# Una tarea solo se marca completada con las 10 semillas.
+dev_n_seeds: 3

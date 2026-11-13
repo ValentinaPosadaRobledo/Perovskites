@@ -1,0 +1,4 @@
+{
+  "description": "SHA-256 de los archivos canónicos de data/splits/ (nombre de archivo -> hash). holdout_frozen.csv se registra una sola vez en F1.8 y su hash se publica en el preregistro.",
+  "files": {}
+}

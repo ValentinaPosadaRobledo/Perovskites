@@ -1,0 +1,8 @@
+{
+  "description": "Registro de los datos crudos (data/raw/). Se rellena en F1.1 y F1.2: SHA-256 de cada archivo, versión de la base de datos de MP (MPRester().get_database_version()), versiones de mp-api y emmet-core y fecha de la consulta.",
+  "mp_database_version": null,
+  "mp_api_version": null,
+  "emmet_core_version": null,
+  "query_date_utc": null,
+  "files": {}
+}
