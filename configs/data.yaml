@@ -58,11 +58,21 @@ identification:
   coordination:
     method: crystalnn                # CrystalNN / ChemEnv
     b_site_cn: 6                     # B en coordinación octaédrica
-    a_site_cn_min: 8
+    a_site_cn_min: 8                 # NC(A) con CrystalNN (catión–anión)
     a_site_cn_max: 12
+    # Regla híbrida (2026-11-13): CrystalNN subestima la NC de los A con par libre; para
+    # ellos se acepta un recuento de O por distancia. Sensibilidad: sin esta regla.
+    lone_pair_a_rule:
+      elements: [Bi, Pb, Sn, Sb, Tl, Hg]
+      cutoff_ang: 3.3
+      min_o: 8
   octahedral_connectivity:
     sharing: corner_only             # BO6 comparten SOLO vértices
-    min_b_o_b_angle_deg: 140.0       # PROPUESTA (F1.3/F1.4): validar con casos límite
+    # 135° (2026-11-13, antes 140° propuesto): con 140° se perdían perovskitas Pnma muy
+    # inclinadas (GdScO3, LuFeO3…, 134–140°). El tipo LiNbO3 (~137°) queda fuera por la
+    # NC(A) = 6, no por el ángulo. Sensibilidad: 140°.
+    min_b_o_b_angle_deg: 135.0
+    sensitivity_min_b_o_b_angle_deg: 140.0
   structure_matcher:                 # tolerancias por defecto de pymatgen (PROPUESTA)
     ltol: 0.2
     stol: 0.3
