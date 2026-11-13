@@ -13,7 +13,8 @@ repos:
     hooks:
       - id: detect-secrets
         args: [--baseline, .secrets.baseline]
-        exclude: ^uv\.lock$  # los hashes de paquetes darían falsos positivos
+        # Registros de hashes por diseño (SHA-256 y commits): darían falsos positivos.
+        exclude: ^(uv\.lock|data/MANIFEST\.json|data/splits/HASHES\.json)$
 
   - repo: https://github.com/kynan/nbstripout
     rev: 0.9.1

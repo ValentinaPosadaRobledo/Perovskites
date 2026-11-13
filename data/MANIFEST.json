@@ -1,8 +1,51 @@
 {
-  "description": "Registro de los datos crudos (data/raw/). Se rellena en F1.1 y F1.2: SHA-256 de cada archivo, versión de la base de datos de MP (MPRester().get_database_version()), versiones de mp-api y emmet-core y fecha de la consulta.",
-  "mp_database_version": null,
-  "mp_api_version": null,
-  "emmet_core_version": null,
-  "query_date_utc": null,
-  "files": {}
+  "description": "Registro de los datos crudos (data/raw/, no versionados): versión de la base de datos de MP (MPRester().db_version), versiones de paquetes, commit del código que descargó, fecha, parámetros de la consulta y SHA-256 de cada archivo.",
+  "git_commit": "6218285f0f5d31197fbca529570eeb02b618aa01",
+  "git_dirty": false,
+  "mp_database_version": "2026.09.28",
+  "mp_api_version": "0.47.2",
+  "emmet_core_version": "0.88.3",
+  "pymatgen_version": "2026.10.24",
+  "query_date_utc": "2026-11-13T19:21:39+00:00",
+  "query": {
+    "formula_anonymous": "ABC3",
+    "elements_include": [
+      "O"
+    ],
+    "exclude_deprecated": true,
+    "gnome_policy": "exclude_and_flag",
+    "thermo_types": [
+      "GGA_GGA+U"
+    ],
+    "sensitivity_thermo_types": [
+      "R2SCAN"
+    ],
+    "thermo_chunk_size": 500,
+    "fields": [
+      "material_id",
+      "formula_pretty",
+      "structure",
+      "theoretical",
+      "database_IDs",
+      "energy_above_hull",
+      "formation_energy_per_atom",
+      "symmetry",
+      "deprecated",
+      "builder_meta"
+    ]
+  },
+  "counts": {
+    "abc3_oxide_entries": 2688,
+    "abo3_entries": 2563,
+    "abo3_gnome_entries": 0,
+    "abo3_reduced_formulas": 1319,
+    "abo3_with_icsd_id": 884,
+    "abo3_theoretical_false": 829,
+    "thermo_docs": 3170
+  },
+  "files": {
+    "mp_abo3_summary.json.gz": "e964cbe7e5fb8dd62cf0b1243dea3c7c4ad05b0d14afaf255198b380e7ce0b5f",
+    "mp_abo3_index.parquet": "59182c4ad307c8320272cd67a9058f70bbf9da141df78f8e134a22d485d64f49",
+    "mp_abo3_thermo.parquet": "2f32777f123dbd02ad0dc0036ab2ef121e8b3e78596860adbc266c3800d3f3e9"
+  }
 }
