@@ -33,9 +33,9 @@ son ampliaciones.
 
 | ID | Tarea | Destino | Estado | Inicio | Fin | Commit | Resultado / Notas |
 |---|---|---|---|---|---|---|---|
-| F0.1 | Estructura del repositorio, CLAUDE.md, ROADMAP.md, README.md, entorno uv (o Poetry como respaldo), `.gitattributes`, pre-commit y CI | A+T | 🔄 En proceso | 2026-11-13 | | | |
-| F0.2 | Esqueleto de `tests/test_leakage.py` y `tests/test_metrics.py`, con fixtures sintéticas activas y tests dependientes de datos en `skipif` | A+T | 🔄 En proceso | 2026-11-13 | | | |
-| F0.3 | Configuración de semillas (`SeedSequence`) y plantilla de configuración de experimentos | A+T | 🔄 En proceso | 2026-11-13 | | | |
+| F0.1 | Estructura del repositorio, CLAUDE.md, ROADMAP.md, README.md, entorno uv (o Poetry como respaldo), `.gitattributes`, pre-commit y CI | A+T | ✅ Completada | 2026-11-13 | 2026-11-13 | `140448a` | Estructura, CLAUDE.md, ROADMAP.md, README.md, uv.lock, pre-commit y CI (`.github/workflows/ci.yml`). uv sin conflictos: no se usó Poetry |
+| F0.2 | Esqueleto de `tests/test_leakage.py` y `tests/test_metrics.py`, con fixtures sintéticas activas y tests dependientes de datos en `skipif` | A+T | ✅ Completada | 2026-11-13 | 2026-11-13 | `140448a` | `tests/test_leakage.py`, `tests/test_metrics.py`, `tests/test_utils.py`: 96 pasan, 2 saltados (dependientes de datos, hasta F1.8). Encontró y se corrigió un bug de validación en las métricas |
+| F0.3 | Configuración de semillas (`SeedSequence`) y plantilla de configuración de experimentos | A+T | ✅ Completada | 2026-11-13 | 2026-11-13 | `140448a` | `configs/seeds.yaml`, `src/perovskite_pu/utils/seeds.py` (SeedSequence → 3 flujos), `configs/experiments/_template.yaml` |
 | F0.4 | Borrador de `docs/preregistro.md` (hipótesis, δ₁, δ₂, tests, punto de operación) | A+T | ⬜ Pendiente | | | | Borrador inicial creado en F0.1; falta que la autora fije δ₁ y δ₂ |
 | F0.5 | Revisión de literatura: verificar y leer MatFold, LOCO-CV, SynCoTrain, Desai et al. (2025), Gu et al. (2022), Bartel et al. (2019), Jang et al. (2020), Frey et al. (2020) y SynthNN. Delimitar la brecha | A+T | ⬜ Pendiente | | | | |
 
