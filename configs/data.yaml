@@ -32,6 +32,23 @@ materials_project:
     - builder_meta                   # lote de cálculo (batch_id): procedencia y detección de GNoME
 
 # ---------------------------------------------------------------------------
+# F1.2 Fuentes externas (descargadas en data/raw/, no versionadas)
+# ---------------------------------------------------------------------------
+external_sources:
+  gu2022:
+    # El DOI del artículo (10.5281/zenodo.6348980) es el "concepto"; la versión es 6348981.
+    zenodo_record: 6348981
+    file: kaist-amsg/PerovskiteSynthesizability_Manuscript2021-Release.zip
+    md5: 1db13f82d7c32dae0c08c46c75ccd41d  # publicado por Zenodo  # pragma: allowlist secret
+    # Solo se extraen estos tipos: los .pkl/.pth.tar (pickle) NO se abren fuera de F3.5.
+    extract_extensions: [.md, .csv, .json, .cif]
+    split_index: 0                          # el test de positivos es igual en las 100 particiones
+  bartel2019:
+    repo: https://github.com/CJBartel/perovskite-stability
+    commit: 965b8de5b379dde09a6cb1f223ae0f0b9d3ce54e  # fijado; licencia MIT  # pragma: allowlist secret
+    table: TableS1.csv                      # 576 ABX3 experimentales (exp_label ±1)
+
+# ---------------------------------------------------------------------------
 # F1.3 Identificación de perovskitas por conectividad (regla 2.1.1)
 # ---------------------------------------------------------------------------
 identification:

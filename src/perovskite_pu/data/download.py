@@ -248,6 +248,8 @@ def download(config_path: Path, out_dir: Path, dry_run: bool = False) -> dict[st
     manifest = build_manifest(
         [summary_path, index_path, thermo_path], db_version, query, counts, previous
     )
+    if previous and "external" in previous:  # conserva el registro de F1.2
+        manifest["external"] = previous["external"]
     with open(MANIFEST_PATH, "w", encoding="utf-8", newline="\n") as fh:
         json.dump(manifest, fh, indent=2, ensure_ascii=False)
         fh.write("\n")

@@ -44,7 +44,7 @@ son ampliaciones.
 | ID | Tarea | Destino | Estado | Inicio | Fin | Commit | Resultado / Notas |
 |---|---|---|---|---|---|---|---|
 | F1.1 | Descarga desde MP con `mp-api` (`material_id`, `formula_pretty`, `structure`, `theoretical`, `database_IDs`, `energy_above_hull`, `formation_energy_per_atom`, `symmetry`), `thermo_types=["GGA_GGA+U"]`, versión de la BD en `data/MANIFEST.json` | A+T | ✅ Completada | 2026-11-13 | 2026-11-13 | `6218285` | `data/MANIFEST.json`: MP 2026.09.28; 2563 entradas ABO₃ (1319 composiciones; 829 experimentales; 0 GNoME); E_hull GGA/GGA+U para 2490. Descarga reproducible (hashes idénticos en 3 corridas) |
-| F1.2 | Descarga del dataset de Gu et al. (Zenodo) y de Bartel et al. (2019); verificación de su solapamiento con MP | A+T | ⬜ Pendiente | | | | |
+| F1.2 | Descarga del dataset de Gu et al. (Zenodo) y de Bartel et al. (2019); verificación de su solapamiento con MP | A+T | 🔄 En proceso | 2026-11-13 | | | |
 | F1.3 | Identificación de perovskitas ABO₃ por conectividad (CrystalNN/ChemEnv + StructureMatcher, regla 2.1.1): exclusión de polianiones, politipos hexagonales aparte, estados de oxidación y casos ambiguos | A+T | ⬜ Pendiente | | | | |
 | F1.4 | Validación manual de ≥ 50 casos límite en `docs/validacion_manual.md` | A+T | ⬜ Pendiente | | | | |
 | F1.5 | Deduplicación estructural y por composición, agrupación de casi duplicados y etiquetado por composición (positivo / sintetizada no perovskita / no etiquetado), con banderas de alta presión y metaestabilidad | A+T | ⬜ Pendiente | | | | |
