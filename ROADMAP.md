@@ -43,7 +43,7 @@ son ampliaciones.
 
 | ID | Tarea | Destino | Estado | Inicio | Fin | Commit | Resultado / Notas |
 |---|---|---|---|---|---|---|---|
-| F1.1 | Descarga desde MP con `mp-api` (`material_id`, `formula_pretty`, `structure`, `theoretical`, `database_IDs`, `energy_above_hull`, `formation_energy_per_atom`, `symmetry`), `thermo_types=["GGA_GGA+U"]`, versión de la BD en `data/MANIFEST.json` | A+T | ⬜ Pendiente | | | | Requiere `MP_API_KEY` en `.env` |
+| F1.1 | Descarga desde MP con `mp-api` (`material_id`, `formula_pretty`, `structure`, `theoretical`, `database_IDs`, `energy_above_hull`, `formation_energy_per_atom`, `symmetry`), `thermo_types=["GGA_GGA+U"]`, versión de la BD en `data/MANIFEST.json` | A+T | 🔄 En proceso | 2026-11-13 | | | Requiere `MP_API_KEY` en `.env` · **Bloqueada (2026-11-13):** Esperando la clave de Materials Project (secreto de red para api.materialsproject.org, cabecera X-API-Key) |
 | F1.2 | Descarga del dataset de Gu et al. (Zenodo) y de Bartel et al. (2019); verificación de su solapamiento con MP | A+T | ⬜ Pendiente | | | | |
 | F1.3 | Identificación de perovskitas ABO₃ por conectividad (CrystalNN/ChemEnv + StructureMatcher, regla 2.1.1): exclusión de polianiones, politipos hexagonales aparte, estados de oxidación y casos ambiguos | A+T | ⬜ Pendiente | | | | |
 | F1.4 | Validación manual de ≥ 50 casos límite en `docs/validacion_manual.md` | A+T | ⬜ Pendiente | | | | |
