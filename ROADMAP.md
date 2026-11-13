@@ -49,7 +49,7 @@ son ampliaciones.
 | F1.4 | Validación manual de ≥ 50 casos límite en `docs/validacion_manual.md` | A+T | ⬜ Pendiente | | | | |
 | F1.5 | Deduplicación estructural y por composición, agrupación de casi duplicados y etiquetado por composición (positivo / sintetizada no perovskita / no etiquetado), con banderas de alta presión y metaestabilidad | A+T | ⬜ Pendiente | | | | |
 | F1.6 | Informe de conteos (positivos, sintetizadas no perovskita, no etiquetados; por estructura, composición, elemento A y B y familia). **Decisión:** si hay < ~100 ABO₃ positivas (estimación previa 200–350), ampliar a todas las clases de perovskita y evaluar óxidos aparte | A+T | ⬜ Pendiente | | | | Registrar la decisión en la bitácora |
-| F1.7 | Generación de todas las particiones (MatFold o propia) con informe de tamaños de grupo y positivos por grupo; demostrar cuánto se parece `group_system` a `random` | A+T | ⬜ Pendiente | | | | Implementación provisional propia ya en `src/perovskite_pu/splits/` |
+| F1.7 | Generación de todas las particiones (MatFold o propia) con informe de tamaños de grupo y positivos por grupo; demostrar cuánto se parece `group_system` a `random`. **S1:** distancia al train por grupo y fracción de grupos extrapolativos por esquema (preregistro §10b; requiere F2.1) | A+T | ⬜ Pendiente | | | | Implementación provisional propia ya en `src/perovskite_pu/splits/` |
 | F1.8 | Holdout congelado por grupos (y temporal si aplica), `train_pool.parquet` y hash canónico en `HASHES.json`. Todos los tests de fuga pasan sin saltos | A+T | ⬜ Pendiente | | | | |
 
 ## Fase 2 — Features y líneas base (A+T)
@@ -69,7 +69,7 @@ son ampliaciones.
 | F3.2 | Estimación de la prior de clase π (≥ 2 métodos) y análisis de sensibilidad | A+T | ⬜ Pendiente | | | | |
 | F3.3 | CV anidada: todos los esquemas × 10 semillas, `pre_dft` y `post_dft`, búsqueda aleatoria de presupuesto fijo, umbral en el bucle interno | A+T | ⬜ Pendiente | | | | |
 | F3.4 | Validación de **formabilidad** con negativos de Bartel y sintetizadas no perovskita (τ marcado *in-sample*) | A+T | ⬜ Pendiente | | | | |
-| F3.5 | **Obligatoria:** reevaluación del modelo de grafos de Gu et al.: reproducir su partición aleatoria en entorno aislado con su código y versiones; luego particiones por grupos. CPU/Colab/GPU del grupo. **Plazo máximo: 3 semanas.** Plan B: CGCNN o ALIGNN propio. Si ambos fallan, H3 pasa a exploratoria (bitácora) | A | ⬜ Pendiente | | | | |
+| F3.5 | **Obligatoria:** reevaluación del modelo de grafos de Gu et al.: reproducir su partición aleatoria en entorno aislado con su código y versiones; **S2:** repetirla agrupando sus cristales por composición (ΔTPR por fuga entre polimorfos); luego particiones por grupos. CPU/Colab/GPU del grupo. **Plazo máximo: 3 semanas.** Plan B: CGCNN o ALIGNN propio. Si ambos fallan, H3 pasa a exploratoria (bitácora) | A | ⬜ Pendiente | | | | |
 | F3.6 | Sensibilidad: sin fases de alta presión/metaestables y sin estados de oxidación ambiguos | A+T | ⬜ Pendiente | | | | |
 
 ## Fase 4 — Evaluación final e interpretabilidad (A+T)
@@ -144,6 +144,8 @@ son ampliaciones.
 | 2026-11-13 | Gu et al. (2022) evalúa con **una sola partición aleatoria del 10 %, por cristal**, y compara con τ en subconjuntos distintos (310 frente a 943 cristales), no a igual P(ŷ=1) | Leído a texto completo. Refuerza el diseño de H2 (igual P(ŷ=1)) y de F3.5. Se propone medir aparte el efecto de deduplicar por composición | F0.5, F3.5 |
 | 2026-11-13 | MatFold v1.3.3, **compatibilidad parcial (preliminar)**: cubre `random`, `chemsys` y `sgnum`, pero no `loeo_A`/`loeo_B` por sitio, `family`, `cluster` ni `temporal`, y exige una estructura por entrada. Se propone un esquema híbrido | Revisado en el README oficial (PyPI). La decisión final queda para F1.7 | F1.7 |
 | 2026-11-13 | La brecha queda delimitada (`docs/revision_literatura.md` §6) pero **condicionada a leer Chung, Walsh y Payne (2025)**, PU para óxidos ternarios, cuyo protocolo de evaluación se desconoce | La RSC bloquea el acceso automatizado; hace falta lectura humana o el PDF subido a la sesión | F0.5 |
+| 2026-11-13 | **Aprobado por la autora:** análisis secundario **S1** (¿los esquemas por grupos extrapolan de verdad?, por Li et al. 2025) y **S2** (efecto de deduplicar por composición la partición de Gu et al.). Ambos preregistrados como no confirmatorios (§10b) | S1 se evalúa en F1.7, antes de entrenar; S2 en F3.5 con los datos de Gu. Código de S1 en `perovskite_pu.evaluation.extrapolation`, con tests | F1.7, F3.5 |
+| 2026-11-13 | S1 usa PCA al 95 % de la varianza (ajustado en train) como espacio principal; el espacio estandarizado completo queda como sensibilidad | Los tests sintéticos mostraron que, al estandarizar, una sola feature de ruido diluye la señal de extrapolación. Con ~130 features MAGPIE el efecto sería mayor | F1.7 |
 
 ## Resultados clave
 

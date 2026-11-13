@@ -218,7 +218,10 @@ brecha (1) se estrecha a "perovskitas ABO₃ y comparación con τ" y debe citar
 más cercano. La contribución sigue siendo una **evaluación**, no un algoritmo nuevo, como
 establece el preregistro.
 
-## 7. Implicaciones para el proyecto (propuestas; no aplicadas sin aprobación)
+## 7. Implicaciones para el proyecto
+
+> Las propuestas 1 y 3 fueron **aprobadas el 2026-11-13** y quedan preregistradas como
+> análisis secundarios S2 y S1 (`docs/preregistro.md` §10b).
 
 1. **Reevaluación de Gu (F3.5).** Además de las particiones por grupos, deduplicar sus
    cristales a nivel de composición y medir cuánto cambia su TPR solo por eso. Esto separa la

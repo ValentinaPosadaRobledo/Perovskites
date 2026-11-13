@@ -90,6 +90,14 @@ splits:
     n_clusters: 10                   # PROPUESTA (F1.7)
   temporal:
     cutoff_year: null                # se fija en F1.7 si hay años de ICSD
+                                     # (año de la primera entrada en ICSD, NO fecha de carga en MP)
+  # Análisis secundario S1 (preregistro §10b): ¿cada esquema extrapola de verdad?
+  extrapolation:
+    feature_set: magpie
+    pca_variance: 0.95               # principal; ajustado solo con train
+    sensitivity_pca_variance: null   # sensibilidad: espacio estandarizado completo
+    reference_scheme: random
+    reference_quantile: 0.95         # grupo extrapolativo si su mediana > q95 de `random`
 
 # ---------------------------------------------------------------------------
 # F1.8 Holdout externo congelado por grupos (regla 2.1.5)

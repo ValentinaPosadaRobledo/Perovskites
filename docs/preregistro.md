@@ -270,6 +270,40 @@ a τ (N = 250).
 7. Validación de formabilidad (negativos de Bartel y sintetizadas no perovskita).
 8. Recall nominal del punto de operación 0,80 y 0,95 (en lugar de 0,90).
 9. H2 excluyendo los compuestos del conjunto de Bartel (τ fuera de muestra).
+10. S1 en el espacio estandarizado completo, sin PCA.
+
+## 10b. Análisis secundarios (no confirmatorios) *(añadidos 2026-11-13)*
+
+No intervienen en las decisiones sobre H1–H3. Se reportan como contexto y se nombran S1 y S2.
+
+**S1. ¿Los esquemas por grupos extrapolan de verdad?** Motivación: Li et al. (2025) muestran
+que muchas pruebas "fuera de distribución" en materiales en realidad interpolan.
+
+- Para cada composición de test, se calcula la distancia euclídea a la composición de train
+  más cercana en el espacio MAGPIE, estandarizado y proyectado por PCA al 95 % de la
+  varianza. Ambas transformaciones se ajustan solo con el train de cada fold
+  (`perovskite_pu.evaluation.extrapolation`).
+- Un grupo se considera **extrapolativo** si su mediana de distancia supera el cuantil 0,95
+  de las distancias bajo `random`.
+- Se reporta, por esquema, la fracción de grupos y de positivos en grupos extrapolativos. Se
+  calcula en F1.7, **antes de entrenar**.
+- En F4, la correlación de Spearman entre la mediana de distancia del grupo y su TPR, con IC
+  bootstrap, es descriptiva.
+- **Sensibilidad:** el espacio estandarizado completo, sin PCA.
+- **Limitación conocida:** al estandarizar, las features irrelevantes pesan igual que las
+  relevantes y diluyen la señal. Se documenta en `tests/test_extrapolation.py`.
+- **Interpretación preregistrada:** si un esquema tiene < 50 % de sus positivos en grupos
+  extrapolativos, sus resultados en H1 se describen como de "extrapolación débil".
+
+**S2. Efecto de la deduplicación por composición en Gu et al. (F3.5).** Gu et al. (2022)
+particiona por **cristal**.
+
+- Antes de aplicar las particiones por grupos, se reproduce su partición aleatoria en dos
+  variantes: (a) por cristal, como en el original; (b) con los cristales agrupados por
+  composición reducida, para que ninguna composición quede en train y test a la vez.
+- **ΔTPR(a − b)** estima la parte de la TPR atribuible a la fuga entre polimorfos. Así se
+  separa de la caída por extrapolación química que mide H3.
+- Se reporta con un IC bootstrap por composición.
 
 ## 11. Decisiones contingentes preregistradas
 
