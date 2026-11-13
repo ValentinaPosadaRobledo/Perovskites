@@ -15,9 +15,19 @@ Cada figura y tabla se genera con un script de `paper/scripts/` a partir de `res
 - PU learning en materiales: por qué los no etiquetados no son negativos.
 - El problema de la evaluación con particiones aleatorias: sobreestimación al predecir
   química nueva.
-- Trabajos relacionados: LOCO-CV (Meredig et al., 2018), MatFold (Witman y Schindler,
-  2025), SynCoTrain (arXiv 2411.12011), Desai et al. (arXiv 2510.06166), Gu et al. (2022),
-  Bartel et al. (2019), Jang et al. (2020), Frey et al. (2020), SynthNN.
+- Trabajos relacionados (verificados en `docs/revision_literatura.md`; claves de
+  `paper/references.bib`):
+  - Particiones fuera de distribución: LOCO-CV (`meredig2018`), MatFold
+    (`witman2025matfold`) y "las pruebas OOD suelen interpolar" (`li2025ood`).
+  - PU para sintetizabilidad: Gu et al. (`gu2022perovskite`), SynCoTrain
+    (`amariamir2025syncotrain`), Desai et al. (`desai2025bridging`), Chung et al.
+    (`chung2025solidstate`, el más cercano), Jang et al. (`jang2020structure`,
+    `jang2024stoichiometry`), Frey et al. (`frey2019mxenes`), CPUL (`sun2025cpul`) y
+    Aydın et al. (`aydin2026tree`).
+  - Solo composición y particiones temporales: SynthNN (`antoniuk2023synthnn`) y Zhu et al.
+    (`zhu2023synthesizability`).
+  - Sesgos y sobrepredicción: `davariashtiyani2024bias`, `schlesinger2026thermodynamic`.
+  - Factor de tolerancia: τ (`bartel2019tolerance`).
 - Delimitación de la contribución: evaluación sistemática y preregistrada, no un algoritmo
   nuevo.
 - **Alimentan:** F0.5.
