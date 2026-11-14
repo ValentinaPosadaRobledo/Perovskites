@@ -103,7 +103,11 @@ labeling:
 # F1.5 Banderas de sensibilidad (se conservan en el análisis principal)
 # ---------------------------------------------------------------------------
 sensitivity_flags:                   # listas iniciales; ampliar en F1.5
-  high_pressure_or_metastable: [MgSiO3, BiCoO3, PbVO3, BiScO3]
+  high_pressure_or_metastable: [MgSiO3, BiCoO3, PbVO3, BiScO3]   # lista curada (ampliable)
+  # Regla DFT (decisión de la autora, 2026-11-14): positiva cuya perovskita experimental queda
+  # ≥ este valor por encima del polimorfo más estable de la composición (E_hull GGA/GGA+U), con
+  # el estado fundamental NO perovskita. Solo para sensibilidad (F3.6); no cambia etiquetas.
+  metastable_dft_gap_ev_per_atom: 0.05
   ambiguous_oxidation_state: [BiNiO3, CaFeO3]
 
 # ---------------------------------------------------------------------------
