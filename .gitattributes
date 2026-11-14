@@ -8,3 +8,7 @@
 *.json.gz binary
 *.png binary
 *.pdf binary
+
+# Copias de terceros (Bartel et al., 2019): byte a byte idénticas al original, sin normalizar.
+src/perovskite_pu/features/data/*.json -text
+tests/fixtures/bartel2019_* -text

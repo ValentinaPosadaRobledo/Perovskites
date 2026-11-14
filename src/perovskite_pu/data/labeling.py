@@ -98,9 +98,12 @@ def site_assignment(group: pd.DataFrame) -> tuple[str | None, str | None]:
 
 
 def charge_balanced(formula: str) -> bool:
-    """True si la composición admite balance de carga con estados de oxidación comunes.
+    """True si la composición admite balance de carga con los estados de oxidación de ICSD.
 
-    Usa `Composition.oxi_state_guesses` (estados comunes de pymatgen). Ojo: falla en
+    Usa `Composition.oxi_state_guesses`, que por defecto toma los estados OBSERVADOS EN ICSD
+    (`Element.icsd_oxidation_states`) y, si un elemento no los tiene, los comunes
+    (`common_oxidation_states`). Es más permisivo que los comunes solos: admite Mn3+, así que
+    LaMnO3 equilibra la carga (con los comunes, no). Ojo: aun así falla en
     compuestos reales con estados poco comunes (Fe4+ en CaFeO3, Bi mixto en BaBiO3), así que
     se usa como BANDERA y como línea base, nunca para excluir.
     """
@@ -171,7 +174,7 @@ def build_labels(
                                    alta presión, a confirmar)
         flag_only_hexagonal        sintetizada solo como politipo hexagonal
         flag_icsd_without_exp      tiene IDs de ICSD pero ninguna entrada `theoretical == False`
-        flag_no_charge_balance     no admite balance de carga con estados comunes (pymatgen)
+        flag_no_charge_balance     sin balance de carga con los estados de ICSD (pymatgen)
         flag_site_rule_disagrees   la asignación A/B por estructura difiere de la de tamaño
 
     Sitios: `A`, `B` salen de la estructura (principal); `A_size`, `B_size` de la regla de

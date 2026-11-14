@@ -168,3 +168,33 @@ holdout:
   path: data/splits/holdout_frozen.csv
   hashes_path: data/splits/HASHES.json
   train_pool_path: data/processed/train_pool.parquet
+
+# ---------------------------------------------------------------------------
+# F2 Features (regla 2.1.8). Se calculan una vez por composición: son transformaciones fijas
+# de la fórmula, sin parámetros ajustados. La imputación, el umbral de varianza y el escalado
+# van dentro del Pipeline de cada fold (regla 2.1.6).
+# ---------------------------------------------------------------------------
+features:
+  families:
+    # Principal. Sin τ (decisión de la autora, 2026-11-14): τ se ajustó con la TableS1 de
+    # Bartel et al. (2019), que contiene la mayoría de nuestras positivas.
+    pre_dft:
+      composition: [element_property_magpie, stoichiometry, valence_orbital, ion_property]
+      geometric: [t, mu]
+    # Sensibilidad 14 del preregistro: pre_dft + τ, evaluada en todo el conjunto (declarada
+    # in-sample) y solo sobre las positivas fuera de la TableS1 (regla 2.1.6).
+    pre_dft_tau:
+      composition: [element_property_magpie, stoichiometry, valence_orbital, ion_property]
+      geometric: [t, mu, tau]
+  geometric:
+    # Sitios A/B y estados de oxidación con el algoritmo de Bartel (solo la fórmula). NO se usan
+    # las columnas A/B del pool: salen de la estructura y, en las positivas, de sus entradas
+    # perovskita experimentales, así que dependen de la etiqueta.
+    source: bartel2019_algorithm
+    # Radios de Shannon de las tablas de Bartel: r_A con el NC disponible más cercano a 12 y
+    # r_B con el más cercano a 6 (si no es el nominal, el radio queda marcado como sustituto).
+    # Las tablas van incluidas en el paquete (perovskite_pu/features/data, licencia MIT).
+  output:
+    table: data/interim/features_pre_dft.parquet
+    metadata: data/interim/features_pre_dft_meta.parquet
+    columns: data/interim/features_pre_dft_columns.json

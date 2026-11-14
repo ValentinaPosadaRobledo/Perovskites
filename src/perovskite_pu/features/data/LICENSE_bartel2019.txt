@@ -1,0 +1,30 @@
+Archivos copiados sin modificar (byte a byte) de https://github.com/CJBartel/perovskite-stability
+(commit 965b8de5b379dde09a6cb1f223ae0f0b9d3ce54e), de Bartel et al. (2019), Sci. Adv. 5, eaav0693:
+
+  Shannon_radii_dict.json  sha256 322870e5a1fb45e168b4ff6c8e262f88122fe5c662b1f9c5cc9676ecb74b425f
+  electronegativities.csv  sha256 94e26be5fd3fcd156b0c71dd8588c61947289d7e25cdeece3c277a3df00255b8
+
+Los usa perovskite_pu.features.tolerance para calcular t, mu y tau. Se distribuyen bajo su
+licencia original:
+
+MIT License
+
+Copyright (c) 2018 Christopher J. Bartel
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

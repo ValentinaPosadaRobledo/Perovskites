@@ -35,9 +35,14 @@ repos:
       - id: check-yaml
       - id: check-toml
       - id: check-json
+      # Las copias de terceros (tablas de Bartel et al., 2019) se guardan byte a byte idénticas
+      # al original, para poder verificar su hash; no se normalizan espacios ni finales de línea.
       - id: end-of-file-fixer
+        exclude: &vendored ^(src/perovskite_pu/features/data/|tests/fixtures/bartel2019_)
       - id: trailing-whitespace
         args: [--markdown-linebreak-ext=md]
+        exclude: *vendored
       - id: mixed-line-ending
         args: [--fix=lf]
+        exclude: *vendored
       - id: detect-private-key

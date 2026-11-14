@@ -102,7 +102,9 @@ def require_files():
         msg = f"Faltan datos: {missing}"
         if data_required():
             pytest.fail(msg + " (REQUIRE_DATA=1 o data/processed/ con datos: no se permite saltar)")
-        pytest.skip(msg + " (se ejecutará tras F1.8)")
+        # En CI se salta porque los datos (p. ej. train_pool) no se versionan; en local se
+        # comprueba con `uv run poe test-data`, que exige los datos.
+        pytest.skip(msg + " (datos no versionados; en local: `uv run poe test-data`)")
 
     return _require
 

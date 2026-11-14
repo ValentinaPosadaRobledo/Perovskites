@@ -84,7 +84,8 @@ por grupo.
 
 - **Modelos PU:** bagging PU (Mordelet y Vert, 2014) con Random Forest o Gradient
   Boosting (el aprendiz base se elige en el bucle interno, sección 7.1).
-- **Familias de features:** `pre_dft` (MAGPIE, t, μ, τ) y `post_dft` (+ E_hull, ΔHf),
+- **Familias de features:** `pre_dft` (MAGPIE completo de Ward et al. (2016), t y μ; **sin
+  τ**, decisión del 2026-11-14) y `post_dft` (+ E_hull, ΔHf),
   reportadas por separado; `post_dft` es una cota superior informada por el hull.
 - **Modelo de grafos:** Gu et al. (2022), reevaluado bajo las particiones por grupos.
 - **Líneas base:** t de Goldschmidt, τ de Bartel et al. (2019), umbral de E_hull, modelo de
@@ -275,11 +276,17 @@ a τ (N = 250).
 8. Recall nominal del punto de operación 0,80 y 0,95 (en lugar de 0,90).
 9. H2 excluyendo los compuestos del conjunto de Bartel (τ fuera de muestra).
 10. S1 en el espacio estandarizado completo, sin PCA.
-11. Solo con las U que admiten balance de carga con estados comunes (las 310 sin balance son
-    no etiquetadas triviales; 2026-11-14).
+11. Solo con las U que admiten balance de carga con los estados de oxidación observados en
+    ICSD (`flag_no_charge_balance`): las 310 sin balance son no etiquetadas triviales
+    (2026-11-14; la definición de los estados se precisó el mismo día).
 12. `loeo_A` / `loeo_B` con los sitios asignados por tamaño (r_A > r_B) en lugar de por
     estructura (2026-11-14).
 13. Sin las composiciones ambiguas (principal) frente a contarlas como P (2026-11-14).
+14. `pre_dft_tau` = `pre_dft` + τ (2026-11-14). τ se ajustó con la TableS1 de Bartel et al.
+    (2019), que contiene 152 de las 193 positivas de `train_pool`. Se evalúa en todo el
+    conjunto, declarada *in-sample*, y solo sobre las composiciones fuera de la TableS1 (P y U),
+    como exige la regla 2.1.6. Fuera de la TableS1 quedan 41 positivas, así que la potencia
+    es baja y el análisis es descriptivo.
 
 ## 10b. Análisis secundarios (no confirmatorios) *(añadidos 2026-11-13)*
 
