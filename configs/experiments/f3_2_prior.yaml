@@ -1,0 +1,72 @@
+# F3.2: prior de clase π con dos métodos (preregistro §7: "≥ 2 métodos, con sensibilidad").
+# Decisiones de la autora del 2026-11-14 (bitácora): Elkan–Noto + TIcE con implementación
+# propia validada con datos sintéticos; π descriptiva y para la sensibilidad (precisión en el
+# punto de operación bajo SCAR). Nada del protocolo principal depende de π. Todo parámetro
+# vive aquí (regla 2.4); las semillas se leen de configs/seeds.yaml.
+
+name: f3_2_prior
+description: >-
+  Frecuencia de etiquetado c y prior π de train_pool con las features pre_dft, por
+  Elkan–Noto (clasificador calibrado, puntuaciones fuera de fold) y TIcE (Bekker y Davis,
+  2018, Algorithm 1 con sus valores por defecto). Ambos suponen SCAR, que aquí no se cumple.
+roadmap_task: F3.2
+hypotheses: [descriptivo]
+
+data:
+  config: configs/data.yaml
+  input: data/processed/train_pool.parquet   # todo parte de train_pool (regla 2.1.5)
+
+features:
+  family: pre_dft                             # la familia principal (sin información de MP)
+  preprocessing:
+    add_missing_indicator: true               # igual que F3.3: t y μ faltan sin balance
+
+# Poblaciones sobre las que se estima π. La principal es todo train_pool; la sensibilidad
+# quita las U sin balance de carga con los estados de ICSD (sensibilidad 11 del preregistro),
+# que son no etiquetadas triviales y rebajan π_U por construcción.
+populations:
+  all: {exclude_unlabeled_flag: null}
+  charge_balanced_u: {exclude_unlabeled_flag: flag_no_charge_balance}
+
+methods:
+  elkan_noto:
+    kind: elkan_noto
+    role: principal
+    n_splits: 5                               # puntuación fuera de fold de cada positiva
+    learner: random_forest
+    params: {n_estimators: 300, min_samples_leaf: 5, max_features: sqrt}
+    calibration: {method: isotonic, cv: 3}    # isotónica: admite la meseta g(x) = c
+  elkan_noto_sigmoid:
+    kind: elkan_noto
+    role: sensitivity
+    n_splits: 5
+    learner: random_forest
+    params: {n_estimators: 300, min_samples_leaf: 5, max_features: sqrt}
+    calibration: {method: sigmoid, cv: 3}     # Platt, como el artículo original (con SVM)
+  elkan_noto_gb:
+    kind: elkan_noto
+    role: sensitivity
+    n_splits: 5
+    learner: gradient_boosting
+    params: {n_estimators: 100, max_depth: 3, learning_rate: 0.1}
+    calibration: {method: isotonic, cv: 3}
+  tice:
+    kind: tice
+    role: principal
+    n_folds: 5                                # valores por defecto del artículo
+    k: 5
+    max_splits: 500
+    n_bins: 4
+    binning: uniform                          # rango [0, 1] partido en 4 partes iguales
+  tice_quantile:
+    kind: tice
+    role: sensitivity
+    n_folds: 5
+    k: 5
+    max_splits: 500
+    n_bins: 4
+    binning: quantile                         # cortes por cuantiles (robusto a extremos)
+
+execution:
+  n_jobs: -1                                  # joblib (loky) sobre semilla × método × población
+  dev_mode: false
