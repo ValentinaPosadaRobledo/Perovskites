@@ -1,6 +1,6 @@
 # Informe F2.4: líneas base
 
-> Generado por `scripts/report_f2_4.py` (commit `836d147`, árbol sucio) a partir de
+> Generado por `scripts/report_f2_4.py` (commit `abb8e54`) a partir de
 > `results/f2_4_baselines/20261114T013022Z_00a61daabfdf` (corrida con el commit `922443b`; 10 semillas; 20 s).
 > No editar a mano. Configuración: `configs/experiments/f2_4_baselines.yaml`. Solo `train_pool`.
 
