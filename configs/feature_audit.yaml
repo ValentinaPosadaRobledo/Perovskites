@@ -1,0 +1,120 @@
+# F2.3 Auditoría de features (regla 2.1.8 de CLAUDE.md).
+# Cada grupo de columnas declara su fuente, su etapa y cómo puede depender de la etiqueta.
+# `perovskite_pu.features.audit` y los tests de fuga lo hacen cumplir:
+# - toda columna de toda familia pertenece a un grupo auditado;
+# - ninguna columna coincide con `forbidden_patterns`;
+# - la familia principal `pre_dft` solo lleva grupos `pre_synthesis` con `label_dependence: none`.
+#
+# Etapas:  pre_synthesis = solo la fórmula y tablas externas fijas; post_dft = cálculo DFT de MP.
+# Dependencia de la etiqueta:
+#   none      = no usa nuestras etiquetas ni la base de datos que las define;
+#   in_sample = ajustada con datos que contienen nuestras positivas (τ con la TableS1);
+#   indirect  = calculada con información que depende de la síntesis (hull de MP con fases de
+#               ICSD; estructura experimental relajada en las positivas).
+
+groups:
+  element_property_magpie:
+    columns_from: element_property_magpie   # grupo del JSON de columnas de pre_dft
+    source: "Propiedades elementales de Magpie (Ward et al., 2016), vía matminer"
+    stage: pre_synthesis
+    label_dependence: none
+    note: >-
+      Mínimo, máximo, rango, media, desviación media y moda de 22 propiedades elementales,
+      ponderadas por la fracción atómica. Algunas propiedades elementales (GSvolume_pa,
+      GSbandgap, GSmagmom) son DFT de los elementos puros: no dependen de nuestras composiciones.
+  stoichiometry:
+    columns_from: stoichiometry
+    source: "matminer Stoichiometry (normas p de las fracciones atómicas)"
+    stage: pre_synthesis
+    label_dependence: none
+    note: "Constantes en ABO3; las quita el umbral de varianza del Pipeline."
+  valence_orbital:
+    columns_from: valence_orbital
+    source: "matminer ValenceOrbital (electrones s, p, d, f de valencia; tablas de Magpie)"
+    stage: pre_synthesis
+    label_dependence: none
+  ion_property:
+    columns_from: ion_property
+    source: "matminer IonProperty: carácter iónico (electronegatividad) y 'compound possible'"
+    stage: pre_synthesis
+    label_dependence: none
+    note: >-
+      'compound possible' usa los estados de oxidación COMUNES de pymatgen, una lista curada
+      que no se ajusta con nuestras etiquetas. Falla en el 31 % de las P (p. ej. LaMnO3).
+  geometric_t_mu:
+    columns: [geom_t, geom_mu]
+    source: "Radios de Shannon (1976) con la asignación de sitios y oxidación de Bartel et al. (2019), solo a partir de la fórmula"
+    stage: pre_synthesis
+    label_dependence: none
+    note: >-
+      NO se usan las columnas A/B del pool, que salen de la estructura (y, en las P, de sus
+      entradas experimentales). NaN si no hay combinación de oxidación que equilibre la carga
+      (39 % de las U y 0 % de las P): se imputa dentro del Pipeline.
+  geometric_tau:
+    columns: [geom_tau]
+    source: "τ de Bartel et al. (2019): forma funcional (SISSO) y umbral 4,18 ajustados con su TableS1"
+    stage: pre_synthesis
+    label_dependence: in_sample
+    mitigation: >-
+      Fuera de la familia principal. Solo en pre_dft_tau (sensibilidad 14), evaluada en todo
+      el conjunto (declarada in-sample) y sin la TableS1 (152 de las 193 P de train_pool están
+      en ella). Como línea base (H2), el análisis principal es conservador para el modelo PU.
+  thermo_gga:
+    columns: [thermo_ehull, thermo_eform]
+    source: "Endpoint thermo de MP (GGA_GGA+U), polimorfo perovskita de menor E_hull"
+    stage: post_dft
+    label_dependence: indirect
+    mitigation: >-
+      Familia aparte (post_dft), presentada como cota superior informada por el hull, junto a
+      la línea base de solo E_hull. Solo composiciones con polimorfo perovskita calculado (sin
+      imputar). Circularidad: el hull lo definen en parte fases de ICSD y, en el 97 % de las P,
+      la entrada elegida es la estructura experimental. La ΔHf lleva las correcciones MP2020,
+      ajustadas a entalpías experimentales a nivel de población, no por compuesto.
+  thermo_r2scan:
+    columns: [thermo_ehull_r2scan, thermo_eform_r2scan]
+    source: "Endpoint thermo de MP (r2SCAN), mismo criterio de polimorfo"
+    stage: post_dft
+    label_dependence: indirect
+    mitigation: "Solo sensibilidad 4 (descriptiva), con composiciones que tienen ambas funcionales."
+
+# Familias de features que se pueden usar como features de un modelo, con su papel.
+families:
+  pre_dft: {role: principal}
+  pre_dft_tau: {role: sensitivity_14}
+  post_dft: {role: upper_bound}
+  post_dft_r2scan: {role: sensitivity_4}
+
+# Columnas que NUNCA pueden ser features: metadatos, procedencia o información derivada de la
+# etiqueta. Expresiones regulares ancladas al inicio del nombre (sensibles a mayúsculas, para no
+# chocar con propiedades elementales legítimas como "MagpieData mean SpaceGroupNumber").
+forbidden_patterns:
+  - '^label'
+  - '^(A|B)$'
+  - '^(A|B)_size$'
+  - '^experimental'
+  - '^theoretical'
+  - '^(n_)?icsd'
+  - '^material_id'
+  - '^year'
+  - '^first_year'
+  - '^n_(entries|unique_structures|experimental|perovskite|references)'
+  - '^eligible'
+  - '^flag_'
+  - '^bartel'
+  - '^in_bartel'
+  - '^ground_state'
+  - '^summary_'
+  - '^spacegroup'
+  - '^crystal_system'
+  - '^cls'
+  - '^manual'
+  - '^(a|b)_element'
+  - '^family$'
+  - '^metastable'
+  - '^batch_id'
+  - '^is_gnome'
+
+# Cribado univariante (descriptivo, NO selecciona features): una columna que separa P de U casi
+# perfectamente se revisa como posible fuga. AUC con U como negativo (cota inferior).
+screen:
+  suspicious_auc: 0.95     # se marca si AUC ≥ 0,95 o ≤ 0,05

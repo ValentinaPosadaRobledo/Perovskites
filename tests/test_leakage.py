@@ -7,9 +7,12 @@ Capas:
    - el preprocesamiento se ajusta solo con train;
    - análisis estático (ast): training/ no referencia el holdout;
    - audit hook: una corrida sintética nunca abre holdout_frozen.csv;
-   - load_holdout() exige HOLDOUT_UNLOCK=1 y verifica el hash.
+   - load_holdout() exige HOLDOUT_UNLOCK=1 y verifica el hash;
+   - auditoría de features (F2.3): la configuración de familias cumple
+     `configs/feature_audit.yaml` (lista blanca, patrones prohibidos, pre_dft limpia).
 2. DEPENDIENTES DE DATOS (se saltan sin datos; fallan con REQUIRE_DATA=1 o si
-   data/processed/ tiene datos): holdout ∩ train_pool = ∅ y hash canónico correcto.
+   data/processed/ tiene datos): holdout ∩ train_pool = ∅, hash canónico correcto y familias
+   de features calculadas sin columnas prohibidas ni sin auditar.
 
 Ejecutar siempre con ``pytest -rs`` (ya está en pyproject.toml).
 """
@@ -329,6 +332,64 @@ def test_load_holdout_requires_registered_hash(fake_holdout, monkeypatch, tmp_pa
 
 
 # ===========================================================================
+# 1e. Auditoría de features (F2.3, regla 2.1.8)
+# ===========================================================================
+def _config_families(data_cfg: dict) -> tuple[dict[str, list[str]], dict[str, list[str]]]:
+    """Familias a partir SOLO de la configuración, con una columna ficticia por grupo."""
+    from perovskite_pu.features.post_dft import family_columns_post
+    from perovskite_pu.features.pre_dft import GEOMETRIC_COLUMNS, family_columns
+
+    fam_cfg = data_cfg["features"]["families"]
+    groups = {g for spec in fam_cfg.values() for g in spec["composition"]}
+    by_group = {g: [f"MagpieData mean {g}"] for g in groups}  # nombres como los de matminer
+    by_group["geometric"] = list(GEOMETRIC_COLUMNS.values())
+    pre = family_columns(fam_cfg, by_group)
+    post = family_columns_post(data_cfg["features"]["families_post_dft"], pre)
+    return {**pre, **post}, by_group
+
+
+def test_feature_families_config_passes_audit(data_cfg):
+    """Las familias de configs/data.yaml cumplen feature_audit.yaml (sin datos)."""
+    from perovskite_pu.features.audit import check_family_columns, load_audit_config
+
+    families, by_group = _config_families(data_cfg)
+    assert check_family_columns(families, load_audit_config(), by_group) == []
+
+
+def test_pre_dft_has_no_tau_and_no_thermo(data_cfg):
+    families, _ = _config_families(data_cfg)
+    assert not any(c == "geom_tau" or c.startswith("thermo_") for c in families["pre_dft"])
+
+
+def test_audit_detects_forbidden_unaudited_and_impure_pre_dft(data_cfg):
+    from perovskite_pu.features.audit import check_family_columns, load_audit_config
+
+    _, by_group = _config_families(data_cfg)
+    bad = {
+        "pre_dft": ["geom_t", "thermo_ehull"],          # termo en la familia principal
+        "post_dft": ["experimental_gga", "columna_x"],  # metadato y columna sin auditar
+    }  # fmt: skip
+    problems = check_family_columns(bad, load_audit_config(), by_group)
+    assert any("prohibida 'experimental_gga'" in p for p in problems)
+    assert any("sin grupo auditado 'columna_x'" in p for p in problems)
+    assert any("pre_dft: 'thermo_ehull'" in p for p in problems)
+
+
+@pytest.mark.parametrize(
+    "name",
+    ["MagpieData mean SpaceGroupNumber", "compound possible", "avg s valence electrons",
+     "0-norm", "geom_t", "thermo_ehull"],
+)  # fmt: skip
+def test_forbidden_patterns_spare_legitimate_features(name):
+    import re
+
+    from perovskite_pu.features.audit import load_audit_config
+
+    patterns = [re.compile(p) for p in load_audit_config()["forbidden_patterns"]]
+    assert not any(p.search(name) for p in patterns)
+
+
+# ===========================================================================
 # 2. Dependientes de datos (se activan tras F1.8)
 # ===========================================================================
 HOLDOUT_PATH: Path = SPLITS_DIR / HOLDOUT_FILENAME
@@ -360,3 +421,19 @@ def test_holdout_hash_matches_registry(require_files):
     assert not raw.startswith(b"\xef\xbb\xbf"), "El holdout tiene BOM"
     comps = pd.read_csv(HOLDOUT_PATH, usecols=["composition"])["composition"].tolist()
     assert comps == sorted(comps), "El holdout no está ordenado por composición"
+
+
+@pytest.mark.requires_data
+def test_computed_feature_families_pass_audit(require_files, data_cfg):
+    """Las familias calculadas (F2.1–F2.2) no tienen columnas prohibidas ni sin auditar."""
+    import json
+
+    from perovskite_pu.features.audit import check_family_columns, load_audit_config
+
+    out = data_cfg["features"]["output"]
+    pre_path, post_path = ROOT / out["columns"], ROOT / out["post_columns"]
+    require_files(pre_path, post_path)
+    pre = json.loads(pre_path.read_text("utf-8"))
+    post = json.loads(post_path.read_text("utf-8"))
+    families = {**pre["families"], **post["families"]}
+    assert check_family_columns(families, load_audit_config(), pre["groups"]) == []
