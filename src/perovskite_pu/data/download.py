@@ -28,6 +28,7 @@ from __future__ import annotations
 import argparse
 import gzip
 import json
+import re
 from collections.abc import Iterable, Sequence
 from datetime import UTC, datetime
 from importlib import metadata
@@ -45,6 +46,8 @@ from perovskite_pu.utils.run_metadata import git_commit, git_is_dirty
 SUMMARY_FILE = "mp_abo3_summary.json.gz"  # documentos completos, con estructuras
 INDEX_FILE = "mp_abo3_index.parquet"  # tabla plana sin estructuras
 THERMO_FILE = "mp_abo3_thermo.parquet"  # E_hull y ΔHf por thermo_type
+PROVENANCE_FILE = "mp_abo3_provenance.parquet"  # año más antiguo de las referencias (F1.7)
+_YEAR_RE = re.compile(r"\byear\s*=\s*[{\"]?\s*(\d{4})")
 MANIFEST_PATH = DATA_DIR / "MANIFEST.json"
 
 
@@ -115,6 +118,16 @@ def index_table(docs: Sequence[dict[str, Any]]) -> pd.DataFrame:
             }
         )
     return pd.DataFrame(rows).sort_values("material_id", ignore_index=True)
+
+
+def earliest_year(references: Iterable[str] | None) -> int | None:
+    """Año más antiguo citado en una lista de referencias BibTeX (None si no hay ninguno).
+
+    Se usa para fechar la primera caracterización experimental (esquema `temporal`).
+    """
+    years = [int(y) for ref in (references or []) for y in _YEAR_RE.findall(ref)]
+    years = [y for y in years if 1800 <= y <= 2100]  # descarta valores absurdos
+    return min(years) if years else None
 
 
 def build_manifest(
@@ -256,12 +269,62 @@ def download(config_path: Path, out_dir: Path, dry_run: bool = False) -> dict[st
     return counts
 
 
+def download_provenance(out_dir: Path, chunk: int = 200) -> dict[str, int]:
+    """Descarga la procedencia de las entradas con ID de ICSD y guarda el año más antiguo.
+
+    Solo guarda `material_id`, `first_year` y el número de referencias: no las referencias.
+    Registra el archivo en la sección `provenance` de `data/MANIFEST.json`.
+    """
+    from mp_api.client import MPRester
+
+    index = pd.read_parquet(out_dir / INDEX_FILE)
+    ids = sorted(index.loc[index["n_icsd_ids"] > 0, "material_id"])
+    rows = []
+    with MPRester(use_document_model=False, mute_progress_bars=True) as mpr:
+        db_version = mpr.db_version
+        for start in range(0, len(ids), chunk):
+            docs = mpr.materials.provenance.search(
+                material_ids=ids[start : start + chunk], fields=["material_id", "references"]
+            )
+            for d in docs:
+                refs = d.get("references") or []
+                rows.append(
+                    {
+                        "material_id": str(d["material_id"]),
+                        "first_year": earliest_year(refs),
+                        "n_references": len(refs),
+                    }
+                )
+    table = pd.DataFrame(rows).sort_values("material_id", ignore_index=True)
+    path = out_dir / PROVENANCE_FILE
+    table.to_parquet(path, index=False)
+    manifest = json.loads(MANIFEST_PATH.read_text("utf-8")) if MANIFEST_PATH.exists() else {}
+    manifest["provenance"] = {
+        "file": PROVENANCE_FILE, "sha256": sha256_file(path), "mp_database_version": db_version,
+        "query_date_utc": datetime.now(UTC).isoformat(timespec="seconds"),
+        "entries_requested": len(ids), "entries_returned": len(table),
+        "entries_with_year": int(table["first_year"].notna().sum()),
+    }  # fmt: skip
+    with open(MANIFEST_PATH, "w", encoding="utf-8", newline="\n") as fh:
+        json.dump(manifest, fh, indent=2, ensure_ascii=False)
+        fh.write("\n")
+    return {k: v for k, v in manifest["provenance"].items() if k.startswith("entries")}
+
+
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description="F1.1: descarga de óxidos ABO3 desde MP.")
     parser.add_argument("--config", type=Path, default=CONFIGS_DIR / "data.yaml")
     parser.add_argument("--out", type=Path, default=RAW_DIR)
     parser.add_argument("--dry-run", action="store_true", help="Solo cuenta; no escribe nada.")
+    parser.add_argument(
+        "--provenance",
+        action="store_true",
+        help="Solo descarga la procedencia (años de ICSD) de lo ya descargado.",
+    )
     args = parser.parse_args(argv)
+    if args.provenance:
+        print(json.dumps(download_provenance(args.out), indent=2))
+        return
     counts = download(args.config, args.out, dry_run=args.dry_run)
     print(json.dumps(counts, indent=2))
 

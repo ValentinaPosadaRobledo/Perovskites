@@ -134,7 +134,7 @@ def split_cfg(data_cfg: dict) -> dict:
     """Sección ``splits`` con valores adaptados al tamaño de los datos de juguete."""
     cfg = {k: dict(v) if isinstance(v, dict) else v for k, v in data_cfg["splits"].items()}
     cfg["cluster"]["n_clusters"] = 4  # 80 composiciones: 4 clústeres bastan
-    cfg["temporal"]["cutoff_year"] = 2000  # la config real lo deja en null hasta F1.7
+    cfg["temporal"]["cutoff_year"] = 2000  # fijo para los tests; la config real lo calcula
     return cfg
 
 

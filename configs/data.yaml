@@ -138,12 +138,17 @@ splits:
   loeo_A:
     min_positives_per_element: 5
     small_group_policy: report_separately
-  cluster:                           # LOCO-CV (Meredig et al., 2018)
+  cluster:                           # LOCO-CV (Meredig et al., 2018): k-means sobre MAGPIE estandarizado
     feature_set: magpie
-    n_clusters: 10                   # PROPUESTA (F1.7)
+    # k = 5 (decisión de la autora, 2026-11-14): la silueta es plana (0,148–0,165 para k = 2–10)
+    # y no indica un k natural; k = 5 está a 0,003 del máximo e iguala los 5 folds de `random`.
+    n_clusters: 5
+    k_scan: [2, 3, 4, 5, 6, 7, 8, 9, 10]   # descriptivo (Meredig): mediana entre k
   temporal:
-    cutoff_year: null                # se fija en F1.7 si hay años de ICSD
-                                     # (año de la primera entrada en ICSD, NO fecha de carga en MP)
+    # Año de primera caracterización = el más antiguo de las referencias de ICSD (procedencia de
+    # MP) de sus entradas perovskita experimentales; NO la fecha de carga en MP.
+    target_test_fraction: 0.15       # el corte deja ~15 % de las positivas en el test
+    cutoff_year: null                # null: se calcula con target_test_fraction sobre el pool
   # Análisis secundario S1 (preregistro §10b): ¿cada esquema extrapola de verdad?
   extrapolation:
     feature_set: magpie

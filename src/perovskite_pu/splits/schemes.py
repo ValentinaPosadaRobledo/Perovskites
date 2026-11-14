@@ -19,6 +19,7 @@ from typing import Any
 import numpy as np
 import pandas as pd
 from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
 
 from perovskite_pu.utils.seeds import sklearn_random_state
 
@@ -33,7 +34,8 @@ SCHEMES: tuple[str, ...] = (
     "temporal",
 )
 # Esquemas cuyos folds dependen de la semilla (el resto son deterministas).
-RANDOMIZED_SCHEMES: frozenset[str] = frozenset({"random", "group_system", "cluster"})
+# `temporal` es aleatorio solo en la fracción de U que va al test.
+RANDOMIZED_SCHEMES: frozenset[str] = frozenset({"random", "group_system", "cluster", "temporal"})
 
 
 class LeakageError(AssertionError):
@@ -80,12 +82,13 @@ def merge_small_groups(
 def cluster_groups(features: np.ndarray, n_clusters: int, rng: np.random.Generator) -> pd.Series:
     """Grupos por k-means sobre features composicionales (LOCO-CV, Meredig et al., 2018).
 
-    El clustering es no supervisado (no usa etiquetas), por eso se ajusta con todas las
-    composiciones, como en el LOCO-CV original.
+    Como en Meredig et al., las features se estandarizan antes de k-means. El clustering es no
+    supervisado (no usa etiquetas), por eso se ajusta con todas las composiciones del pool,
+    como en el LOCO-CV original.
     """
     seed = sklearn_random_state(np.random.SeedSequence(rng.integers(2**32)))
     km = KMeans(n_clusters=n_clusters, n_init=10, random_state=seed)
-    labels = km.fit_predict(features)
+    labels = km.fit_predict(StandardScaler().fit_transform(features))
     return pd.Series([f"cluster_{c}" for c in labels])
 
 
@@ -125,13 +128,41 @@ def leave_one_group_out(groups: pd.Series) -> list[Fold]:
     return folds
 
 
-def temporal_split(years: pd.Series, cutoff_year: int) -> list[Fold]:
-    """Un solo fold: train = entradas anteriores al corte; test = posteriores o iguales.
+def temporal_cutoff(years: pd.Series, target_test_fraction: float) -> int:
+    """Año de corte tal que la fracción de positivas con año ≥ corte se acerque al objetivo.
 
-    Las composiciones sin año (no etiquetadas, típicamente) van a train.
+    `years` son los años de primera caracterización de las POSITIVAS (sin NaN). Entre los años
+    candidatos se elige el que deja la fracción de test más cercana al objetivo (empate: el
+    más reciente).
+    """
+    y = pd.Series(years).dropna().astype(int)
+    if y.empty:
+        raise ValueError("No hay años para fijar el corte temporal.")
+    candidates = sorted(y.unique())
+    return int(min(candidates, key=lambda c: (abs((y >= c).mean() - target_test_fraction), -c)))
+
+
+def temporal_split(
+    years: pd.Series,
+    labels: pd.Series,
+    cutoff_year: int,
+    u_test_fraction: float,
+    rng: np.random.Generator,
+) -> list[Fold]:
+    """Un solo fold: test = positivas con año ≥ corte + una fracción aleatoria de U.
+
+    Las positivas posteriores al corte NO entran al entrenamiento ni siquiera como no
+    etiquetadas (regla 2.1.3: nunca la misma composición en train y test). Una fracción
+    `u_test_fraction` de U, elegida con `rng`, va al test para poder medir P(ŷ=1|U).
     """
     years = years.reset_index(drop=True)
-    test_mask = (years >= cutoff_year).fillna(False).to_numpy(dtype=bool)
+    labels = labels.reset_index(drop=True).astype(int)
+    late_pos = ((labels == 1) & (years >= cutoff_year).fillna(False)).to_numpy(dtype=bool)
+    u_idx = np.flatnonzero(labels.to_numpy() == 0)
+    n_u = round(u_test_fraction * len(u_idx))
+    u_test = rng.choice(u_idx, size=n_u, replace=False) if n_u else np.array([], dtype=int)
+    test_mask = late_pos.copy()
+    test_mask[u_test] = True
     return [Fold(np.flatnonzero(~test_mask), np.flatnonzero(test_mask), (f">={cutoff_year}",))]
 
 
@@ -200,10 +231,12 @@ def make_folds(
     elif scheme == "group_system":
         folds = group_kfold(groups, split_cfg["group_system"]["n_splits"], rng)
     elif scheme == "temporal":
-        cutoff = split_cfg["temporal"].get("cutoff_year")
-        if cutoff is None or "year" not in df.columns:
-            raise ValueError("`temporal` requiere `cutoff_year` en la config y columna `year`.")
-        folds = temporal_split(df["year"], int(cutoff))
+        tcfg = split_cfg["temporal"]
+        if "year" not in df.columns:
+            raise ValueError("`temporal` requiere la columna `year` (primera caracterización).")
+        frac = tcfg.get("target_test_fraction", 0.15)
+        cutoff = tcfg.get("cutoff_year") or temporal_cutoff(df.loc[df["label"] == 1, "year"], frac)
+        folds = temporal_split(df["year"], df["label"], int(cutoff), frac, rng)
     else:
         folds = leave_one_group_out(groups)
 

@@ -7,7 +7,13 @@ import json
 
 import pytest
 
-from perovskite_pu.data.download import build_manifest, flag_gnome, index_table, is_abo3_oxide
+from perovskite_pu.data.download import (
+    build_manifest,
+    earliest_year,
+    flag_gnome,
+    index_table,
+    is_abo3_oxide,
+)
 
 
 @pytest.mark.parametrize(
@@ -83,3 +89,15 @@ def test_build_manifest_records_versions_and_hashes(tmp_path):
         "git_commit",
     }
     assert len(m["files"]["a.json.gz"]) == 64
+
+
+def test_earliest_year_parses_bibtex_variants():
+    refs = [
+        "@article{a, title = {X}, year = {1953}}",
+        '@article{b, year = "1927", journal = {Z}}',
+        "@article{c, year=2001}",
+        "@misc{d, title = {sin año}}",
+    ]
+    assert earliest_year(refs) == 1927
+    assert earliest_year([]) is None and earliest_year(None) is None
+    assert earliest_year(["@article{e, year = {0001}}"]) is None  # valor absurdo descartado
