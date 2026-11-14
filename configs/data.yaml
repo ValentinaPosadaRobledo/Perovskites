@@ -194,7 +194,34 @@ features:
     # Radios de Shannon de las tablas de Bartel: r_A con el NC disponible más cercano a 12 y
     # r_B con el más cercano a 6 (si no es el nominal, el radio queda marcado como sustituto).
     # Las tablas van incluidas en el paquete (perovskite_pu/features/data, licencia MIT).
+  # F2.2: post_dft = pre_dft + E_hull + ΔHf. Cota superior informada por el hull (regla 2.1.8).
+  post_dft:
+    # E_hull y ΔHf de la entrada PEROVSKITA de menor E_hull de la composición (decisión de la
+    # autora, 2026-11-14), no del estado fundamental.
+    polymorph: lowest_energy_perovskite
+    # Mismo criterio que define las positivas: solo entradas clasificadas `perovskite` en F1.5
+    # (las `perovskite_borderline` experimentales pasaron a ambiguas).
+    perovskite_classes: [perovskite]
+    thermo_type: GGA_GGA+U             # una sola funcional (materials_project.thermo_types)
+    sensitivity_thermo_type: R2SCAN    # sensibilidad 4: solo donde hay perovskita en GGA y r2SCAN
+    # Composiciones sin entrada perovskita con termodinámica de la funcional: se EXCLUYEN de
+    # post_dft (no se imputan). Imputarlas daría la regla "sin polimorfo perovskita → U",
+    # derivada de la etiqueta: todas las P tienen esa entrada porque se sintetizaron.
+    # Incluye las U con Yb que solo tienen r2SCAN (decisión de la autora, 2026-11-14).
+    missing_policy: exclude
+  families_post_dft:
+    post_dft:
+      extends: pre_dft
+      thermo: [ehull, eform]
+    # Sensibilidad 4 (descriptiva): las mismas features con r2SCAN.
+    post_dft_r2scan:
+      extends: pre_dft
+      thermo: [ehull_r2scan, eform_r2scan]
   output:
     table: data/interim/features_pre_dft.parquet
     metadata: data/interim/features_pre_dft_meta.parquet
     columns: data/interim/features_pre_dft_columns.json
+    post_table: data/interim/features_post_dft.parquet
+    # Metadatos (entrada elegida, si es experimental, elegibilidad): NUNCA son features.
+    post_metadata: data/interim/features_post_dft_meta.parquet
+    post_columns: data/interim/features_post_dft_columns.json

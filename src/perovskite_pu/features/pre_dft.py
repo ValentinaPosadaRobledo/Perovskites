@@ -157,25 +157,6 @@ def build_pre_dft(
     return table, meta, columns
 
 
-def load_feature_matrix(family: str, compositions: Sequence[str]) -> pd.DataFrame:
-    """Features de una familia para las composiciones pedidas, en ese orden.
-
-    Lee las salidas de `main` (rutas en `features.output`). Falla si falta alguna composición.
-    """
-    import yaml
-
-    cfg = yaml.safe_load((CONFIGS_DIR / "data.yaml").read_text("utf-8"))["features"]["output"]
-    columns = json.loads((ROOT / cfg["columns"]).read_text("utf-8"))["families"]
-    if family not in columns:
-        raise KeyError(f"Familia de features desconocida: {family}")
-    table = pd.read_parquet(ROOT / cfg["table"])
-    missing = sorted(set(compositions) - set(table.index))
-    if missing:
-        extra = max(len(missing) - 5, 0)
-        raise KeyError(f"Composiciones sin features: {missing[:5]} (y {extra} más)")
-    return table.loc[list(compositions), columns[family]]
-
-
 def main(argv: list[str] | None = None) -> None:
     """Calcula las features `pre_dft` de todas las composiciones no polianiónicas."""
     import yaml

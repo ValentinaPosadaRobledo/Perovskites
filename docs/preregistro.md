@@ -86,7 +86,11 @@ por grupo.
   Boosting (el aprendiz base se elige en el bucle interno, sección 7.1).
 - **Familias de features:** `pre_dft` (MAGPIE completo de Ward et al. (2016), t y μ; **sin
   τ**, decisión del 2026-11-14) y `post_dft` (+ E_hull, ΔHf),
-  reportadas por separado; `post_dft` es una cota superior informada por el hull.
+  reportadas por separado; `post_dft` es una cota superior informada por el hull. La E_hull y
+  la ΔHf son las del **polimorfo perovskita de menor energía** (GGA_GGA+U), y `post_dft` se
+  calcula **solo sobre las composiciones que tienen ese polimorfo** en MP (193 P y 587 U de
+  `train_pool`), sin imputar: todas las P lo tienen porque se sintetizaron (2026-11-14). Sus
+  comparaciones pareadas con `pre_dft` y la línea base de solo E_hull usan ese subconjunto.
 - **Modelo de grafos:** Gu et al. (2022), reevaluado bajo las particiones por grupos.
 - **Líneas base:** t de Goldschmidt, τ de Bartel et al. (2019), umbral de E_hull, modelo de
   solo E_hull, modelo de solo grupo espacial/simetría, **balance de carga** (estados de
@@ -269,7 +273,9 @@ a τ (N = 250).
 1. Sin fases de alta presión ni metaestables.
 2. Sin casos de estado de oxidación ambiguo.
 3. Prior de clase π estimada con métodos distintos.
-4. Termodinámica r2SCAN en lugar de GGA/GGA+U (para `post_dft`).
+4. Termodinámica r2SCAN en lugar de GGA/GGA+U (para `post_dft`). **Descriptiva**, solo en las
+   composiciones con polimorfo perovskita en ambas funcionales (173 de `train_pool`: 126 P y
+   47 U casi estables), por la cobertura sesgada de r2SCAN en MP (2026-11-14).
 5. Tolerancias de identificación (ángulo B–O–B, StructureMatcher).
 6. Política de grupos pequeños en `loeo_B` (fusionar por familia frente a reportar aparte).
 7. Validación de formabilidad (negativos de Bartel y sintetizadas no perovskita).
