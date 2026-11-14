@@ -73,3 +73,119 @@ def split_holdout(
     if set(holdout["composition"]) & set(train_pool["composition"]):
         raise AssertionError("Composiciones en holdout y train_pool a la vez.")
     return holdout.reset_index(drop=True), train_pool.reset_index(drop=True)
+
+
+# ---------------------------------------------------------------------------
+# Congelación (una sola vez) y folds definitivos sobre train_pool
+# ---------------------------------------------------------------------------
+HOLDOUT_COLUMNS = ["composition", "label", "A", "B", "family", "year"]
+
+
+def freeze(allow_dirty: bool = False) -> dict:
+    """Crea el holdout congelado, `train_pool` y los folds definitivos. UNA SOLA VEZ.
+
+    Si `holdout_frozen.csv` ya existe, no lo toca: verifica su hash y termina con error.
+    Exige el árbol de git limpio (registra el commit), salvo `allow_dirty`.
+    """
+    import json
+    from datetime import UTC, datetime
+
+    import yaml
+
+    from perovskite_pu.splits.build import build_pool, generate_folds
+    from perovskite_pu.splits.schemes import temporal_cutoff
+    from perovskite_pu.utils.hashing import read_hashes, sha256_file, write_canonical_csv
+    from perovskite_pu.utils.paths import (
+        CONFIGS_DIR,
+        HASHES_FILENAME,
+        HOLDOUT_FILENAME,
+        INTERIM_DIR,
+        PROCESSED_DIR,
+        RAW_DIR,
+        SPLITS_DIR,
+        TRAIN_POOL_FILENAME,
+    )  # fmt: skip
+    from perovskite_pu.utils.run_metadata import ensure_clean_tree, git_commit
+    from perovskite_pu.utils.seeds import load_seed_config
+
+    holdout_path, hashes_path = SPLITS_DIR / HOLDOUT_FILENAME, SPLITS_DIR / HASHES_FILENAME
+    if holdout_path.exists():
+        ok = read_hashes(hashes_path).get(HOLDOUT_FILENAME) == sha256_file(holdout_path)
+        state = "correcto" if ok else "DISTINTO"
+        raise FileExistsError(
+            f"El holdout ya está congelado ({holdout_path}); hash {state}. No se vuelve a crear."
+        )
+    ensure_clean_tree(allow_dirty=allow_dirty)
+    cfg = yaml.safe_load((CONFIGS_DIR / "data.yaml").read_text("utf-8"))
+    seeds = load_seed_config()
+    pool = build_pool(
+        pd.read_parquet(INTERIM_DIR / "f1_5_labels.parquet"),
+        pd.read_parquet(INTERIM_DIR / "f1_5_entries.parquet"),
+        pd.read_parquet(RAW_DIR / "mp_abo3_provenance.parquet"),
+        cfg["b_families"],
+    )
+    sel = select_reserved_b(
+        pool, seeds.holdout_seed, bounds=tuple(cfg["holdout"]["target_positive_fraction"])
+    )
+    holdout, train_pool = split_holdout(pool, sel.reserved_b)
+
+    SPLITS_DIR.mkdir(parents=True, exist_ok=True)
+    PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
+    h_sha = write_canonical_csv(holdout[HOLDOUT_COLUMNS], holdout_path, ["composition"])
+    train_pool.to_parquet(PROCESSED_DIR / TRAIN_POOL_FILENAME, index=False)
+
+    # Folds definitivos de todos los esquemas y semillas, SOLO sobre train_pool.
+    split_cfg = dict(cfg["splits"])
+    cutoff = temporal_cutoff(
+        train_pool.loc[train_pool["label"] == 1, "year"],
+        split_cfg["temporal"]["target_test_fraction"],
+    )
+    split_cfg["temporal"] = {**split_cfg["temporal"], "cutoff_year": cutoff}
+    X = pd.read_parquet(INTERIM_DIR / "magpie.parquet").loc[train_pool["composition"]].to_numpy()
+    folds = generate_folds(train_pool, X, split_cfg, cfg["b_families"], seeds.seeds)
+    folds_path = SPLITS_DIR / "folds.parquet"
+    folds.to_parquet(folds_path, index=False)
+
+    commit = git_commit()
+    record = {
+        "description": "SHA-256 de los archivos de data/splits/ y metadatos del holdout (F1.8). "
+        "El holdout se creó una sola vez; no se lee hasta F4.1 (load_holdout, HOLDOUT_UNLOCK=1).",
+        "files": {HOLDOUT_FILENAME: h_sha, "folds.parquet": sha256_file(folds_path)},
+        "holdout": {
+            "holdout_seed": seeds.holdout_seed, "reserved_b": sel.reserved_b,
+            "reserved_b_per_family": sel.per_family, "selection_attempt": sel.attempt,
+            "positive_fraction": sel.positive_fraction,
+            "n_compositions": len(holdout), "n_positives": int(holdout["label"].sum()),
+            "train_pool_compositions": len(train_pool),
+            "train_pool_positives": int(train_pool["label"].sum()),
+            "train_pool_sha256": sha256_file(PROCESSED_DIR / TRAIN_POOL_FILENAME),
+            "code_commit": commit, "created_utc": datetime.now(UTC).isoformat(timespec="seconds"),
+        },
+        "folds": {"seeds": list(seeds.seeds), "schemes": sorted(folds["scheme"].unique()),
+                  "cluster_k": split_cfg["cluster"]["n_clusters"], "temporal_cutoff_year": cutoff,
+                  "code_commit": commit},
+    }  # fmt: skip
+    with open(hashes_path, "w", encoding="utf-8", newline="\n") as fh:
+        json.dump(record, fh, indent=2, ensure_ascii=False)
+        fh.write("\n")
+    return record
+
+
+def main(argv: list[str] | None = None) -> None:
+    import argparse
+    import json
+
+    parser = argparse.ArgumentParser(description="F1.8: congela el holdout (una sola vez).")
+    parser.add_argument("command", choices=["freeze"])
+    parser.add_argument("--allow-dirty", action="store_true")
+    args = parser.parse_args(argv)
+    record = freeze(allow_dirty=args.allow_dirty)
+    print(
+        json.dumps(
+            {k: record[k] for k in ("files", "holdout", "folds")}, indent=2, ensure_ascii=False
+        )
+    )
+
+
+if __name__ == "__main__":  # requisito en Windows (regla 2.2)
+    main()

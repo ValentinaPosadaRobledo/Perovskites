@@ -23,7 +23,14 @@ from sklearn.preprocessing import StandardScaler
 from perovskite_pu.evaluation.extrapolation import interpolation_threshold, nearest_train_distances
 from perovskite_pu.splits.build import build_pool
 from perovskite_pu.splits.schemes import SCHEMES, make_folds, scheme_groups, temporal_cutoff
-from perovskite_pu.utils.paths import CONFIGS_DIR, INTERIM_DIR, RAW_DIR, RESULTS_DIR
+from perovskite_pu.utils.paths import (
+    CONFIGS_DIR,
+    INTERIM_DIR,
+    PROCESSED_DIR,
+    RAW_DIR,
+    RESULTS_DIR,
+    TRAIN_POOL_FILENAME,
+)
 from perovskite_pu.utils.run_metadata import git_commit, git_is_dirty
 from perovskite_pu.utils.seeds import load_seed_config, rng_streams, sklearn_random_state
 
@@ -38,12 +45,20 @@ def main() -> None:
     cfg = yaml.safe_load((CONFIGS_DIR / "data.yaml").read_text("utf-8"))
     sc, fam = cfg["splits"], cfg["b_families"]
     seeds = load_seed_config().seeds
-    pool = build_pool(
-        pd.read_parquet(INTERIM_DIR / "f1_5_labels.parquet"),
-        pd.read_parquet(INTERIM_DIR / "f1_5_entries.parquet"),
-        pd.read_parquet(RAW_DIR / "mp_abo3_provenance.parquet"),
-        fam,
-    )
+    tp_path = PROCESSED_DIR / TRAIN_POOL_FILENAME
+    if tp_path.exists():  # particiones definitivas (tras F1.8): solo train_pool
+        pool, pool_name = (
+            pd.read_parquet(tp_path),
+            "train_pool (definitivo, tras congelar el holdout)",
+        )
+    else:  # diagnóstico previo al holdout
+        pool = build_pool(
+            pd.read_parquet(INTERIM_DIR / "f1_5_labels.parquet"),
+            pd.read_parquet(INTERIM_DIR / "f1_5_entries.parquet"),
+            pd.read_parquet(RAW_DIR / "mp_abo3_provenance.parquet"),
+            fam,
+        )
+        pool_name = "pool PU completo (diagnóstico, antes del holdout)"
     X = pd.read_parquet(INTERIM_DIR / "magpie.parquet").loc[pool["composition"]].to_numpy()
 
     # 1. Grupos por esquema (semilla 0).
@@ -104,7 +119,7 @@ def main() -> None:
 
     s = {
         "code_commit": git_commit(), "code_dirty": git_is_dirty(),
-        "pool": {"n": len(pool), "positives": int(pool["label"].sum())},
+        "pool": {"name": pool_name, "n": len(pool), "positives": int(pool["label"].sum())},
         "schemes": table.to_dict("records"), "group_system_group_size_counts": gs_sizes,
         "silhouette_k_scan": sil, "cluster_k": sc["cluster"]["n_clusters"],
         "temporal": {"cutoff_year": cutoff, "test_positives": late, "test_positive_frac": late / int(pool["label"].sum())},
@@ -120,12 +135,12 @@ def main() -> None:
         for k, v in s1.items()
     )
     sil_rows = " · ".join(f"k={k}: {m:.3f}±{sd:.3f}" for k, (m, sd) in sil.items())
-    md = f"""# Informe F1.7: particiones (diagnóstico, antes del holdout)
+    md = f"""# Informe F1.7: particiones
 
 > Generado por `scripts/report_f1_7.py` (commit `{s["code_commit"][:7]}`{", árbol sucio" if s["code_dirty"] else ""}).
-> No editar a mano. **Diagnóstico sobre el pool PU completo ({len(pool)} composiciones, {s["pool"]["positives"]} P).**
-> Las particiones definitivas se generan sobre `train_pool`, después de congelar el holdout
-> (F1.8; regla 2.1.5).
+> No editar a mano. **Pool: {pool_name}: {len(pool)} composiciones, {s["pool"]["positives"]} P.**
+> Las particiones definitivas usan solo `train_pool` (regla 2.1.5); están en
+> `data/splits/folds.parquet`, con su hash en `HASHES.json`.
 
 ## 1. Implementación
 

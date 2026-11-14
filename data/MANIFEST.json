@@ -62,5 +62,14 @@
       "table_sha256": "bea471ddb1ed63dcb94cc9cbc58c73f3bc1a12918e96cf24818b3aea2cbe3656"
     },
     "retrieved_utc": "2026-11-13T19:35:12+00:00"
+  },
+  "provenance": {
+    "file": "mp_abo3_provenance.parquet",
+    "sha256": "5bb812e5aee3af1f712e5dd21ee2b9f2b825f9d793154c8936222fa0e2a291b7",
+    "mp_database_version": "2026.09.28",
+    "query_date_utc": "2026-11-14T00:34:44+00:00",
+    "entries_requested": 884,
+    "entries_returned": 884,
+    "entries_with_year": 884
   }
 }
