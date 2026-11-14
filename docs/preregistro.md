@@ -122,8 +122,10 @@ por grupo.
     (50 árboles, tasa 0,1; max_depth ∈ {2, 3, 5}, min_samples_leaf ∈ {1, 5, 10},
     max_features ∈ {√p, 0,3, 0,5}, subsample ∈ {0,8, 1}). Son los mismos para todos los
     esquemas y folds de cada semilla.
-  - **Bagging PU:** 50 bolsas; en cada una, todas las P y K = |P| no etiquetadas tomadas
-    con reemplazo (flujo `pu_sampling`).
+  - **Bagging PU:** 20 bolsas; en cada una, todas las P y K = |P| no etiquetadas tomadas
+    con reemplazo (flujo `pu_sampling`). Con 20 bolsas, el orden de las puntuaciones
+    coincide con el de 100 (Spearman 0,996–0,998); con 50, el coste real (~27 h) duplicaba
+    la estimación.
   - **Preprocesamiento** (dentro del Pipeline, ajustado en el train de cada fold): mediana
     con **indicador de dato faltante** (t y μ faltan sin balance de carga de Bartel) y
     eliminación de columnas constantes.
