@@ -1,0 +1,36 @@
+# F3.4: validación de FORMABILIDAD (no de sintetizabilidad) con óxidos ABO3 sintetizados que
+# no son perovskita (nuestra etiquetación ∪ negativos de la TableS1 de Bartel et al., 2019).
+# Decisiones de la autora del 2026-11-14 (bitácora): conjunto principal de sintetizadas no
+# perovskita sin el elemento B reservado; polianiones y ambiguas aparte; modelo final con todo
+# train_pool y modelos de los folds de `family` (extrapolación). Todo parámetro vive aquí o en
+# los experimentos de origen (regla 2.4); las semillas se leen de configs/seeds.yaml.
+
+name: f3_4_formability
+description: >-
+  FPR del bagging PU pre_dft y de las reglas (τ, t, balance de carga) sobre óxidos ABO3
+  sintetizados no perovskita, y ROC-AUC real entre perovskitas conocidas y esos negativos.
+roadmap_task: F3.4
+hypotheses: [descriptivo]
+
+data:
+  config: configs/data.yaml
+  input: data/processed/train_pool.parquet   # todo parte de train_pool (regla 2.1.5)
+  folds: data/splits/folds.parquet           # folds de `family` congelados en F1.8
+  labels: data/interim/f1_5_labels.parquet   # categorías de F1.5 (sintetizada no perovskita…)
+
+# El modelo y su protocolo (búsqueda, bolsas, CV interna) son EXACTAMENTE los de F3.3.
+model_source: configs/experiments/f3_3_pu.yaml
+models: [pu_pre_dft]              # post_dft no aplica: los negativos no tienen polimorfo perovskita
+variants: [final, family]
+
+# Reglas tomadas de F2.4, con sus umbrales externos.
+rules_source: configs/experiments/f2_4_baselines.yaml
+rules: [tau_bartel, t_window_bartel, t_window_classic, charge_balance_icsd, charge_balance_common]
+
+negatives:
+  sets: [principal, polyanion, ambiguous]   # conflictos con P/U y B reservado: no se puntúan
+  principal_set: principal
+
+execution:
+  n_jobs: -1                      # joblib (loky) sobre semilla × variante × fold
+  dev_mode: false

@@ -61,6 +61,9 @@ SEARCH_COLUMNS = ["baseline", "scheme", "seed", "fold", "candidate", "learner", 
                   "inner_threshold", "selected"]  # fmt: skip
 # Índice reservado en la spawn_key para el sorteo de candidatos (no coincide con ningún esquema).
 SEARCH_KEY = len(SCHEMES)
+# "Esquemas" que no son particiones de train_pool, con su propio índice en la spawn_key (F3.4:
+# el modelo final, entrenado con todo train_pool). No cambian las semillas de los esquemas.
+EXTRA_SCHEME_KEYS = {"final": SEARCH_KEY + 1}
 
 
 # ---------------------------------------------------------------------------
@@ -99,7 +102,8 @@ def task_seed(
     no depende del orden de ejecución. `extra` distingue, p. ej., los candidatos de la búsqueda.
     """
     parent = spawn_streams(seed)[stream]
-    key = (*parent.spawn_key, SCHEMES.index(scheme), int(fold), *(int(e) for e in extra))
+    idx = SCHEMES.index(scheme) if scheme in SCHEMES else EXTRA_SCHEME_KEYS[scheme]
+    key = (*parent.spawn_key, idx, int(fold), *(int(e) for e in extra))
     return np.random.SeedSequence(entropy=parent.entropy, spawn_key=key)
 
 
