@@ -1,0 +1,2 @@
+timestamp_utc,experiment,run_dir,git_commit,git_dirty,config_hash,n_seeds,n_jobs,total_s
+2026-11-14T01:30:09+00:00,f2_4_baselines,results/f2_4_baselines/20261114T013022Z_00a61daabfdf,922443b5de2f3143c4b42353b15a6fbd59626b00,False,00a61daabfdf,10,-1,19.988

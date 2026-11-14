@@ -1,0 +1,130 @@
+baselines:
+  charge_balance_common:
+    input: charge_balanced_common
+    kind: rule
+    role: sensitivity
+    rule:
+      threshold: 1
+      type: above
+    subset: all
+  charge_balance_icsd:
+    input: charge_balanced_icsd
+    kind: rule
+    role: principal
+    rule:
+      threshold: 1
+      type: above
+    subset: all
+  ehull_0:
+    input: ehull
+    kind: rule
+    role: sensitivity
+    rule:
+      threshold: 0.0
+      type: below
+    subset: post_dft
+  ehull_0p05:
+    input: ehull
+    kind: rule
+    role: principal
+    rule:
+      threshold: 0.05
+      type: below
+    subset: post_dft
+  ehull_0p1:
+    input: ehull
+    kind: rule
+    role: sensitivity
+    rule:
+      threshold: 0.1
+      type: below
+    subset: post_dft
+  ehull_model:
+    estimator: logistic
+    inputs:
+    - ehull
+    kind: model
+    params:
+      C: 1.0
+    role: principal
+    subset: post_dft
+  symmetry_model:
+    estimator: logistic_onehot
+    inputs:
+    - spacegroup_number
+    - crystal_system
+    kind: model
+    params:
+      C: 1.0
+      min_frequency: 5
+    role: principal
+    subset: post_dft
+  t_window_bartel:
+    input: t
+    kind: rule
+    role: principal
+    rule:
+      type: window
+      window:
+      - 0.825
+      - 1.059
+    subset: t_defined
+  t_window_classic:
+    input: t
+    kind: rule
+    role: sensitivity
+    rule:
+      type: window
+      window:
+      - 0.8
+      - 1.0
+    subset: t_defined
+  tau_bartel:
+    input: tau
+    kind: rule
+    role: principal
+    rule:
+      threshold: 4.18
+      type: below
+    subset: tau_defined
+  trivial_random:
+    estimator: random_scores
+    inputs: []
+    kind: model
+    params: {}
+    role: principal
+    subset: all
+data:
+  config: configs/data.yaml
+  folds: data/splits/folds.parquet
+  input: data/processed/train_pool.parquet
+description: Líneas base de reglas (τ, t, E_hull, balance de carga) y aprendidas (solo
+  E_hull, solo simetría, puntuaciones aleatorias) en los 7 esquemas, con el punto
+  de operación preregistrado.
+evaluation:
+  fixed_ppr:
+  - 0.05
+  - 0.1
+  - 0.2
+execution:
+  dev_mode: false
+  n_jobs: -1
+hypotheses:
+- H2
+- H3
+- descriptivo
+inner_cv:
+  n_splits: 3
+  split: stratified
+  target_recall: 0.9
+name: f2_4_baselines
+roadmap_task: F2.4
+splits:
+  schemes:
+  - random
+  - group_system
+  - loeo_A
+  - loeo_B
+  - family
+  - cluster
+  - temporal
