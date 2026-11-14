@@ -60,8 +60,8 @@ de Gu et al. (2022).
 | `loeo_A` | Leave-one-A-element-out | Extrapolación química |
 | `loeo_B` | Leave-one-B-element-out (B con < 5 positivos fusionados por familia) | Extrapolación química |
 | `family` | Leave-one-family-out del elemento B (3d, 4d/5d, 4f/5f, grupos principales) | Extrapolación química |
-| `cluster` | LOCO-CV, k-means sobre MAGPIE (k = 10 **[PROPUESTA]**) | Extrapolación química |
-| `temporal` | Entrenar antes de un año de corte, probar después (si hay años de ICSD) | Ampliación |
+| `cluster` | LOCO-CV, k-means sobre MAGPIE estandarizado, **k = 5** (silueta plana, decisión del 2026-11-14); barrido k = 2–10 descriptivo | Extrapolación química |
+| `temporal` | Positivas caracterizadas desde **2009** (año más antiguo de sus referencias de ICSD) solo en test, más el 15 % de U; resto en train | Ampliación |
 
 Se reportan siempre por separado, con la distribución de tamaños de grupo y de positivos
 por grupo.
@@ -71,9 +71,12 @@ por grupo.
 - **Definición:** todas las composiciones cuyo elemento B pertenece a un conjunto reservado
   de elementos, elegidos estratificando por familia hasta cubrir ~10–15 % de los positivos.
 - **Semilla:** `holdout_seed = 2026` (independiente de las semillas de experimentos).
-- **Elementos B reservados:** *[se fijan en F1.8]*
+- **Elementos B reservados (congelado el 2026-11-14):** Mn (3d); Mo, Pd, Zr (4d/5d); Np, Th
+  (4f/5f); Bi, Ge (grupos principales). Holdout: **126 composiciones (33 P, el 14,6 % de las
+  positivas; 93 U)**. `train_pool`: 924 composiciones (193 P). Selección en el intento 2.
 - **Archivo:** `data/splits/holdout_frozen.csv` (forma canónica: ordenado, LF, UTF-8).
-- **SHA-256:** *[se registra en F1.8; debe coincidir con `data/splits/HASHES.json`]*
+- **SHA-256:** `8eb201620f3851b1e007afb22a1152f584ce344928752d663e65dfc381937e15`
+  (coincide con `data/splits/HASHES.json`; creado desde el commit `32535bd`).
 - **Acceso:** una sola evaluación (F4.1) mediante `load_holdout()` con `HOLDOUT_UNLOCK=1`,
   después de depositar este preregistro.
 
