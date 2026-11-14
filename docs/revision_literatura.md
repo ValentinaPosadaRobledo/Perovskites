@@ -1,9 +1,10 @@
 # Revisión de literatura (F0.5)
 
-> **Estado: parcial (2026-11-13).** Las 22 referencias tienen metadatos verificados. Solo 5
-> se leyeron a texto completo. Faltan lecturas completas que no pude hacer porque la
-> editorial RSC bloquea el acceso automatizado (sección 8). La brecha de la sección 6 queda
-> **condicionada** a la lectura de Chung et al. (2025).
+> **Estado (2026-11-14):** las 24 referencias están verificadas y **10 se leyeron a texto
+> completo**, entre ellas todas las del núcleo del proyecto. La autora aportó los PDF de Chung
+> 2025, MatFold, Meredig 2018, Bartel 2019 y SynCoTrain (versión publicada). Jang 2020 y Frey
+> 2019 (ACS) siguen a nivel de resumen (sección 8). **La brecha de la sección 6 queda
+> confirmada**: Chung 2025 tampoco evalúa con particiones por grupos.
 >
 > Bibliografía en BibTeX: `paper/references.bib`, generada a partir de los registros de
 > Crossref de cada DOI. Cada entrada indica su nivel de verificación.
@@ -30,8 +31,7 @@
 **Limitaciones:**
 
 - `pubs.rsc.org` devuelve 403 a cualquier acceso automatizado, incluidos los PDF de acceso
-  abierto. Por eso MatFold, Meredig et al., Chung et al. y la versión publicada de SynCoTrain
-  no se leyeron completos.
+  abierto. Esos artículos se leyeron a partir de los PDF que aportó la autora (2026-11-14).
 - No es una revisión sistemática (PRISMA). La afirmación de que "ningún trabajo hace X" vale
   para el conjunto revisado, no para toda la literatura.
 
@@ -45,19 +45,20 @@
 | MatFold | *Digital Discovery*, 2025 | Correcto: 4(3):625–635. Preprint en ChemRxiv (2024) |
 | Desai et al. (alcance) | "PU para sintetizabilidad" | Solo perovskitas **haluro y calcogenuro**: no cubre óxidos |
 | Gu et al. (datos) | "943 sintetizadas, 11 964 virtuales" | Son **cristales**, no composiciones; provienen de MP + OQMD + AFLOW (octubre de 2020) |
+| KM2 (Ramaswamy et al.) | — | Título exacto: "Mixture Proportion Estimation via Kernel Embedding of Distributions" (*Embedding*, en singular), ICML 2016, pp. 2052–2060; arXiv:1603.02501 |
 
 ## 3. Referencias revisadas
 
 | Clave BibTeX | Trabajo | Nivel | Papel en el proyecto |
 |---|---|---|---|
 | `gu2022perovskite` | Gu et al., *npj Comput. Mater.* 8:71 (2022) | TC | Modelo que se reevalúa (H3, F3.5) |
-| `amariamir2025syncotrain` | SynCoTrain, *Digital Discovery* (2025) | TC (arXiv v1) | PU para óxidos; "generalización" sin particiones por grupos |
+| `amariamir2025syncotrain` | SynCoTrain, *Digital Discovery* (2025) | TC (arXiv v1 y versión publicada) | PU para óxidos; "generalización" sin particiones por grupos |
 | `desai2025bridging` | Desai et al., *MLST* (2025) | TC (arXiv) | PU para perovskitas haluro/calcogenuro |
 | `antoniuk2023synthnn` | SynthNN, *npj Comput. Mater.* 9:155 (2023) | TC | Composicional; precedente de partición temporal |
-| `chung2025solidstate` | Chung, Walsh y Payne, *Digital Discovery* 4:2439 (2025) | M + R | **El más cercano: PU para óxidos ternarios.** Sin leer |
-| `meredig2018` | Meredig et al., *MSDE* 3:819 (2018) | R | LOCO-CV (esquema `cluster`) |
-| `witman2025matfold` | Witman y Schindler, *Digital Discovery* 4:625 (2025) | R + README | Herramienta de particiones (F1.7) |
-| `bartel2019tolerance` | Bartel et al., *Sci. Adv.* 5:eaav0693 (2019) | R | τ: línea base y comparador de H2 |
+| `chung2025solidstate` | Chung, Walsh y Payne, *Digital Discovery* 4:2439 (2025) | TC | **El más cercano: PU para óxidos ternarios**, solo CV aleatoria |
+| `meredig2018` | Meredig et al., *MSDE* 3:819 (2018) | TC | LOCO-CV (esquema `cluster`) |
+| `witman2025matfold` | Witman y Schindler, *Digital Discovery* 4:625 (2025) | TC + README | Herramienta de particiones (F1.7) |
+| `bartel2019tolerance` | Bartel et al., *Sci. Adv.* 5:eaav0693 (2019) | TC | τ: línea base y comparador de H2 |
 | `jang2020structure` | Jang et al., *JACS* 142:18836 (2020) | R | PU con grafos; precedente temporal |
 | `jang2024stoichiometry` | Jang et al., *Matter* 7:2294 (2024) | R | PU por estequiometría (óxidos) |
 | `frey2019mxenes` | Frey et al., *ACS Nano* 13:3031 (2019) | R | PU en materiales (MXenes) |
@@ -72,8 +73,8 @@
 | `bekker2018tice` | Bekker y Davis, AAAI 2018 | M | TIcE, prior de clase (F3.2) |
 | `nadeau2003inference` | Nadeau y Bengio, *Mach. Learn.* 52:239 (2003) | M | Test corregido (F4.2) |
 | `singh2017electrochemical` | Singh et al., *Chem. Mater.* 29:10159 (2017) | M | ΔG_pbx (F5.1) |
-| — | Lee y Liu, ICML 2003 | **No verificada** | Métrica de Lee–Liu (sin DOI) |
-| — | Ramaswamy et al., ICML 2016 (KM2) | **No verificada** | Prior de clase (sin DOI) |
+| `lee2003weighted` | Lee y Liu (2003) | M (OpenAlex; sede ICML sin verificar) | Métrica de Lee–Liu (sin DOI) |
+| `ramaswamy2016km2` | Ramaswamy, Scott y Tewari, ICML 2016 | M (OpenAlex/arXiv) | Prior de clase, KM2 (F3.2) |
 
 ## 4. Fichas de los trabajos núcleo
 
@@ -102,7 +103,7 @@
   - Ninguna partición por grupos.
   - La comparación con τ no se hace a igual P(ŷ = 1), que es lo que corrige H2.
 
-### 4.2 SynCoTrain (Amariamir, George y Benner, 2025) [TC, arXiv v1]
+### 4.2 SynCoTrain (Amariamir, George y Benner, 2025) [TC, arXiv v1 y versión publicada]
 
 - **Datos.** Óxidos de ICSD vía MP: "10206 experimental and 31245 unlabeled data points". La
   experimentalidad se toma del atributo `theoretical`, como en nuestra definición.
@@ -113,7 +114,8 @@
 - **Hallazgo útil.** Validan la *recall* contra una "Ground Truth Recall", construyendo una
   tarea PU artificial a partir de la estabilidad. Es una idea aplicable a F3.2.
 - **Para este proyecto:** óxidos en general, sin foco en perovskitas y sin extrapolación
-  química explícita.
+  química explícita. La versión publicada mantiene la misma evaluación (5 % fijo + 10 %
+  dinámico, aleatorios).
 
 ### 4.3 Desai et al. (2025) [TC, arXiv]
 
@@ -153,30 +155,57 @@
 - **Schlesinger et al. (2026, grupo de Bartel):** los modelos de sintetizabilidad publicados
   "generally overpredict the likelihood of synthesis". Apoya reportar siempre P(ŷ = 1 | U).
 
-### 4.6 Herramientas de partición
+### 4.6 Herramientas de partición [TC]
 
-- **Meredig et al. (2018) [R]:** introduce LOCO-CV y una línea base de vecino más cercano.
-  "Traditional machine learning (ML) metrics overestimate model performance for materials
-  discovery."
-- **MatFold (2025) [R + README v1.3.3]:**
-  - Esquemas disponibles: `random`, `structureid`, `composition`, `chemsys`, `sgnum`,
-    `pointgroup`, `crystalsys`, `elements`, `periodictablerows` y `periodictablegroups`, con
-    CV anidada (`n_inner_splits`, `n_outer_splits`) y LOO de un solo grupo
-    (`create_loo_split('elements', 'Fe')`).
-  - Exige una estructura de pymatgen por entrada (`bulk_dict`). Licencia MIT; depende de
-    numpy, pandas y pymatgen ≥ 2024.
+- **Meredig et al. (2018):** introduce LOCO-CV y una línea base de vecino más cercano.
+  Algoritmo: "Perform standard normalization of input features", k-means "with k from 2 to 10"
+  y, para resumir, "compute median and standard deviation across k". Alternativa: elegir un
+  único k con X-means, G-means o la silueta. **Nuestro preregistro tiene k = 10 fijo
+  [PROPUESTA]**: se decide en F1.7 (sección 7).
+- **MatFold (Witman y Schindler, 2025):**
+  - Criterios: Random, Structure, Composition, Chemsys, Element, PT group, PT row, SG#, Point
+    group y Crystal system, con CV anidada (K, L) y la opción de asignar todos los binarios al
+    entrenamiento.
+  - Resultado: "The expected MAE is strongly influenced by the splitting criteria and
+    generally increases with Random < Structure < Composition < Chemsys < SG# ≲ Elements", y
+    el ensamble de modelos de CV anidada reduce el MAE esperado un ~10–20 %.
+  - Se aplica a **regresión de propiedades** (MAE), no a PU ni a sintetizabilidad. No tiene
+    particiones por sitio A/B, por familia del elemento B ni LOCO por k-means.
+  - Exige una estructura de pymatgen por entrada (`bulk_dict`). Licencia MIT; README v1.3.3.
 
-### 4.7 Chung, Walsh y Payne (2025): **lectura prioritaria** [M + R]
+### 4.7 Chung, Walsh y Payne (2025) [TC]
 
-- Resumen gráfico: "a human curated dataset on solid-state reactions of ternary metal
-  oxides. Applications … include outlier detection of text-mined datasets, synthesis data
-  analysis, and synthesizability prediction."
-- Según Desai et al., "predicted the synthesizability of ternary oxides using PU learning,
-  with labels applied specifically for oxides that can be synthesized via solid-state
-  methods", y usa un conjunto de test fijo.
-- Aron Walsh es coautor de Gu et al. (2022).
-- **Se desconoce cómo particionan.** Es el trabajo más cercano en química (óxidos ternarios
-  con PU) y debe leerse antes de redactar la introducción.
+- **Datos:** "synthesis information of 4103 ternary oxides was extracted from the literature"
+  (3276 composiciones de 1233 sistemas químicos de MP), con etiquetas revisadas a mano de
+  síntesis **en estado sólido**. Conjunto PU: 7033 composiciones (2213 sintetizadas en estado
+  sólido, 508 por otras vías, 4312 hipotéticas). No se centra en perovskitas.
+- **Método:** bagging PU con árboles de decisión, adaptado de Frey et al. (Mordelet y Vert).
+  Tres esquemas de etiquetado; en uno, las sintetizadas por otras vías se usan como
+  negativos.
+- **Evaluación:** "10-fold cross-validation was repeated 10 times with different data splits".
+  **Solo CV aleatoria: no hay particiones por elemento, sistema químico ni clúster.** Métrica:
+  ROC-AUC (AUC sesgado, con U como negativo, en el modelo de sintetizabilidad general), con
+  el umbral que maximiza la media geométrica de TPR y TNR.
+- **Limitaciones que discuten:** la suposición SCAR; MP no distingue materiales desordenados;
+  ~10 % de las entradas que Jang et al. tomaron como sintetizadas tienen otra estequiometría
+  o son duplicados.
+- **Para este proyecto:** es el trabajo más cercano en química (PU en óxidos ternarios), pero
+  no evalúa extrapolación química. Coincide con nosotros en la crítica a la calidad de las
+  etiquetas de MP.
+
+### 4.8 Bartel et al. (2019): τ [TC]
+
+- **Definición de perovskita:** "any ABX3 compound with a network of corner-sharing BX6
+  octahedra surrounding a larger A-site cation (rA > rB)". Es **la misma definición que la
+  nuestra**, basada en la conectividad.
+- **τ** = r_X/r_B − n_A(n_A − (r_A/r_B)/ln(r_A/r_B)), con r_A > r_B por definición y radios de
+  Shannon (A 12-coordinado, B 6-coordinado). **τ < 4,18 → perovskita.**
+- **Datos:** 576 ABX₃ "experimentally characterized at ambient conditions". Exactitud: 92 %
+  global; "94% for a randomly chosen test set of 116 compounds" (coincide con `is_train = -1`
+  de TableS1); 92 % en óxidos. Probabilidad continua P(τ) por escalado de Platt.
+- **Para este proyecto:** la referencia a **condiciones ambiente** explica que Bartel
+  clasifique SrSiO₃ y MnTiO₃ (perovskitas de alta presión en MP) como no perovskitas. P(τ), o
+  directamente −τ, da la puntuación continua que necesita H2 (a igual P(ŷ = 1)).
 
 ## 5. Matriz comparativa
 
@@ -189,7 +218,7 @@
 | Jang 2020 | Inorgánicos | Grafo | Aleatorio + temporal | Temporal | No específico | — |
 | Zhu 2023 | Inorgánicos | FTCP | Aleatorio + temporal (fecha MP) | Temporal | No específico | — |
 | CPUL 2025 | Inorgánicos | Grafo | Aleatorio + todos los compuestos con Fe | 1 elemento | No específico | — |
-| Chung 2025 | Óxidos ternarios | ? | ? (test fijo, según Desai) | ? | ? | ? |
+| Chung 2025 | Óxidos ternarios (estado sólido) | Composición | 10-fold aleatorio × 10 | No | No específico | — |
 | **Este proyecto** | **Perovskitas óxido ABO₃** | Composición y grafo | **Aleatoria, por A, por B, por familia, por clúster y temporal; holdout por grupos** | **Sí** | **Sí** | **Sí (H2)** |
 
 ## 6. Delimitación de la brecha (actualizada)
@@ -213,10 +242,11 @@ En el conjunto revisado **ya existen**:
 4. controla la **procedencia de la estructura** con una línea base de solo simetría;
 5. está **preregistrado**.
 
-**Condición:** si Chung et al. (2025) evalúa óxidos ternarios con particiones por grupos, la
-brecha (1) se estrecha a "perovskitas ABO₃ y comparación con τ" y debe citarse como trabajo
-más cercano. La contribución sigue siendo una **evaluación**, no un algoritmo nuevo, como
-establece el preregistro.
+**Brecha confirmada (2026-11-14):** Chung et al. (2025), el trabajo más cercano, usa solo CV
+aleatoria repetida. Debe citarse como el antecedente químico más próximo (PU en óxidos
+ternarios) y como evidencia de que el problema de la evaluación persiste en 2025. La
+contribución sigue siendo una **evaluación**, no un algoritmo nuevo, como establece el
+preregistro.
 
 ## 7. Implicaciones para el proyecto
 
@@ -239,18 +269,19 @@ establece el preregistro.
 4. **`temporal`.** Si se usa una fecha, debe ser la de la primera entrada en ICSD (año de
    publicación), no la de carga en MP (Zhu 2023). Se verifica en F1.1 si MP la expone.
 5. **Introducción del artículo.** Citar a Schlesinger 2026 y Davariashtiyani 2024 para
-   motivar P(ŷ = 1 | U) y el control de procedencia, y a Li 2025 para justificar particiones
-   más exigentes que las heurísticas.
+   motivar P(ŷ = 1 | U) y el control de procedencia, a Li 2025 para justificar particiones
+   más exigentes que las heurísticas, y el orden de MatFold (Random < … < Elements) como
+   antecedente de H1 en regresión.
+6. **`cluster` (F1.7), decisión pendiente:** seguir a Meredig (k de 2 a 10, resumido con la
+   mediana entre k) o mantener k = 10 fijo [PROPUESTA del preregistro]. Debe fijarse antes de
+   F4.0.
+7. **τ en H2:** usar la puntuación continua (−τ o P(τ) de Platt) para comparar a igual
+   P(ŷ = 1); el umbral 4,18 solo define la P(ŷ = 1) de referencia.
 
-## 8. Pendientes de la autora
+## 8. Pendientes
 
-1. **Leer Chung et al. (2025)** a texto completo (prioridad 1) y anotar su protocolo de
-   evaluación.
-2. Leer a texto completo MatFold, Meredig et al., Bartel et al. (2019) y la versión publicada
-   de SynCoTrain (puede diferir de arXiv v1).
-3. Verificar Lee y Liu (2003) y Ramaswamy et al. (2016, KM2): no tienen DOI y OpenAlex limitó
-   las consultas.
-4. Decidir sobre las propuestas 1 y 3 de la sección 7.
-
-*Para que yo pueda leerlos, basta con subir los PDF a la sesión. Desde aquí no puedo
-descargarlos de la RSC.*
+1. *(Opcional)* Texto completo de Jang et al. (2020, *JACS*) y Frey et al. (2019, *ACS Nano*);
+   la editorial ACS no está accesible desde la sesión. Su papel en el proyecto es secundario y
+   está cubierto con el resumen.
+2. Confirmar la sede de Lee y Liu (2003), presumiblemente ICML 2003; OpenAlex no la registra.
+3. Decidir el protocolo de `cluster` (punto 6 de la sección 7) en F1.7.

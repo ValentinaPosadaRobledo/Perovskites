@@ -2,7 +2,7 @@
 % de cada DOI. Cada entrada indica el nivel de verificación de su CONTENIDO.
 % Ver docs/revision_literatura.md. No editar los metadatos a mano sin volver a verificarlos.
 
-% Verificación: metadatos Crossref + resumen (Semantic Scholar); texto completo NO leído (RSC bloquea)
+% Verificación: metadatos Crossref; texto completo leído (PDF aportado por la autora)
 @article{meredig2018,
   title     = {{Can machine learning identify the next high-temperature superconductor? Examining extrapolation performance for materials discovery}},
   author    = {{Meredig}, Bryce and {Antono}, Erin and {Church}, Carena and {Hutchinson}, Maxwell and {Ling}, Julia and {Paradiso}, Sean and {Blaiszik}, Ben and {Foster}, Ian and {Gibbons}, Brenna and {Hattrick-Simpers}, Jason and {Mehta}, Apurva and {Ward}, Logan},
@@ -14,7 +14,7 @@
   doi       = {10.1039/c8me00012c},
 }
 
-% Verificación: metadatos Crossref + README oficial de MatFold v1.3.3 (PyPI); texto completo NO leído
+% Verificación: metadatos Crossref + README de MatFold v1.3.3; texto completo leído (PDF aportado por la autora)
 @article{witman2025matfold,
   title     = {{MatFold: systematic insights into materials discovery models' performance through standardized cross-validation protocols}},
   author    = {{Witman}, Matthew D. and {Schindler}, Peter},
@@ -26,7 +26,7 @@
   doi       = {10.1039/d4dd00250d},
 }
 
-% Verificación: metadatos Crossref; texto completo leído en arXiv:2411.12011v1 (puede diferir de la versión publicada)
+% Verificación: metadatos Crossref; texto completo leído (arXiv:2411.12011v1 y versión publicada)
 @article{amariamir2025syncotrain,
   title     = {{SynCoTrain: a dual classifier PU-learning framework for synthesizability prediction}},
   author    = {{Amariamir}, Sasan and {George}, Janine and {Benner}, Philipp},
@@ -62,7 +62,7 @@
   doi       = {10.1038/s41524-022-00757-z},
 }
 
-% Verificación: metadatos Crossref + resumen; texto completo NO leído
+% Verificación: metadatos Crossref; texto completo leído (PDF aportado por la autora)
 @article{bartel2019tolerance,
   title     = {{New tolerance factor to predict the stability of perovskite oxides and halides}},
   author    = {{Bartel}, Christopher J. and {Sutton}, Christopher and {Goldsmith}, Bryan R. and {Ouyang}, Runhai and {Musgrave}, Charles B. and {Ghiringhelli}, Luca M. and {Scheffler}, Matthias},
@@ -177,7 +177,7 @@
   doi       = {10.1016/j.cpc.2024.109465},
 }
 
-% Verificación: metadatos Crossref + resumen gráfico + descripción en Desai et al.; texto completo NO leído (RSC bloquea). LECTURA PRIORITARIA
+% Verificación: metadatos Crossref; texto completo leído (PDF aportado por la autora, 2026-11-14)
 @article{chung2025solidstate,
   title     = {{Solid-state synthesizability predictions using positive-unlabeled learning from human-curated literature data}},
   author    = {{Chung}, Vincent and {Walsh}, Aron and {J. Payne}, David},
@@ -261,8 +261,23 @@
   doi       = {10.1016/j.matt.2024.05.002},
 }
 
-% --- Referencias SIN DOI, pendientes de verificar (OpenAlex limitó las consultas) ---
-% Lee, W. S. y Liu, B. (2003). Learning with positive and unlabeled examples using weighted
-%   logistic regression. ICML 2003.
-% Ramaswamy, H., Scott, C. y Tewari, A. (2016). Mixture proportion estimation via kernel
-%   embeddings of distributions. ICML 2016 (PMLR 48). [estimador KM2 de la prior de clase]
+% Verificación: autores, título y año en OpenAlex; sede (ICML 2003) sin verificar.
+@inproceedings{lee2003weighted,
+  title     = {{Learning with Positive and Unlabeled Examples Using Weighted Logistic Regression}},
+  author    = {{Lee}, Wee Sun and {Liu}, Bing},
+  booktitle = {Proceedings of the Twentieth International Conference on Machine Learning (ICML)},
+  year      = {2003},
+}
+
+% Verificación: OpenAlex + arXiv:1603.02501 (estimador KM2). Ojo: "Embedding", en singular.
+@inproceedings{ramaswamy2016km2,
+  title     = {{Mixture Proportion Estimation via Kernel Embedding of Distributions}},
+  author    = {{Ramaswamy}, Harish G. and {Scott}, Clayton D. and {Tewari}, Ambuj},
+  booktitle = {Proceedings of the 33rd International Conference on Machine Learning (ICML)},
+  series    = {PMLR},
+  volume    = {48},
+  pages     = {2052--2060},
+  year      = {2016},
+  eprint    = {1603.02501},
+  archiveprefix = {arXiv},
+}
