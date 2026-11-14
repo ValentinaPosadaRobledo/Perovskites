@@ -17,6 +17,7 @@ import pandas as pd
 import yaml
 
 from perovskite_pu.utils.paths import RESULTS_DIR, ROOT
+from perovskite_pu.utils.run_metadata import git_commit, git_is_dirty
 
 EXP = "f2_4_baselines"
 SCHEMES = ["random", "group_system", "loeo_A", "loeo_B", "family", "cluster", "temporal"]
@@ -92,8 +93,8 @@ def main() -> None:
 
     md = f"""# Informe F2.4: líneas base
 
-> Generado por `scripts/report_f2_4.py` a partir de `{run["run_dir"]}`
-> (commit `{str(run["git_commit"])[:7]}`{", árbol sucio" if bool(run["git_dirty"]) else ""}; {int(run["n_seeds"])} semillas; {run["total_s"]:.0f} s).
+> Generado por `scripts/report_f2_4.py` (commit `{git_commit()[:7]}`{", árbol sucio" if git_is_dirty() else ""}) a partir de
+> `{run["run_dir"]}` (corrida con el commit `{str(run["git_commit"])[:7]}`{", árbol sucio" if bool(run["git_dirty"]) else ""}; {int(run["n_seeds"])} semillas; {run["total_s"]:.0f} s).
 > No editar a mano. Configuración: `configs/experiments/{EXP}.yaml`. Solo `train_pool`.
 
 ## 1. Qué se mide
@@ -153,6 +154,13 @@ P(ŷ = 1 | U):
   aprendidas: E_hull {learned_drop["ehull_model"]:.3f} y simetría {learned_drop["symmetry_model"]:.3f}. Son
   modelos de una o dos entradas, que apenas dependen de la química del grupo reservado.
 - **Azar:** TPR ≈ P(ŷ=1), como se espera. Es la referencia inferior de todas las curvas.
+- **Cuidado al leer la sección 4:** en las reglas, la TPR a P(ŷ=1) fija cambia entre esquemas
+  aunque cada composición reciba siempre la misma predicción. No es extrapolación: la P(ŷ=1)
+  se fija dentro de cada fold, y la proporción de P de los folds cambia con el esquema. Por
+  eso las comparaciones entre modelos a igual P(ŷ=1) se hacen pareadas, fold a fold (§7.2).
+- **Puntuaciones discretas:** el modelo de solo simetría da pocas puntuaciones distintas (una
+  por combinación de categorías), así que su umbral calibrado cae en bloques empatados y su
+  P(ŷ=1|U) varía más entre semillas.
 """
     out = RESULTS_DIR / EXP / "informe.md"
     out.write_text(md, "utf-8")
