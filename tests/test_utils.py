@@ -143,6 +143,17 @@ def test_dirty_tree_is_refused_unless_allowed(tmp_repo):
     assert "cambio" in diff
 
 
+def test_untracked_outputs_do_not_dirty_the_tree(tmp_repo):
+    # Salidas nuevas en results/ no ensucian; un archivo nuevo fuera de results/, sí.
+    out = tmp_repo / "results" / "exp" / "run"
+    out.mkdir(parents=True)
+    (out / "summary.csv").write_text("x\n", encoding="utf-8")
+    assert ensure_clean_tree(tmp_repo) is None
+    (tmp_repo / "nuevo.py").write_text("x = 1\n", encoding="utf-8")
+    with pytest.raises(DirtyTreeError):
+        ensure_clean_tree(tmp_repo)
+
+
 def test_run_metadata_records_required_fields(tmp_repo):
     (tmp_repo / "nuevo.txt").write_text("x\n", encoding="utf-8")  # árbol sucio
     meta = build_run_metadata(

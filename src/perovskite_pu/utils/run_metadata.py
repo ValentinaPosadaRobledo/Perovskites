@@ -53,9 +53,24 @@ def git_commit(repo: Path = ROOT) -> str:
     return _git(["rev-parse", "HEAD"], repo).strip()
 
 
+# Directorios de SALIDA: un archivo nuevo sin seguimiento aquí no es código y no ensucia el
+# árbol (p. ej. los resultados de una corrida que todavía no se han versionado).
+OUTPUT_DIRS: tuple[str, ...] = ("results/",)
+
+
 def git_is_dirty(repo: Path = ROOT) -> bool:
-    """True si hay cambios sin commit (incluidos archivos nuevos no ignorados)."""
-    return bool(_git(["status", "--porcelain"], repo).strip())
+    """True si hay cambios sin commit, incluidos archivos nuevos no ignorados.
+
+    Excepción: los archivos NUEVOS sin seguimiento dentro de `OUTPUT_DIRS` no cuentan, porque
+    son salidas y no pueden cambiar el comportamiento del código. Un archivo YA versionado de
+    `results/` que se modifique sí cuenta.
+    """
+    lines = _git(["status", "--porcelain", "--untracked-files=all"], repo).splitlines()
+    relevant = [
+        ln for ln in lines
+        if ln.strip() and not (ln.startswith("?? ") and ln[3:].startswith(OUTPUT_DIRS))
+    ]  # fmt: skip
+    return bool(relevant)
 
 
 def git_diff(repo: Path = ROOT) -> str:
