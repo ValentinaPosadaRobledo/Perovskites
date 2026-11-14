@@ -415,6 +415,7 @@ def run_experiment(
     from perovskite_pu.utils.hashing import config_hash
     from perovskite_pu.utils.paths import RESULTS_DIR, ROOT
     from perovskite_pu.utils.run_metadata import (
+        append_runs_index,
         build_run_metadata,
         make_run_dir,
         write_run_metadata,
@@ -439,7 +440,7 @@ def run_experiment(
     if resume is None:
         run_dir = make_run_dir(cfg["name"], meta["config_hash"])
     else:
-        run_dir = Path(resume)
+        run_dir = Path(resume).resolve()  # admite rutas relativas al directorio actual
         prev = json.loads((run_dir / "run_metadata.json").read_text("utf-8"))
         if prev["config_hash"] != meta["config_hash"]:
             raise RuntimeError("No se puede reanudar: cambió la configuración.")
@@ -519,20 +520,5 @@ def run_experiment(
                        "resumed": resume is not None}  # fmt: skip
     meta["n_tasks"] = len(tasks)
     write_run_metadata(meta, run_dir)
-    _append_index(RESULTS_DIR / "runs_index.csv", cfg["name"], run_dir, meta)
+    append_runs_index(RESULTS_DIR / "runs_index.csv", cfg["name"], run_dir, meta)
     return run_dir
-
-
-def _append_index(index_path: Path, experiment: str, run_dir: Path, meta: Mapping) -> None:
-    """Añade la corrida a `results/runs_index.csv` (lo crea con cabecera si no existe)."""
-    from perovskite_pu.utils.paths import ROOT
-
-    row = pd.DataFrame([{
-        "timestamp_utc": meta["timestamp_utc"], "experiment": experiment,
-        "run_dir": run_dir.relative_to(ROOT).as_posix(), "git_commit": meta["git_commit"],
-        "git_dirty": meta["git_dirty"], "config_hash": meta["config_hash"],
-        "n_seeds": len(meta["seeds"]), "n_jobs": meta["n_jobs"],
-        "total_s": meta["timings"]["total_s"],
-    }])  # fmt: skip
-    header = not index_path.exists()
-    row.to_csv(index_path, mode="a", header=header, index=False, lineterminator="\n")

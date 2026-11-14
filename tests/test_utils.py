@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import subprocess
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -180,6 +181,21 @@ def test_run_metadata_records_required_fields(tmp_repo):
     out = write_run_metadata(meta, tmp_repo)
     assert out.exists()
     assert "nuevo.txt" in (tmp_repo / "git_diff.patch").read_text("utf-8")
+
+
+def test_runs_index_accepts_relative_run_dir(tmp_repo, monkeypatch):
+    # Regresión (2026-11-14): `--resume` con una ruta relativa fallaba al añadir la fila.
+    from perovskite_pu.utils.run_metadata import append_runs_index
+
+    monkeypatch.chdir(tmp_repo)
+    (tmp_repo / "results" / "exp" / "run").mkdir(parents=True)
+    meta = {"timestamp_utc": "t", "git_commit": "abc", "git_dirty": False, "config_hash": "h",
+            "seeds": [0, 1], "n_jobs": 1, "timings": {"total_s": 1.0}}  # fmt: skip
+    index = tmp_repo / "results" / "runs_index.csv"
+    append_runs_index(index, "exp", Path("results/exp/run"), meta, repo=tmp_repo)
+    append_runs_index(index, "exp", tmp_repo / "results" / "exp" / "run", meta, repo=tmp_repo)
+    rows = pd.read_csv(index)
+    assert list(rows["run_dir"]) == ["results/exp/run", "results/exp/run"]  # una cabecera
 
 
 # ---------------------------------------------------------------------------

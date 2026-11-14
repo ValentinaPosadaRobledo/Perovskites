@@ -173,3 +173,25 @@ def write_run_metadata(meta: dict[str, Any], run_dir: Path) -> Path:
         json.dump(meta, fh, indent=2, ensure_ascii=False, sort_keys=True)
         fh.write("\n")
     return out
+
+
+def append_runs_index(
+    index_path: Path, experiment: str, run_dir: Path, meta: dict[str, Any], repo: Path = ROOT
+) -> None:
+    """Añade la corrida a ``results/runs_index.csv`` (lo crea con cabecera si no existe).
+
+    ``run_dir`` puede ser relativo (p. ej. el que se pasa a ``--resume``): se resuelve antes
+    de expresarlo respecto a la raíz del repositorio. Sin esto, una corrida reanudada con una
+    ruta relativa fallaba al final, después de escribir todos los resultados (2026-11-14).
+    """
+    import pandas as pd
+
+    row = pd.DataFrame([{
+        "timestamp_utc": meta["timestamp_utc"], "experiment": experiment,
+        "run_dir": Path(run_dir).resolve().relative_to(Path(repo).resolve()).as_posix(),
+        "git_commit": meta["git_commit"], "git_dirty": meta["git_dirty"],
+        "config_hash": meta["config_hash"], "n_seeds": len(meta["seeds"]),
+        "n_jobs": meta["n_jobs"], "total_s": meta["timings"]["total_s"],
+    }])  # fmt: skip
+    header = not index_path.exists()
+    row.to_csv(index_path, mode="a", header=header, index=False, lineterminator="\n")
