@@ -1,0 +1,121 @@
+{
+  "code_commit": "846444d57f293fa013583435942cbd6265180e5a",
+  "code_dirty": false,
+  "labels_parquet_sha256": "0445149de74148a5d4731e9d5636b3762734fdeac77d94aa5357b2a3a96aa895",
+  "entries": 2563,
+  "unique_structures": 2135,
+  "duplicate_groups": 257,
+  "redundant_entries": 428,
+  "manual_reviewed_entries": 59,
+  "labels": {
+    "unlabeled": 824,
+    "positive": 226,
+    "polyanion": 160,
+    "synthesized_non_perovskite": 84,
+    "ambiguous": 25
+  },
+  "pu_set": 1050,
+  "labeled_prevalence": 0.21523809523809523,
+  "labeled_prevalence_ambiguous_as_positive": 0.23348837209302326,
+  "flags": {
+    "flag_high_pressure": {
+      "total": 4,
+      "by_label": {
+        "positive": 3,
+        "ambiguous": 1
+      },
+      "compositions": [
+        "CoBiO3",
+        "MgSiO3",
+        "ScBiO3",
+        "VPbO3"
+      ]
+    },
+    "flag_metastable_dft": {
+      "total": 13,
+      "by_label": {
+        "positive": 13
+      },
+      "compositions": [
+        "BaIrO3",
+        "CaGeO3",
+        "CaSiO3",
+        "CdGeO3",
+        "GePbO3",
+        "LuMnO3",
+        "MgSiO3",
+        "NaSbO3",
+        "SrGeO3",
+        "SrSiO3",
+        "TiMnO3",
+        "VCdO3",
+        "VPbO3"
+      ]
+    },
+    "flag_ambiguous_oxidation": {
+      "total": 18,
+      "by_label": {
+        "positive": 17,
+        "ambiguous": 1
+      },
+      "compositions": [
+        "BaBiO3",
+        "BaFeO3",
+        "BaNpO3",
+        "BaOsO3",
+        "BaPaO3",
+        "BaPuO3",
+        "CaFeO3",
+        "CaTcO3",
+        "CdTcO3",
+        "NaOsO3",
+        "NiBiO3",
+        "SrBiO3",
+        "SrFeO3",
+        "SrOsO3",
+        "SrTcO3",
+        "TbMnO3",
+        "TlCrO3",
+        "TlNiO3"
+      ]
+    },
+    "flag_bartel_conflict": {
+      "total": 2,
+      "by_label": {
+        "positive": 2
+      },
+      "compositions": [
+        "SrSiO3",
+        "TiMnO3"
+      ]
+    },
+    "flag_only_hexagonal": {
+      "total": 8,
+      "by_label": {
+        "synthesized_non_perovskite": 8
+      },
+      "compositions": [
+        "BaCoO3",
+        "BaCrO3",
+        "BaMnO3",
+        "BaNiO3",
+        "BaRhO3",
+        "BaRuO3",
+        "BaTcO3",
+        "KTiO3"
+      ]
+    },
+    "flag_icsd_without_exp": {
+      "total": 3,
+      "by_label": {
+        "unlabeled": 3
+      },
+      "compositions": [
+        "NiPbO3",
+        "SrRhO3",
+        "TiSnO3"
+      ]
+    }
+  },
+  "positives_in_sensitivity_exclusion": 31
+}
