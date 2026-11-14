@@ -1,0 +1,107 @@
+{
+  "code_commit": "1cb0383702c38a0c2b4da1977df72c547478e94e",
+  "code_dirty": false,
+  "n_cases": 59,
+  "reviewer": [
+    "Valentina Posada"
+  ],
+  "dates": [
+    "2026-11-13"
+  ],
+  "decisive_agreement": {
+    "k": 42,
+    "n": 42,
+    "rate": 1.0,
+    "ci95_clopper_pearson": [
+      0.9159161450596449,
+      1.0
+    ]
+  },
+  "confusion": {
+    "dudosa": {
+      "hexagonal_polytype": 0,
+      "non_perovskite": 0,
+      "perovskite": 0,
+      "perovskite_borderline": 8,
+      "polyanion": 0
+    },
+    "no_perovskita": {
+      "hexagonal_polytype": 0,
+      "non_perovskite": 14,
+      "perovskite": 0,
+      "perovskite_borderline": 6,
+      "polyanion": 0
+    },
+    "perovskita": {
+      "hexagonal_polytype": 0,
+      "non_perovskite": 0,
+      "perovskite": 16,
+      "perovskite_borderline": 3,
+      "polyanion": 0
+    },
+    "polianion": {
+      "hexagonal_polytype": 0,
+      "non_perovskite": 0,
+      "perovskite": 0,
+      "perovskite_borderline": 0,
+      "polyanion": 6
+    },
+    "politipo_hexagonal": {
+      "hexagonal_polytype": 6,
+      "non_perovskite": 0,
+      "perovskite": 0,
+      "perovskite_borderline": 0,
+      "polyanion": 0
+    }
+  },
+  "borderline_outcomes": {
+    "dudosa": 8,
+    "no_perovskita": 6,
+    "perovskita": 3
+  },
+  "decisive_discordant": [],
+  "composition_labels_before": {
+    "unlabeled": 824,
+    "positive": 223,
+    "polyanion": 160,
+    "synthesized_non_perovskite": 82,
+    "ambiguous": 30
+  },
+  "composition_labels_after": {
+    "unlabeled": 824,
+    "positive": 226,
+    "polyanion": 160,
+    "synthesized_non_perovskite": 84,
+    "ambiguous": 25
+  },
+  "pu_set": 1050,
+  "labeled_prevalence": 0.21523809523809523,
+  "labeled_prevalence_if_ambiguous_positive": 0.23348837209302326,
+  "ambiguous_compositions": [
+    "CoTeO3",
+    "CrInO3",
+    "KBiO3",
+    "KIrO3",
+    "KSbO3",
+    "LaErO3",
+    "LaHoO3",
+    "LiNbO3",
+    "LiOsO3",
+    "LiReO3",
+    "LiTaO3",
+    "LiUO3",
+    "LuRhO3",
+    "NiBiO3",
+    "OsPbO3",
+    "ScBiO3",
+    "ScMnO3",
+    "ScRhO3",
+    "SnPbO3",
+    "SrPrO3",
+    "TcPbO3",
+    "TiFeO3",
+    "TiZnO3",
+    "VCuO3",
+    "ZnPbO3"
+  ]
+}
