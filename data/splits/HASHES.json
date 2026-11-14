@@ -1,4 +1,73 @@
 {
-  "description": "SHA-256 de los archivos canónicos de data/splits/ (nombre de archivo -> hash). holdout_frozen.csv se registra una sola vez en F1.8 y su hash se publica en el preregistro.",
-  "files": {}
+  "description": "SHA-256 de los archivos de data/splits/ y metadatos del holdout (F1.8). El holdout se creó una sola vez; no se lee hasta F4.1 (load_holdout, HOLDOUT_UNLOCK=1).",
+  "files": {
+    "holdout_frozen.csv": "8eb201620f3851b1e007afb22a1152f584ce344928752d663e65dfc381937e15",
+    "folds.parquet": "a131835c809f7bf7258a066ab4c5703fa55ecc29e087ab502517da30a3b245bc"
+  },
+  "holdout": {
+    "holdout_seed": 2026,
+    "reserved_b": [
+      "Bi",
+      "Ge",
+      "Mn",
+      "Mo",
+      "Np",
+      "Pd",
+      "Th",
+      "Zr"
+    ],
+    "reserved_b_per_family": {
+      "3d": [
+        "Mn"
+      ],
+      "4d_5d": [
+        "Mo",
+        "Pd",
+        "Zr"
+      ],
+      "4f_5f": [
+        "Np",
+        "Th"
+      ],
+      "main_group": [
+        "Bi",
+        "Ge"
+      ]
+    },
+    "selection_attempt": 2,
+    "positive_fraction": 0.14601769911504425,
+    "n_compositions": 126,
+    "n_positives": 33,
+    "train_pool_compositions": 924,
+    "train_pool_positives": 193,
+    "train_pool_sha256": "07d5c238e4fb3c2cb8e1d629d1eb334457a22fa89568e27b534120e5442a3b1b",
+    "code_commit": "32535bddde791e02814afd47846eb6ea50fa5da3",
+    "created_utc": "2026-11-14T00:43:53+00:00"
+  },
+  "folds": {
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "schemes": [
+      "cluster",
+      "family",
+      "group_system",
+      "loeo_A",
+      "loeo_B",
+      "random",
+      "temporal"
+    ],
+    "cluster_k": 5,
+    "temporal_cutoff_year": 2009,
+    "code_commit": "32535bddde791e02814afd47846eb6ea50fa5da3"
+  }
 }
