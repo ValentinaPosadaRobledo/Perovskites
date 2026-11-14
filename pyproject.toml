@@ -77,3 +77,4 @@ format-check = { cmd = "ruff format --check .", help = "Verifica el formato sin 
 check = { sequence = ["lint", "format-check", "test"], help = "Lint + formato + tests (lo mismo que CI)" }
 figures = { cmd = "python paper/scripts/make_all.py", help = "Regenera todas las figuras y tablas del artículo desde results/" }
 roadmap = { cmd = "python scripts/roadmap.py", help = "Actualiza estados del ROADMAP (start/done/block <ID>)" }
+experiment = { cmd = "python scripts/run_experiment.py", help = "Ejecuta un experimento desde su YAML: poe experiment configs/experiments/<x>.yaml" }

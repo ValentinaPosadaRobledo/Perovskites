@@ -121,7 +121,7 @@ def feature_files(tmp_path, monkeypatch, entries, thermo):
         json.dump({"families": {"post_dft": ["f1", "thermo_ehull", "thermo_eform"]},
                    "eligibility": {"post_dft": "eligible_post_dft"}}, fh)  # fmt: skip
     # Rutas absolutas: `ROOT / ruta_absoluta` devuelve la ruta absoluta.
-    monkeypatch.setattr(sets, "_output_paths", lambda: paths)
+    monkeypatch.setattr(sets, "output_paths", lambda: paths)
     return paths
 
 

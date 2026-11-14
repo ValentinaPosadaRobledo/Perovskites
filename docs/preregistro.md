@@ -92,9 +92,25 @@ por grupo.
   `train_pool`), sin imputar: todas las P lo tienen porque se sintetizaron (2026-11-14). Sus
   comparaciones pareadas con `pre_dft` y la línea base de solo E_hull usan ese subconjunto.
 - **Modelo de grafos:** Gu et al. (2022), reevaluado bajo las particiones por grupos.
-- **Líneas base:** t de Goldschmidt, τ de Bartel et al. (2019), umbral de E_hull, modelo de
-  solo E_hull, modelo de solo grupo espacial/simetría, **balance de carga** (estados de
-  oxidación comunes, como en SynthNN; añadida el 2026-11-14) y clasificador trivial.
+- **Líneas base** *(definiciones fijadas el 2026-11-14; `configs/experiments/f2_4_baselines.yaml`)*:
+  - τ de Bartel et al. (2019): τ < 4,18 (umbral externo; *in-sample* en la TableS1), sobre las
+    composiciones con τ definido;
+  - t de Goldschmidt: ventana de Bartel 0,825 < t < 1,059 (optimizada en su TableS1, así que
+    *in-sample*) como principal y ventana clásica 0,8 < t < 1,0 como sensibilidad, sobre las
+    composiciones con t definido;
+  - umbral de E_hull (polimorfo perovskita, GGA): E_hull ≤ 0,05 eV/átomo como principal, 0 y
+    0,1 como sensibilidad, sobre las composiciones de `post_dft`;
+  - modelo de solo E_hull: regresión logística (monótona; equivale a un umbral de E_hull
+    calibrado en el bucle interno a recall 0,90);
+  - modelo de solo simetría: grupo espacial y sistema cristalino de la misma entrada que
+    `post_dft`, regresión logística con codificación one-hot (categorías con < 5 casos en train
+    agrupadas) y umbral del bucle interno; es el control de procedencia de H3 y se revisa en
+    F3.5 si el modelo de grafos usa otras estructuras;
+  - **balance de carga** (añadida el 2026-11-14): estados de oxidación observados en ICSD
+    (`oxi_state_guesses` de pymatgen) como principal y estados comunes de pymatgen como
+    sensibilidad;
+  - clasificador trivial: puntuaciones aleatorias (TPR ≈ P(ŷ = 1)), con el umbral del bucle
+    interno.
 - **Protocolo:** CV anidada; bucle interno con búsqueda aleatoria de presupuesto fijo
   (n_iter = 15 **[PROPUESTA]**) y selección del umbral; 10 semillas (0–9).
 
@@ -104,8 +120,10 @@ por grupo.
 
 Se usa para H1 y para el reporte de cada modelo PU por separado.
 
-1. En cada fold externo, el bucle interno (3 folds sobre el train externo) produce
-   puntuaciones **fuera de fold** para todas las composiciones del train externo.
+1. En cada fold externo, el bucle interno (3 folds **estratificados aleatorios** sobre el
+   train externo, también en los esquemas por grupos; fijado el 2026-11-14) produce
+   puntuaciones **fuera de fold** para todas las composiciones del train externo. Así, una
+   caída de la TPR externa mide la degradación del umbral al exigir extrapolación.
 2. Para cada configuración de hiperparámetros, el umbral t* es el **percentil 10 de las
    puntuaciones fuera de fold de los positivos**: el 90 % de los positivos internos queda
    por encima (`threshold_for_recall` en `perovskite_pu.evaluation.metrics`).
@@ -132,7 +150,10 @@ TPR = 0,957 reportada por Gu et al. (2022) con partición aleatoria. Recalls nom
 
 Los modelos con umbrales de origen distinto solo se comparan a la misma tasa de predicción
 positiva. El umbral de cada modelo se ajusta en el fold de test usando **solo la
-distribución de puntuaciones** (no las etiquetas), con `threshold_for_ppr`.
+distribución de puntuaciones** (no las etiquetas), con `threshold_for_ppr`. Si el corte cae
+dentro de un bloque de puntuaciones empatadas (p. ej. una regla binaria), el bloque entra en
+la fracción justa: es el valor esperado al romper los empates al azar
+(`expected_hits_at_ppr`; precisado el 2026-11-14).
 
 - **H2 (PU frente a τ):** la P(ŷ = 1) de referencia es la que produce τ con su umbral externo
   de 4,18 (τ < 4,18 → perovskita) en ese fold, sobre las composiciones con τ definido. El

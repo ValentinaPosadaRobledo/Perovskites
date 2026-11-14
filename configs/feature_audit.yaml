@@ -77,6 +77,22 @@ groups:
     label_dependence: indirect
     mitigation: "Solo sensibilidad 4 (descriptiva), con composiciones que tienen ambas funcionales."
 
+# Entradas de las LÍNEAS BASE que no son features de ninguna familia (F2.4). Su uso está
+# limitado a la línea base indicada y es deliberado.
+baseline_inputs:
+  spacegroup_number:
+    baseline: symmetry_model
+    reason: >-
+      Control de procedencia de la estructura (H3): mide cuánto se puede predecir solo con la
+      simetría de la entrada de MP (experimental distorsionada en las P frente a prototipo
+      cúbico en las U). Por eso está prohibida como feature.
+  crystal_system:
+    baseline: symmetry_model
+    reason: "Igual que spacegroup_number."
+  flag_no_charge_balance:
+    baseline: charge_balance_icsd
+    reason: "Es la propia regla de la línea base de balance de carga (estados de ICSD)."
+
 # Familias de features que se pueden usar como features de un modelo, con su papel.
 families:
   pre_dft: {role: principal}

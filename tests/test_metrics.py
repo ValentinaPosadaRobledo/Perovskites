@@ -145,3 +145,32 @@ def test_threshold_for_recall_rejects_invalid_target(target):
 def test_threshold_for_recall_requires_positives():
     with pytest.raises(ValueError, match="positivos"):
         threshold_for_recall([0, 0], [0.5, 0.1])
+
+
+# ---------------------------------------------------------------------------
+# TPR a P(ŷ = 1) exacta con empates repartidos (F2.4)
+# ---------------------------------------------------------------------------
+def test_expected_hits_without_ties_matches_tpr_at_ppr():
+    from perovskite_pu.evaluation.metrics import expected_hits_at_ppr, tpr_at_ppr
+
+    s = [1, 0, 1, 0, 1, 0, 0, 0, 0, 0]
+    scores = [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.0]
+    for p in (0.1, 0.2, 0.3, 0.5):
+        tpr, _ = tpr_at_ppr(s, scores, p)
+        assert expected_hits_at_ppr(s, scores, p) / 3 == pytest.approx(tpr)
+
+
+def test_expected_hits_splits_tied_block():
+    from perovskite_pu.evaluation.metrics import expected_hits_at_ppr
+
+    # Puntuación binaria: 6 casos con 1 (3 positivos) y 4 con 0 (1 positivo).
+    s = [1, 1, 1, 0, 0, 0, 1, 0, 0, 0]
+    scores = [1, 1, 1, 1, 1, 1, 0, 0, 0, 0]
+    # P(ŷ=1) = 0,3 → 3 de los 6 empatados: se espera la mitad de sus 3 positivos.
+    assert expected_hits_at_ppr(s, scores, 0.3) == pytest.approx(1.5)
+    # P(ŷ=1) = 0,8 → los 6 del bloque alto + 2 de los 4 del bajo (la mitad de su positivo).
+    assert expected_hits_at_ppr(s, scores, 0.8) == pytest.approx(3.5)
+    assert expected_hits_at_ppr(s, scores, 0.0) == 0.0
+    assert expected_hits_at_ppr(s, scores, 1.0) == pytest.approx(4.0)
+    with pytest.raises(ValueError):
+        expected_hits_at_ppr(s, scores, 1.5)

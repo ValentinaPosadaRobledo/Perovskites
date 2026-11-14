@@ -22,7 +22,7 @@ from perovskite_pu.utils.paths import CONFIGS_DIR, ROOT
 
 
 @cache
-def _output_paths() -> dict[str, str]:
+def output_paths() -> dict[str, str]:
     """Rutas de las tablas de features (`features.output` de configs/data.yaml)."""
     import yaml
 
@@ -31,7 +31,7 @@ def _output_paths() -> dict[str, str]:
 
 def _registry() -> dict[str, Any]:
     """Familias disponibles: columnas, tabla(s) de origen y columna de elegibilidad."""
-    out = _output_paths()
+    out = output_paths()
     pre = json.loads((ROOT / out["columns"]).read_text("utf-8"))
     reg = {fam: {"columns": cols, "post": False, "eligibility": None}
            for fam, cols in pre["families"].items()}  # fmt: skip
@@ -53,7 +53,7 @@ def eligible(family: str, compositions: Sequence[str]) -> pd.Series:
     spec = _registry()[family]
     if spec["eligibility"] is None:
         return pd.Series(True, index=pd.Index(list(compositions)))
-    meta = pd.read_parquet(ROOT / _output_paths()["post_metadata"])
+    meta = pd.read_parquet(ROOT / output_paths()["post_metadata"])
     return meta[spec["eligibility"]].reindex(list(compositions)).fillna(False).astype(bool)
 
 
@@ -65,7 +65,7 @@ def load_feature_matrix(family: str, compositions: Sequence[str]) -> pd.DataFram
     reg = _registry()
     if family not in reg:
         raise KeyError(f"Familia de features desconocida: {family} (hay: {sorted(reg)})")
-    spec, out = reg[family], _output_paths()
+    spec, out = reg[family], output_paths()
     comps = list(compositions)
     table = pd.read_parquet(ROOT / out["table"])
     if spec["post"]:

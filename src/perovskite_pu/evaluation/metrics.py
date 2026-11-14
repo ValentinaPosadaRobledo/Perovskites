@@ -119,6 +119,35 @@ def tpr_at_ppr(s: Iterable[int], scores: Iterable[float], target_ppr: float) -> 
     return true_positive_rate(s, y_pred), predicted_positive_rate(y_pred)
 
 
+def expected_hits_at_ppr(s: Iterable[int], scores: Iterable[float], target_ppr: float) -> float:
+    """Aciertos esperados (positivos predichos) a una P(ŷ = 1) EXACTA, repartiendo empates.
+
+    Se predicen positivos las ``target_ppr · n`` puntuaciones más altas. Si el corte cae dentro
+    de un bloque de puntuaciones empatadas, ese bloque entra en la fracción justa y aporta la
+    misma fracción de sus positivos: es el valor esperado al romper los empates al azar
+    (interpolación lineal, como en las curvas ROC). Sin empates en el corte coincide con
+    :func:`tpr_at_ppr`. Con puntuaciones binarias (p. ej. el balance de carga) evita que todo
+    el bloque empatado entre de golpe y la P(ŷ = 1) real supere el objetivo.
+
+    Devuelve un recuento (no una tasa) para micro-agregar sobre folds: Σ aciertos / Σ positivos.
+    """
+    if not 0.0 <= target_ppr <= 1.0:
+        raise ValueError("`target_ppr` debe estar en [0, 1].")
+    s = _as_binary(s, "s")
+    scores = np.asarray(scores, dtype=float)
+    k = target_ppr * scores.size  # número (fraccionario) de predicciones positivas
+    taken = hits = 0.0
+    for v in np.unique(scores)[::-1]:  # bloques de puntuación, de mayor a menor
+        block = scores == v
+        n_block, pos_block = int(block.sum()), int((s[block] == 1).sum())
+        if taken + n_block <= k + 1e-12:
+            taken, hits = taken + n_block, hits + pos_block
+        else:
+            hits += pos_block * (k - taken) / n_block
+            break
+    return float(hits)
+
+
 def tpr_ppr_curve(
     s: Iterable[int], scores: Iterable[float]
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:

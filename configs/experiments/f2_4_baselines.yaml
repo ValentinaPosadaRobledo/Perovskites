@@ -1,0 +1,109 @@
+# F2.4: líneas base con todos los esquemas y las 10 semillas.
+# Todo parámetro vive aquí (regla 2.4); las semillas se leen de configs/seeds.yaml.
+# Decisiones de la autora del 2026-11-14 (bitácora): ventanas de t, umbral de E_hull,
+# definición del balance de carga, entrada para la simetría y CV interna estratificada.
+
+name: f2_4_baselines
+description: >-
+  Líneas base de reglas (τ, t, E_hull, balance de carga) y aprendidas (solo E_hull, solo
+  simetría, puntuaciones aleatorias) en los 7 esquemas, con el punto de operación preregistrado.
+roadmap_task: F2.4
+hypotheses: [H2, H3, descriptivo]
+
+data:
+  config: configs/data.yaml
+  input: data/processed/train_pool.parquet   # todo parte de train_pool (regla 2.1.5)
+  folds: data/splits/folds.parquet            # folds definitivos congelados en F1.8
+
+splits:
+  schemes: [random, group_system, loeo_A, loeo_B, family, cluster, temporal]
+
+# Subconjuntos de evaluación de cada línea base (composiciones de train_pool):
+#   all              todas;
+#   tau_defined      τ definido (H2 se calcula así, preregistro §7.2);
+#   t_defined        t definido;
+#   post_dft         con polimorfo perovskita en GGA (mismas composiciones que post_dft).
+# Reglas: `below` (positivo si x ≤ umbral), `above` (x ≥ umbral) o `window` (a ≤ x ≤ b).
+# La puntuación de cada regla ordena de forma coherente con ella: −x, x o −|x − centro|.
+baselines:
+  tau_bartel:
+    kind: rule
+    input: tau
+    rule: {type: below, threshold: 4.18}      # umbral externo de Bartel et al. (2019)
+    subset: tau_defined
+    role: principal                           # línea base de H2 (in-sample en la TableS1)
+  t_window_bartel:
+    kind: rule
+    input: t
+    rule: {type: window, window: [0.825, 1.059]}  # ventana optimizada por Bartel (in-sample)
+    subset: t_defined
+    role: principal
+  t_window_classic:
+    kind: rule
+    input: t
+    rule: {type: window, window: [0.8, 1.0]}      # ventana clásica (externa)
+    subset: t_defined
+    role: sensitivity
+  ehull_0p05:
+    kind: rule
+    input: ehull
+    rule: {type: below, threshold: 0.05}      # eV/átomo; igual que la bandera de metaestables
+    subset: post_dft
+    role: principal
+  ehull_0:
+    kind: rule
+    input: ehull
+    rule: {type: below, threshold: 0.0}       # sobre el hull
+    subset: post_dft
+    role: sensitivity
+  ehull_0p1:
+    kind: rule
+    input: ehull
+    rule: {type: below, threshold: 0.1}
+    subset: post_dft
+    role: sensitivity
+  charge_balance_icsd:
+    kind: rule
+    input: charge_balanced_icsd               # estados observados en ICSD (bandera de F1.5)
+    rule: {type: above, threshold: 1}
+    subset: all
+    role: principal
+  charge_balance_common:
+    kind: rule
+    input: charge_balanced_common             # estados comunes de pymatgen
+    rule: {type: above, threshold: 1}
+    subset: all
+    role: sensitivity
+  ehull_model:
+    kind: model
+    estimator: logistic                       # monótona: equivale a un umbral de E_hull calibrado
+    inputs: [ehull]
+    params: {C: 1.0}
+    subset: post_dft
+    role: principal
+  symmetry_model:
+    kind: model
+    estimator: logistic_onehot                # control de procedencia de la estructura (H3)
+    inputs: [spacegroup_number, crystal_system]  # de la misma entrada que post_dft
+    params: {C: 1.0, min_frequency: 5}        # categorías con < 5 casos en train: "raras"
+    subset: post_dft
+    role: principal
+  trivial_random:
+    kind: model
+    estimator: random_scores                  # referencia de azar: TPR ≈ P(ŷ=1)
+    inputs: []
+    params: {}
+    subset: all
+    role: principal
+
+inner_cv:                                     # solo para las líneas base aprendidas
+  n_splits: 3
+  split: stratified                           # decisión de la autora (2026-11-14)
+  target_recall: 0.90                         # punto de operación principal (preregistro §7.1)
+
+evaluation:
+  fixed_ppr: [0.05, 0.10, 0.20]               # TPR a P(ŷ=1) fija, umbral por fold (§7.2–7.3)
+
+execution:
+  n_jobs: -1                                  # joblib (loky) sobre semilla × esquema
+  dev_mode: false                             # true: solo dev_n_seeds semillas
