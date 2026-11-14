@@ -5,5 +5,7 @@
 # revisa también las cadenas de texto del código.)
 """Entrenamiento: bagging PU (Mordelet y Vert, 2014), modelos y CV anidada (Fase 3).
 
-Todo el entrenamiento parte de ``data/processed/train_pool.parquet``.
+Todo el entrenamiento parte de ``data/processed/train_pool.parquet``. Módulos: ``cv``
+(ajuste por fold), ``baselines`` (líneas base de F2.4), ``pu_bagging`` (F3.1) y ``runner``
+(ejecutor de experimentos con CV anidada y corridas reanudables).
 """

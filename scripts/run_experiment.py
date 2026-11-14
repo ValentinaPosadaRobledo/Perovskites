@@ -27,8 +27,23 @@ def main(argv: list[str] | None = None) -> None:
         action="store_true",
         help="permite el árbol de git sucio (guarda el diff con los resultados)",
     )
+    parser.add_argument(
+        "--resume",
+        default=None,
+        help="directorio de una corrida interrumpida o de desarrollo: solo los folds pendientes",
+    )
+    parser.add_argument(
+        "--dev-mode",
+        action="store_true",
+        help="solo las dev_n_seeds primeras semillas (para medir tiempos); se amplía con --resume",
+    )
     args = parser.parse_args(argv)
-    run_dir = run_experiment(args.config, allow_dirty=args.allow_dirty)
+    run_dir = run_experiment(
+        args.config,
+        allow_dirty=args.allow_dirty,
+        resume=args.resume,
+        dev_mode=True if args.dev_mode else None,
+    )
     print(f"Resultados en {run_dir}")
 
 

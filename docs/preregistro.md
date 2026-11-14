@@ -6,8 +6,9 @@
 >
 > **Fijado el 2026-11-13, antes de descargar ningún dato:** δ₁, δ₂, el punto de operación,
 > las reglas de decisión de H1–H3 y los parámetros del bootstrap (secciones 7–9).
-> Los valores que siguen marcados **[PROPUESTA]** (tolerancias de identificación, k de
-> `cluster`, n_iter) se fijan en F1 y deben estar cerrados antes de F4.0.
+> Los valores que estaban marcados **[PROPUESTA]** (tolerancias de identificación, k de
+> `cluster`, n_iter) quedaron fijados entre el 2026-11-13 y el 2026-11-14, antes de entrenar
+> ningún modelo PU (bitácora del ROADMAP).
 
 **Título:** Evaluación de la generalización de modelos de aprendizaje positivo–no
 etiquetado (PU learning) para predecir la sintetizabilidad de perovskitas óxido ABO₃ con
@@ -36,7 +37,8 @@ de Gu et al. (2022).
   positivos y de no etiquetados; usada solo en la validación de formabilidad.
 - **No etiquetado:** sin registro experimental. **No se trata como negativo.**
 - **Identificación de perovskitas:** por conectividad (CrystalNN/ChemEnv: B con NC = 6,
-  A con NC 8–12, BO₆ que comparten solo vértices, ángulo B–O–B > 140° **[PROPUESTA]**),
+  A con NC 8–12, o ≥ 8 O a < 3,3 Å si A tiene par libre; BO₆ que comparten solo vértices;
+  ángulo B–O–B ≥ 135°, fijado el 2026-11-13, con 140° como sensibilidad 5),
   contrastada con `StructureMatcher`. Polianiones excluidos; politipos hexagonales 2H/4H/6H
   clasificados aparte. Validación manual de ≥ 50 casos límite.
 - **Banderas de sensibilidad:** alta presión/metaestables (MgSiO₃, BiCoO₃, PbVO₃, BiScO₃,
@@ -111,8 +113,20 @@ por grupo.
     sensibilidad;
   - clasificador trivial: puntuaciones aleatorias (TPR ≈ P(ŷ = 1)), con el umbral del bucle
     interno.
-- **Protocolo:** CV anidada; bucle interno con búsqueda aleatoria de presupuesto fijo
-  (n_iter = 15 **[PROPUESTA]**) y selección del umbral; 10 semillas (0–9).
+- **Protocolo** *(fijado el 2026-11-14; `configs/experiments/f3_3_pu.yaml`)*: CV anidada;
+  bucle interno con búsqueda aleatoria de presupuesto fijo y selección del umbral; 10
+  semillas (0–9).
+  - **Candidatos:** n_iter = 15 por semilla, sorteados sin reemplazo de la rejilla conjunta
+    de Random Forest (25 árboles por bolsa; max_depth ∈ {sin límite, 5, 10, 20},
+    min_samples_leaf ∈ {1, 2, 5, 10}, max_features ∈ {√p, 0,3, 0,5}) y Gradient Boosting
+    (50 árboles, tasa 0,1; max_depth ∈ {2, 3, 5}, min_samples_leaf ∈ {1, 5, 10},
+    max_features ∈ {√p, 0,3, 0,5}, subsample ∈ {0,8, 1}). Son los mismos para todos los
+    esquemas y folds de cada semilla.
+  - **Bagging PU:** 50 bolsas; en cada una, todas las P y K = |P| no etiquetadas tomadas
+    con reemplazo (flujo `pu_sampling`).
+  - **Preprocesamiento** (dentro del Pipeline, ajustado en el train de cada fold): mediana
+    con **indicador de dato faltante** (t y μ faltan sin balance de carga de Bartel) y
+    eliminación de columnas constantes.
 
 ## 7. Punto de operación y métricas *(fijado 2026-11-13)*
 

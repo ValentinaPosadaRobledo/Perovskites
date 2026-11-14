@@ -208,3 +208,101 @@ def test_seed_metrics_and_summary():
     s = summarize(m)
     assert s.loc[0, "tpr_mean"] == pytest.approx(2 / 3) and s.loc[0, "tpr_sd"] == 0.0
     assert s.loc[0, "tpr_ci95_low"] == pytest.approx(2 / 3)
+
+
+# ---------------------------------------------------------------------------
+# Bagging PU con CV anidada (F3.1–F3.3)
+# ---------------------------------------------------------------------------
+SEARCH = {
+    "n_iter": 3,
+    "learners": {
+        "random_forest": {"fixed": {"n_estimators": 3}, "space": {"max_depth": [2, 4]}},
+        "gradient_boosting": {"fixed": {"n_estimators": 5}, "space": {"max_depth": [1, 2]}},
+    },
+}
+PU_SPEC = {"kind": "pu_bagging", "family": "fam", "subset": "family",
+           "bagging": {"n_bags": 3}, "preprocessing": {"add_missing_indicator": True},
+           "search": SEARCH}  # fmt: skip
+
+
+def _features(inputs: pd.DataFrame) -> dict:
+    """Familia sintética: 3 features informativas; una de cada diez filas no elegible."""
+    rng = np.random.default_rng(1)
+    lab = inputs["label"].to_numpy()
+    X = rng.normal(0, 1, (len(inputs), 3)) + lab[:, None] * 1.5
+    X[::7, 0] = np.nan  # huecos para el imputador
+    ok = inputs["post_dft"].to_numpy()
+    X[~ok] = np.nan  # filas no elegibles: nunca deben usarse
+    return {"fam": (X, ok)}
+
+
+def test_sample_candidates_distinct_and_deterministic():
+    from perovskite_pu.training.runner import sample_candidates
+
+    a, b = sample_candidates(SEARCH, 0), sample_candidates(SEARCH, 0)
+    assert a == b and len(a) == 3
+    assert len({str(c) for c in a}) == 3  # sin repetidos
+    assert any(sample_candidates(SEARCH, s) != a for s in range(1, 6))  # depende de la semilla
+    big = {**SEARCH, "n_iter": 99}
+    assert len(sample_candidates(big, 0)) == 4  # como mucho, toda la rejilla
+
+
+def test_pu_nested_selection_and_no_test_influence(inputs, fold):
+    from perovskite_pu.training.runner import sample_candidates
+
+    labels = inputs["label"].to_numpy()
+    feats = _features(inputs)
+    cands = {"pu": sample_candidates(SEARCH, 0)}
+    log: list = []
+    out = evaluate_fold(inputs, labels, fold, 0, "random", 0, {"pu": PU_SPEC}, INNER, feats,
+                        cands, log)  # fmt: skip
+    # Solo filas de test elegibles para la familia.
+    ok = feats["fam"][1]
+    assert set(out["composition"]) == set(inputs.index[fold.test_idx][ok[fold.test_idx]])
+    # Se elige el candidato de menor P(ŷ=1) interna y se usa su umbral.
+    srch = pd.DataFrame(log)
+    best = srch.loc[srch["inner_ppr"].idxmin()]
+    assert srch["selected"].sum() == 1 and bool(best["selected"])
+    assert (out["selected"] == best["candidate"]).all()
+    assert out["threshold"].iloc[0] == pytest.approx(best["inner_threshold"])
+    # Alterar features y etiquetas del test no cambia la selección ni el umbral.
+    X2 = feats["fam"][0].copy()
+    X2[fold.test_idx] = 50.0
+    labels2 = labels.copy()
+    labels2[fold.test_idx] = 1 - labels2[fold.test_idx]
+    log2: list = []
+    out2 = evaluate_fold(inputs, labels2, fold, 0, "random", 0, {"pu": PU_SPEC}, INNER,
+                         {"fam": (X2, ok)}, cands, log2)  # fmt: skip
+    pd.testing.assert_frame_equal(pd.DataFrame(log), pd.DataFrame(log2))
+    assert out2["threshold"].iloc[0] == pytest.approx(out["threshold"].iloc[0])
+
+
+def test_pu_requires_family_subset(inputs, fold):
+    bad = {"pu": {**PU_SPEC, "subset": "all"}}
+    with pytest.raises(ValueError, match="subset: family"):
+        evaluate_fold(inputs, inputs["label"].to_numpy(), fold, 0, "random", 0, bad, INNER,
+                      _features(inputs), {"pu": []})  # fmt: skip
+
+
+def test_code_changed_since_ignores_docs(tmp_path):
+    import subprocess
+
+    from perovskite_pu.training.runner import code_changed_since
+
+    def git(*args):
+        cmd = ["git", "-c", "user.name=t", "-c", "user.email=t@e.x", *args]
+        return subprocess.run(cmd, cwd=tmp_path, check=True, capture_output=True, text=True).stdout
+
+    git("init", "-q")
+    (tmp_path / "src").mkdir()
+    (tmp_path / "src" / "a.py").write_text("x = 1\n", encoding="utf-8")
+    (tmp_path / "README.md").write_text("hola\n", encoding="utf-8")
+    git("add", ".")
+    git("commit", "-q", "-m", "inicial")
+    first = git("rev-parse", "HEAD").strip()
+    (tmp_path / "README.md").write_text("adiós\n", encoding="utf-8")  # solo documentación
+    git("commit", "-qam", "docs")
+    assert code_changed_since(first, tmp_path) == []
+    (tmp_path / "src" / "a.py").write_text("x = 2\n", encoding="utf-8")  # código
+    git("commit", "-qam", "código")
+    assert code_changed_since(first, tmp_path) == ["src/a.py"]
