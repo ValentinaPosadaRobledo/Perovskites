@@ -69,6 +69,15 @@ Excel o en Google Sheets.
 
 ## Resumen
 
-- Casos preparados: 59 (≥ 50). Revisados: 0
-- Desacuerdos: —
-- Ajustes de criterios derivados (registrar también en la bitácora del ROADMAP): —
+- **Casos revisados: 59/59** (Valentina Posada, 2026-11-13). Planilla con los veredictos:
+  `docs/validacion_manual_casos.csv`. Informe generado: `results/f1_4_validacion_manual/informe.md`.
+- **Concordancia en las clasificaciones firmes: 42/42** (IC 95 % Clopper–Pearson: 91,6–100 %).
+- **Casos límite (17):** 3 perovskitas (InRhO₃, LaYO₃, ScCrO₃), 6 no perovskitas (tipo LiNbO₃
+  y pirocloros) y 8 dudosas (5 con roles A/B invertidos en MP, SrPrO₃, BiScO₃, CoTeO₃).
+- **Decisiones derivadas (2026-11-14, bitácora del ROADMAP):**
+  - en las entradas revisadas prevalece el veredicto manual;
+  - el criterio automático **no** se ajusta con estos 59 casos, para evitar el sobreajuste;
+  - las 25 composiciones ambiguas quedan fuera de P y de U en el análisis principal, y cuentan
+    como P en la sensibilidad.
+- Nota técnica: al editar en Excel, la columna `oxidacion_A_B` (formato "+2.0/+4.0") se
+  convirtió en números. Se restauró desde el original y el formato pasó a "A +2.0 | B +4.0".

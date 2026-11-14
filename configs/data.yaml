@@ -88,6 +88,18 @@ identification:
   manual_validation_min_cases: 50    # F1.4, docs/validacion_manual.md
 
 # ---------------------------------------------------------------------------
+# F1.4–F1.5 Etiquetado por composición (decisiones de la autora, 2026-11-14)
+# ---------------------------------------------------------------------------
+labeling:
+  # La revisión manual de F1.4 PREVALECE sobre la clasificación automática en las entradas
+  # revisadas. El criterio automático NO se ajusta con esos 59 casos (riesgo de sobreajuste).
+  manual_review: docs/validacion_manual_casos.csv
+  # Composiciones sintetizadas cuya única evidencia de perovskita es un caso límite sin
+  # revisar o una entrada "dudosa": categoría `ambiguous`, ni P ni U en el análisis principal.
+  ambiguous_policy: exclude          # exclude | positive
+  sensitivity_ambiguous_policy: positive
+
+# ---------------------------------------------------------------------------
 # F1.5 Banderas de sensibilidad (se conservan en el análisis principal)
 # ---------------------------------------------------------------------------
 sensitivity_flags:                   # listas iniciales; ampliar en F1.5

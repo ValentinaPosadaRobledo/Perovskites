@@ -136,7 +136,8 @@ def main() -> None:
                 "formula_ABO3": f"{r['a_element']}{r['b_element']}O3" if r["cls"] != "polyanion" else r["formula_pretty"],
                 "material_id": r["material_id"], "mp_id_antiguo": to_legacy_mpid(r["material_id"]),
                 "grupo_espacial": r["spacegroup_symbol"], "A": r["a_element"], "B": r["b_element"],
-                "oxidacion_A_B": "" if pd.isna(r["oxi_a"]) else f"{r['oxi_a']:+.1f}/{r['oxi_b']:+.1f}",
+                # Formato "A +2.0 | B +4.0": con "+2.0/+4.0" Excel lo convertía en una división (0,5).
+                "oxidacion_A_B": "" if pd.isna(r["oxi_a"]) else f"A {r['oxi_a']:+.1f} | B {r['oxi_b']:+.1f}",
                 "oxidacion_ambigua": bool(r["oxi_ambiguous"]),
                 "NC_A": "" if pd.isna(r["a_cn_min"]) else f"{int(r['a_cn_min'])}–{int(r['a_cn_max'])}",
                 "O_a_3p3A_del_A": "" if pd.isna(r["a_o_within_3p3"]) else int(r["a_o_within_3p3"]),
