@@ -1,0 +1,126 @@
+{
+  "code_commit": "d54e18726c5b7a21e05c9c685986f9fd72363edb",
+  "code_dirty": false,
+  "config": {
+    "polymorph": "lowest_energy_perovskite",
+    "perovskite_classes": [
+      "perovskite"
+    ],
+    "thermo_type": "GGA_GGA+U",
+    "sensitivity_thermo_type": "R2SCAN",
+    "missing_policy": "exclude"
+  },
+  "coverage": [
+    {
+      "clase": "P",
+      "n": 193,
+      "elegibles_GGA": 193,
+      "sin_termo_GGA": 0,
+      "con_GGA_sin_perovskita": 0,
+      "elegibles_r2SCAN": 126
+    },
+    {
+      "clase": "U",
+      "n": 731,
+      "elegibles_GGA": 587,
+      "sin_termo_GGA": 33,
+      "con_GGA_sin_perovskita": 111,
+      "elegibles_r2SCAN": 47
+    },
+    {
+      "clase": "SNP",
+      "n": 84,
+      "elegibles_GGA": 30,
+      "sin_termo_GGA": 0,
+      "con_GGA_sin_perovskita": 54,
+      "elegibles_r2SCAN": 1
+    },
+    {
+      "clase": "AMB",
+      "n": 25,
+      "elegibles_GGA": 9,
+      "sin_termo_GGA": 0,
+      "con_GGA_sin_perovskita": 16,
+      "elegibles_r2SCAN": 1
+    }
+  ],
+  "u_without_gga_top_elements": {
+    "Yb": 33,
+    "Ba": 1,
+    "Cs": 1,
+    "K": 1,
+    "Li": 1
+  },
+  "u_with_gga_without_perovskite_entry_classes": {
+    "non_perovskite": 94,
+    "perovskite_borderline": 94,
+    "hexagonal_polytype": 9
+  },
+  "chosen_entry_experimental_frac": {
+    "P": 0.9740932642487047,
+    "U": 0.0,
+    "SNP": 0.0,
+    "AMB": 0.0
+  },
+  "perovskite_vs_ground_state": [
+    {
+      "clase": "P",
+      "elegibles": 193,
+      "perovskita_es_fundamental": "85.0%",
+      "ΔE (eV/átomo)": "0.000 [0.000, 0.000]"
+    },
+    {
+      "clase": "U",
+      "elegibles": 587,
+      "perovskita_es_fundamental": "91.1%",
+      "ΔE (eV/átomo)": "0.000 [0.000, 0.000]"
+    },
+    {
+      "clase": "SNP",
+      "elegibles": 30,
+      "perovskita_es_fundamental": "0.0%",
+      "ΔE (eV/átomo)": "0.242 [0.085, 0.426]"
+    },
+    {
+      "clase": "AMB",
+      "elegibles": 9,
+      "perovskita_es_fundamental": "22.2%",
+      "ΔE (eV/átomo)": "0.076 [0.011, 0.093]"
+    }
+  ],
+  "distribution": [
+    {
+      "clase": "P",
+      "E_hull (eV/átomo)": "0.004 [0.000, 0.036]",
+      "ΔHf (eV/átomo)": "-2.876 [-3.292, -2.474]"
+    },
+    {
+      "clase": "U",
+      "E_hull (eV/átomo)": "0.334 [0.141, 0.583]",
+      "ΔHf (eV/átomo)": "-2.087 [-2.679, -1.361]"
+    },
+    {
+      "clase": "SNP",
+      "E_hull (eV/átomo)": "0.269 [0.116, 0.459]",
+      "ΔHf (eV/átomo)": "-2.083 [-2.327, -1.590]"
+    },
+    {
+      "clase": "AMB",
+      "E_hull (eV/átomo)": "0.089 [0.072, 0.104]",
+      "ΔHf (eV/átomo)": "-1.889 [-2.717, -1.484]"
+    }
+  ],
+  "r2scan_vs_gga": {
+    "n": 173,
+    "P": 126,
+    "U": 47,
+    "spearman_ehull": 0.4950453501578949,
+    "spearman_eform": 0.9857067366303407,
+    "on_hull_frac": {
+      "GGA": 0.6994219653179191,
+      "r2SCAN": 0.8323699421965318
+    },
+    "u_median_ehull_gga": 0.0,
+    "same_entry": 0.9421965317919075
+  }
+}
