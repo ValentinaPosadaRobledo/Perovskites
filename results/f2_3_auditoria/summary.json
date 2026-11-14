@@ -1,0 +1,168 @@
+{
+  "code_commit": "1b23e0b5d1e3add0189c0787d10c321c80b927d0",
+  "code_dirty": false,
+  "problems": [],
+  "groups": [
+    {
+      "grupo": "element_property_magpie",
+      "columnas": 132,
+      "etapa": "previa a la síntesis",
+      "dependencia de la etiqueta": "ninguna",
+      "familias": "pre_dft, pre_dft_tau, post_dft, post_dft_r2scan"
+    },
+    {
+      "grupo": "stoichiometry",
+      "columnas": 6,
+      "etapa": "previa a la síntesis",
+      "dependencia de la etiqueta": "ninguna",
+      "familias": "pre_dft, pre_dft_tau, post_dft, post_dft_r2scan"
+    },
+    {
+      "grupo": "valence_orbital",
+      "columnas": 8,
+      "etapa": "previa a la síntesis",
+      "dependencia de la etiqueta": "ninguna",
+      "familias": "pre_dft, pre_dft_tau, post_dft, post_dft_r2scan"
+    },
+    {
+      "grupo": "ion_property",
+      "columnas": 3,
+      "etapa": "previa a la síntesis",
+      "dependencia de la etiqueta": "ninguna",
+      "familias": "pre_dft, pre_dft_tau, post_dft, post_dft_r2scan"
+    },
+    {
+      "grupo": "geometric_t_mu",
+      "columnas": 2,
+      "etapa": "previa a la síntesis",
+      "dependencia de la etiqueta": "ninguna",
+      "familias": "pre_dft, pre_dft_tau, post_dft, post_dft_r2scan"
+    },
+    {
+      "grupo": "geometric_tau",
+      "columnas": 1,
+      "etapa": "previa a la síntesis",
+      "dependencia de la etiqueta": "**in-sample**",
+      "familias": "pre_dft_tau"
+    },
+    {
+      "grupo": "thermo_gga",
+      "columnas": 2,
+      "etapa": "DFT (MP)",
+      "dependencia de la etiqueta": "**indirecta**",
+      "familias": "post_dft"
+    },
+    {
+      "grupo": "thermo_r2scan",
+      "columnas": 2,
+      "etapa": "DFT (MP)",
+      "dependencia de la etiqueta": "**indirecta**",
+      "familias": "post_dft_r2scan"
+    }
+  ],
+  "blocked_columns": {
+    "train_pool": [
+      "A",
+      "A_size",
+      "B",
+      "B_size",
+      "family",
+      "flag_ambiguous_oxidation",
+      "flag_bartel_conflict",
+      "flag_high_pressure",
+      "flag_icsd_without_exp",
+      "flag_metastable_dft",
+      "flag_no_charge_balance",
+      "flag_only_hexagonal",
+      "flag_site_rule_disagrees",
+      "label",
+      "manual_reviewed",
+      "metastable_gap_ev",
+      "n_entries",
+      "n_experimental",
+      "n_perovskite_experimental",
+      "n_unique_structures",
+      "year"
+    ],
+    "f1_5_entries": [
+      "a_element",
+      "b_element",
+      "batch_id",
+      "cls",
+      "cls_final",
+      "crystal_system",
+      "experimental",
+      "icsd_ids",
+      "is_gnome",
+      "manual_reviewed",
+      "material_id",
+      "n_icsd_ids",
+      "spacegroup_number",
+      "spacegroup_symbol",
+      "summary_energy_above_hull",
+      "theoretical"
+    ],
+    "features_pre_dft_meta": [
+      "bartel2019_exp_label",
+      "bartel2019_is_train",
+      "bartel_A",
+      "bartel_A_cn",
+      "bartel_B",
+      "bartel_B_cn",
+      "bartel_X",
+      "bartel_nA",
+      "bartel_nB",
+      "bartel_notes",
+      "bartel_rA",
+      "bartel_rB",
+      "bartel_rX",
+      "in_bartel2019"
+    ],
+    "features_post_dft_meta": [
+      "eligible_post_dft",
+      "eligible_post_dft_r2scan",
+      "experimental_gga",
+      "experimental_r2scan",
+      "ground_state_ehull_gga",
+      "material_id_gga",
+      "material_id_r2scan",
+      "n_perovskite_entries_gga",
+      "n_perovskite_entries_r2scan"
+    ]
+  },
+  "suspicious_threshold": 0.95,
+  "suspicious": [],
+  "best_pre_dft_feature": {
+    "feature": "geom_t",
+    "n": 637,
+    "auc": 0.6980639966391262,
+    "separation": 0.19806399663912622,
+    "nan_frac_P": 0.0,
+    "nan_frac_U": 0.39261285909712723
+  },
+  "tau": {
+    "feature": "geom_tau",
+    "n": 632,
+    "auc": 0.21841915800158151,
+    "separation": 0.2815808419984185,
+    "nan_frac_P": 0.0,
+    "nan_frac_U": 0.399452804377565
+  },
+  "ehull": {
+    "feature": "thermo_ehull",
+    "n": 780,
+    "auc": 0.07450724241113595,
+    "separation": 0.42549275758886407,
+    "nan_frac_P": 0.0,
+    "nan_frac_U": 0.0
+  },
+  "t_missing_auc": 0.3036935704514364,
+  "on_hull_frac": {
+    "P": 0.47150259067357514,
+    "U": 0.054514480408858604
+  },
+  "chosen_entry_experimental_frac": {
+    "P": 0.9740932642487047,
+    "U": 0.0
+  }
+}

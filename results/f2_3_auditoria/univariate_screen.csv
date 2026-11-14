@@ -1,0 +1,155 @@
+feature,n,auc,separation,nan_frac_P,nan_frac_U,family
+geom_tau,632,0.21841915800158151,0.2815808419984185,0.0,0.399452804377565,pre_dft_tau
+geom_t,637,0.6980639966391262,0.19806399663912622,0.0,0.39261285909712723,pre_dft_tau
+compound possible,924,0.6708249753691089,0.1708249753691089,0.0,0.0,pre_dft_tau
+MagpieData avg_dev NValence,924,0.33561804044427745,0.16438195955572255,0.0,0.0,pre_dft_tau
+MagpieData range NValence,924,0.35473444709851654,0.14526555290148346,0.0,0.0,pre_dft_tau
+MagpieData mean NUnfilled,924,0.6433978579984831,0.14339785799848315,0.0,0.0,pre_dft_tau
+MagpieData mean NdUnfilled,924,0.6408178164626496,0.14081781646264957,0.0,0.0,pre_dft_tau
+MagpieData avg_dev NdUnfilled,924,0.6408071844233536,0.1408071844233536,0.0,0.0,pre_dft_tau
+MagpieData mean MeltingT,924,0.6403003905502433,0.14030039055024335,0.0,0.0,pre_dft_tau
+MagpieData maximum NdUnfilled,924,0.6388827853107745,0.13888278531077447,0.0,0.0,pre_dft_tau
+MagpieData range NdUnfilled,924,0.6388827853107745,0.13888278531077447,0.0,0.0,pre_dft_tau
+MagpieData avg_dev MeltingT,924,0.6319294316111793,0.13192943161117932,0.0,0.0,pre_dft_tau
+MagpieData maximum NUnfilled,924,0.630731555183828,0.13073155518382795,0.0,0.0,pre_dft_tau
+MagpieData avg_dev NUnfilled,924,0.616980784360979,0.11698078436097903,0.0,0.0,pre_dft_tau
+MagpieData range NUnfilled,924,0.6166653671951972,0.11666536719519716,0.0,0.0,pre_dft_tau
+MagpieData minimum NUnfilled,924,0.6130008576511699,0.11300085765116985,0.0,0.0,pre_dft_tau
+MagpieData maximum MeltingT,924,0.6093859642905239,0.10938596429052394,0.0,0.0,pre_dft_tau
+MagpieData range MeltingT,924,0.6092300277141824,0.10923002771418244,0.0,0.0,pre_dft_tau
+MagpieData maximum NValence,924,0.39824075189781893,0.10175924810218107,0.0,0.0,pre_dft_tau
+MagpieData range GSmagmom,924,0.5963688041791003,0.09636880417910032,0.0,0.0,pre_dft_tau
+MagpieData maximum GSmagmom,924,0.5963688041791003,0.09636880417910032,0.0,0.0,pre_dft_tau
+MagpieData avg_dev GSmagmom,924,0.5963475401005083,0.09634754010050828,0.0,0.0,pre_dft_tau
+MagpieData mean GSmagmom,924,0.5960781951050091,0.09607819510500915,0.0,0.0,pre_dft_tau
+MagpieData avg_dev AtomicWeight,924,0.4115024489130512,0.08849755108694879,0.0,0.0,pre_dft_tau
+frac s valence electrons,924,0.5884089507594822,0.08840895075948219,0.0,0.0,pre_dft_tau
+MagpieData avg_dev Number,924,0.41197380265517464,0.08802619734482536,0.0,0.0,pre_dft_tau
+MagpieData avg_dev NsValence,924,0.4231870600993741,0.07681293990062588,0.0,0.0,pre_dft_tau
+MagpieData mean NsValence,924,0.5767385156255538,0.07673851562555378,0.0,0.0,pre_dft_tau
+avg s valence electrons,924,0.5767385156255538,0.07673851562555378,0.0,0.0,pre_dft_tau
+MagpieData range NsValence,924,0.42633768774409386,0.07366231225590614,0.0,0.0,pre_dft_tau
+MagpieData minimum NsValence,924,0.573662312255906,0.07366231225590603,0.0,0.0,pre_dft_tau
+MagpieData mean MendeleevNumber,924,0.4277765570621549,0.0722234429378451,0.0,0.0,pre_dft_tau
+MagpieData avg_dev NsUnfilled,924,0.42940325907444554,0.07059674092555446,0.0,0.0,pre_dft_tau
+MagpieData mean NsUnfilled,924,0.42940325907444554,0.07059674092555446,0.0,0.0,pre_dft_tau
+MagpieData range NfUnfilled,924,0.5678997469574648,0.06789974695746481,0.0,0.0,pre_dft_tau
+MagpieData maximum NfUnfilled,924,0.5678997469574648,0.06789974695746481,0.0,0.0,pre_dft_tau
+MagpieData maximum NsUnfilled,924,0.4325432546798693,0.06745674532013068,0.0,0.0,pre_dft_tau
+MagpieData range NsUnfilled,924,0.4325432546798693,0.06745674532013068,0.0,0.0,pre_dft_tau
+MagpieData mean NValence,924,0.432794879609875,0.067205120390125,0.0,0.0,pre_dft_tau
+MagpieData avg_dev NfUnfilled,924,0.5670420957875861,0.06704209578758613,0.0,0.0,pre_dft_tau
+MagpieData mean NfUnfilled,924,0.5645577426054167,0.06455774260541669,0.0,0.0,pre_dft_tau
+MagpieData minimum NValence,924,0.5632889859160919,0.06328898591609189,0.0,0.0,pre_dft_tau
+MagpieData maximum CovalentRadius,924,0.5621619897507141,0.062161989750714075,0.0,0.0,pre_dft_tau
+MagpieData range CovalentRadius,924,0.5594862598612165,0.05948625986121647,0.0,0.0,pre_dft_tau
+MagpieData avg_dev MendeleevNumber,924,0.559220458878816,0.059220458878815996,0.0,0.0,pre_dft_tau
+MagpieData minimum AtomicWeight,924,0.5581395348837209,0.05813953488372092,0.0,0.0,pre_dft_tau
+MagpieData minimum Number,924,0.5581395348837209,0.05813953488372092,0.0,0.0,pre_dft_tau
+MagpieData maximum GSvolume_pa,924,0.5561123593912803,0.05611235939128034,0.0,0.0,pre_dft_tau
+MagpieData range Number,924,0.44511032512776166,0.054889674872238337,0.0,0.0,pre_dft_tau
+MagpieData mean AtomicWeight,924,0.44556041479129305,0.05443958520870695,0.0,0.0,pre_dft_tau
+MagpieData minimum Column,924,0.5540993599512344,0.05409935995123438,0.0,0.0,pre_dft_tau
+MagpieData range Column,924,0.44590064004876573,0.05409935995123427,0.0,0.0,pre_dft_tau
+MagpieData range GSvolume_pa,924,0.5529759077989553,0.052975907798955335,0.0,0.0,pre_dft_tau
+MagpieData range AtomicWeight,924,0.44783212718754206,0.05216787281245794,0.0,0.0,pre_dft_tau
+MagpieData minimum Electronegativity,924,0.45062480950929595,0.049375190490704046,0.0,0.0,pre_dft_tau
+MagpieData range Electronegativity,924,0.549375190490704,0.049375190490704046,0.0,0.0,pre_dft_tau
+MagpieData mean Number,924,0.45120957167057685,0.04879042832942315,0.0,0.0,pre_dft_tau
+MagpieData mean CovalentRadius,924,0.5466463004047263,0.04664630040472628,0.0,0.0,pre_dft_tau
+MagpieData maximum Number,924,0.45372227695753564,0.04627772304246436,0.0,0.0,pre_dft_tau
+MagpieData maximum AtomicWeight,924,0.45393491774345596,0.04606508225654404,0.0,0.0,pre_dft_tau
+frac p valence electrons,924,0.5455582883834338,0.04555828838343379,0.0,0.0,pre_dft_tau
+MagpieData avg_dev CovalentRadius,924,0.5453314715451189,0.04533147154511885,0.0,0.0,pre_dft_tau
+MagpieData mean NpValence,924,0.45976481929077206,0.040235180709227936,0.0,0.0,pre_dft_tau
+avg p valence electrons,924,0.45976481929077206,0.040235180709227936,0.0,0.0,pre_dft_tau
+MagpieData avg_dev NpValence,924,0.5397106667706244,0.0397106667706244,0.0,0.0,pre_dft_tau
+frac f valence electrons,924,0.46092725558713665,0.03907274441286335,0.0,0.0,pre_dft_tau
+avg f valence electrons,924,0.4624157410885791,0.03758425891142092,0.0,0.0,pre_dft_tau
+MagpieData mean NfValence,924,0.4624157410885791,0.03758425891142092,0.0,0.0,pre_dft_tau
+MagpieData minimum GSvolume_pa,924,0.5355677154582763,0.035567715458276306,0.0,0.0,pre_dft_tau
+geom_mu,637,0.46920365961816746,0.030796340381832543,0.0,0.39261285909712723,pre_dft_tau
+max ionic char,924,0.5304359844913986,0.030435984491398616,0.0,0.0,pre_dft_tau
+MagpieData avg_dev NfValence,924,0.46962426373127875,0.030375736268721254,0.0,0.0,pre_dft_tau
+MagpieData mean SpaceGroupNumber,924,0.5298760304218083,0.02987603042180831,0.0,0.0,pre_dft_tau
+MagpieData avg_dev SpaceGroupNumber,924,0.5292593721426394,0.029259372142639406,0.0,0.0,pre_dft_tau
+MagpieData avg_dev NdValence,924,0.4712155256125826,0.02878447438741738,0.0,0.0,pre_dft_tau
+MagpieData avg_dev GSbandgap,924,0.4723212576993685,0.027678742300631498,0.0,0.0,pre_dft_tau
+MagpieData mean GSbandgap,924,0.4723212576993685,0.027678742300631498,0.0,0.0,pre_dft_tau
+MagpieData maximum GSbandgap,924,0.4723318897386645,0.027668110261335477,0.0,0.0,pre_dft_tau
+MagpieData range GSbandgap,924,0.4723318897386645,0.027668110261335477,0.0,0.0,pre_dft_tau
+MagpieData mean NpUnfilled,924,0.4726083227603609,0.02739167723963909,0.0,0.0,pre_dft_tau
+MagpieData maximum SpaceGroupNumber,924,0.5270408199428704,0.027040819942870442,0.0,0.0,pre_dft_tau
+MagpieData mean Electronegativity,924,0.4738558153710936,0.026144184628906386,0.0,0.0,pre_dft_tau
+MagpieData avg_dev Electronegativity,924,0.5261335525896104,0.026133552589610365,0.0,0.0,pre_dft_tau
+MagpieData avg_dev NpUnfilled,924,0.5245210266297144,0.02452102662971445,0.0,0.0,pre_dft_tau
+MagpieData minimum MendeleevNumber,924,0.4756278219204298,0.024372178079570206,0.0,0.0,pre_dft_tau
+MagpieData range SpaceGroupNumber,924,0.52426585768661,0.02426585768661005,0.0,0.0,pre_dft_tau
+MagpieData range MendeleevNumber,924,0.5237023596039211,0.023702359603921086,0.0,0.0,pre_dft_tau
+MagpieData avg_dev Row,924,0.4765847054570713,0.023415294542928677,0.0,0.0,pre_dft_tau
+MagpieData range NdValence,924,0.47719073169694437,0.02280926830305563,0.0,0.0,pre_dft_tau
+MagpieData maximum NdValence,924,0.47719073169694437,0.02280926830305563,0.0,0.0,pre_dft_tau
+MagpieData maximum NfValence,924,0.4780342068144284,0.021965793185571625,0.0,0.0,pre_dft_tau
+MagpieData range NfValence,924,0.4780342068144284,0.021965793185571625,0.0,0.0,pre_dft_tau
+MagpieData maximum Row,924,0.5216113918757044,0.021611391875704378,0.0,0.0,pre_dft_tau
+MagpieData mean NdValence,924,0.47845948838626906,0.02154051161373094,0.0,0.0,pre_dft_tau
+avg d valence electrons,924,0.47845948838626906,0.02154051161373094,0.0,0.0,pre_dft_tau
+avg ionic char,924,0.5199244416407363,0.019924441640736257,0.0,0.0,pre_dft_tau
+MagpieData maximum NpUnfilled,924,0.4807205687432221,0.01927943125677789,0.0,0.0,pre_dft_tau
+MagpieData range Row,924,0.5191341267197324,0.01913412671973236,0.0,0.0,pre_dft_tau
+MagpieData mean GSvolume_pa,924,0.48236853483410475,0.017631465165895255,0.0,0.0,pre_dft_tau
+MagpieData range NpUnfilled,924,0.48565029096347545,0.01434970903652455,0.0,0.0,pre_dft_tau
+MagpieData mean Column,924,0.48616771687588156,0.013832283124118439,0.0,0.0,pre_dft_tau
+MagpieData maximum MendeleevNumber,924,0.48700410396716826,0.012995896032831744,0.0,0.0,pre_dft_tau
+MagpieData minimum SpaceGroupNumber,924,0.5117732115137897,0.011773211513789739,0.0,0.0,pre_dft_tau
+MagpieData range NpValence,924,0.5085339835416032,0.008533983541603174,0.0,0.0,pre_dft_tau
+MagpieData minimum NpValence,924,0.4914660164583969,0.008533983541603118,0.0,0.0,pre_dft_tau
+MagpieData minimum NpUnfilled,924,0.4915014565893836,0.0084985434106164,0.0,0.0,pre_dft_tau
+frac d valence electrons,924,0.49563377586243557,0.004366224137564434,0.0,0.0,pre_dft_tau
+MagpieData avg_dev GSvolume_pa,924,0.5035759092165605,0.00357590921656048,0.0,0.0,pre_dft_tau
+MagpieData avg_dev Column,924,0.5035546451379684,0.0035546451379684374,0.0,0.0,pre_dft_tau
+MagpieData minimum Row,924,0.5034199726402189,0.0034199726402188713,0.0,0.0,pre_dft_tau
+MagpieData minimum CovalentRadius,924,0.5034199726402189,0.0034199726402188713,0.0,0.0,pre_dft_tau
+MagpieData minimum MeltingT,924,0.5034199726402189,0.0034199726402188713,0.0,0.0,pre_dft_tau
+MagpieData mean Row,924,0.49898995626687837,0.001010043733121635,0.0,0.0,pre_dft_tau
+MagpieData mode Number,924,,,0.0,0.0,pre_dft_tau
+MagpieData mode MendeleevNumber,924,,,0.0,0.0,pre_dft_tau
+MagpieData mode AtomicWeight,924,,,0.0,0.0,pre_dft_tau
+MagpieData mode MeltingT,924,,,0.0,0.0,pre_dft_tau
+MagpieData maximum Column,924,,,0.0,0.0,pre_dft_tau
+MagpieData mode Column,924,,,0.0,0.0,pre_dft_tau
+MagpieData mode Row,924,,,0.0,0.0,pre_dft_tau
+MagpieData mode CovalentRadius,924,,,0.0,0.0,pre_dft_tau
+MagpieData maximum Electronegativity,924,,,0.0,0.0,pre_dft_tau
+MagpieData mode Electronegativity,924,,,0.0,0.0,pre_dft_tau
+MagpieData maximum NsValence,924,,,0.0,0.0,pre_dft_tau
+MagpieData mode NsValence,924,,,0.0,0.0,pre_dft_tau
+MagpieData maximum NpValence,924,,,0.0,0.0,pre_dft_tau
+MagpieData mode NpValence,924,,,0.0,0.0,pre_dft_tau
+MagpieData minimum NdValence,924,,,0.0,0.0,pre_dft_tau
+MagpieData mode NdValence,924,,,0.0,0.0,pre_dft_tau
+MagpieData minimum NfValence,924,,,0.0,0.0,pre_dft_tau
+MagpieData mode NfValence,924,,,0.0,0.0,pre_dft_tau
+MagpieData mode NValence,924,,,0.0,0.0,pre_dft_tau
+MagpieData minimum NsUnfilled,924,,,0.0,0.0,pre_dft_tau
+MagpieData mode NsUnfilled,924,,,0.0,0.0,pre_dft_tau
+MagpieData mode NpUnfilled,924,,,0.0,0.0,pre_dft_tau
+MagpieData minimum NdUnfilled,924,,,0.0,0.0,pre_dft_tau
+MagpieData mode NdUnfilled,924,,,0.0,0.0,pre_dft_tau
+MagpieData minimum NfUnfilled,924,,,0.0,0.0,pre_dft_tau
+MagpieData mode NfUnfilled,924,,,0.0,0.0,pre_dft_tau
+MagpieData mode NUnfilled,924,,,0.0,0.0,pre_dft_tau
+MagpieData mode GSvolume_pa,924,,,0.0,0.0,pre_dft_tau
+MagpieData minimum GSbandgap,924,,,0.0,0.0,pre_dft_tau
+MagpieData mode GSbandgap,924,,,0.0,0.0,pre_dft_tau
+MagpieData minimum GSmagmom,924,,,0.0,0.0,pre_dft_tau
+MagpieData mode GSmagmom,924,,,0.0,0.0,pre_dft_tau
+MagpieData mode SpaceGroupNumber,924,,,0.0,0.0,pre_dft_tau
+0-norm,924,,,0.0,0.0,pre_dft_tau
+2-norm,924,,,0.0,0.0,pre_dft_tau
+3-norm,924,,,0.0,0.0,pre_dft_tau
+5-norm,924,,,0.0,0.0,pre_dft_tau
+7-norm,924,,,0.0,0.0,pre_dft_tau
+10-norm,924,,,0.0,0.0,pre_dft_tau
+thermo_ehull,780,0.07450724241113595,0.42549275758886407,0.0,0.0,post_dft (elegibles)
+thermo_eform,780,0.2236364759777917,0.2763635240222083,0.0,0.0,post_dft (elegibles)
