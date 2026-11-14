@@ -1,6 +1,6 @@
 # Informe F1.5: etiquetas por composición
 
-> Generado por `scripts/report_f1_5.py` (commit `846444d`).
+> Generado por `scripts/report_f1_5.py` (commit `1d11732`).
 > No editar a mano. Tabla completa: `labels.csv`.
 
 ## 1. Deduplicación estructural (StructureMatcher, dentro de cada composición)
@@ -40,9 +40,15 @@ ABO₃ ordenados y estequiométricos.
 | `flag_bartel_conflict` | 2 | positive: 2 | SrSiO3, TiMnO3 |
 | `flag_only_hexagonal` | 8 | synthesized_non_perovskite: 8 | BaCoO3, BaCrO3, BaMnO3, BaNiO3, BaRhO3, BaRuO3, BaTcO3, KTiO3 |
 | `flag_icsd_without_exp` | 3 | unlabeled: 3 | NiPbO3, SrRhO3, TiSnO3 |
+| `flag_no_charge_balance` | 368 | unlabeled: 310, polyanion: 45, positive: 8, synthesized_non_perovskite: 4, ambiguous: 1 | AcMgO3, AcPdO3, AcSiO3, AgClO3, AlPbO3, AlPdO3, AlSiO3, BOsO3, BPbO3, BPdO3, BPtO3, BTeO3 … |
+| `flag_site_rule_disagrees` | 77 | unlabeled: 53, synthesized_non_perovskite: 18, polyanion: 3, positive: 2, ambiguous: 1 | AgAuO3, AgTeO3, AlCoO3, AlCrO3, AlCuO3, AlFeO3, AlMoO3, AlNiO3, AlRhO3, AsAuO3, BiSbO3, CeAsO3 … |
 
 - `flag_high_pressure`: lista curada en `configs/data.yaml` (ampliable).
 - `flag_metastable_dft`: la perovskita experimental queda ≥ 0,05 eV/átomo por encima del
   polimorfo más estable, que no es perovskita (E_hull GGA/GGA+U).
+- `flag_no_charge_balance`: sin balance de carga con estados comunes (pymatgen). Se mantienen en U
+  (decisión 2026-11-14); la sensibilidad usa solo las U con balance.
+- `flag_site_rule_disagrees`: la asignación A/B por estructura difiere de la regla de tamaño
+  (r_A > r_B). Se usa en la sensibilidad de loeo_A/loeo_B.
 - La sensibilidad de F3.6 excluye **31 positivas**: alta presión, metaestables u
   oxidación ambigua.

@@ -1,0 +1,63 @@
+{
+  "code_commit": "1d11732417f8928c7e23b9901043a8f794d3806c",
+  "code_dirty": false,
+  "labels": {
+    "unlabeled": 824,
+    "positive": 226,
+    "polyanion": 160,
+    "synthesized_non_perovskite": 84,
+    "ambiguous": 25
+  },
+  "entries": 2563,
+  "decision_point": {
+    "positives": 226,
+    "threshold": 100,
+    "decision": "mantener alcance ABO3 óxidos"
+  },
+  "pu_set": 1050,
+  "labeled_prevalence": 0.21523809523809523,
+  "pu_set_charge_balanced_U": 740,
+  "labeled_prevalence_charge_balanced_U": 0.3054054054054054,
+  "n_A_elements_PU": 70,
+  "n_B_elements_PU": 72,
+  "A_elements_with_ge_min_positives": 21,
+  "B_elements_with_ge_min_positives": 14,
+  "min_positives_per_element": 5,
+  "families": {
+    "3d": {
+      "positive": 124,
+      "unlabeled": 175,
+      "synthesized_non_perovskite": 29,
+      "ambiguous": 9,
+      "total_PU": 299
+    },
+    "4d_5d": {
+      "positive": 46,
+      "unlabeled": 224,
+      "synthesized_non_perovskite": 14,
+      "ambiguous": 8,
+      "total_PU": 270
+    },
+    "4f_5f": {
+      "positive": 15,
+      "unlabeled": 135,
+      "synthesized_non_perovskite": 3,
+      "ambiguous": 4,
+      "total_PU": 150
+    },
+    "main_group": {
+      "positive": 41,
+      "unlabeled": 290,
+      "synthesized_non_perovskite": 38,
+      "ambiguous": 4,
+      "total_PU": 331
+    }
+  },
+  "perovskite_experimental_crystal_systems": {
+    "Orthorhombic": 190,
+    "Cubic": 81,
+    "Trigonal": 26,
+    "Monoclinic": 18,
+    "Tetragonal": 17
+  }
+}
