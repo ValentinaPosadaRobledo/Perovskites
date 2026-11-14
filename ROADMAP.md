@@ -48,7 +48,7 @@ son ampliaciones.
 | F1.3 | Identificación de perovskitas ABO₃ por conectividad (CrystalNN/ChemEnv + StructureMatcher, regla 2.1.1): exclusión de polianiones, politipos hexagonales aparte, estados de oxidación y casos ambiguos | A+T | ✅ Completada | 2026-11-13 | 2026-11-13 | `a2f0a73` | `results/f1_3_identificacion/informe.md`: 1244 entradas perovskita (223 composiciones experimentales), 63 hexagonales, 390 polianiones, 255 límite (→ F1.4); frente a Bartel (in-sample), 93,1 % detectadas y 2 falsos positivos |
 | F1.4 | Validación manual de ≥ 50 casos límite en `docs/validacion_manual.md` | A+T | ✅ Completada | 2026-11-13 | 2026-11-14 | `1cb0383` | `results/f1_4_validacion_manual/informe.md`: 59 casos revisados por la autora; concordancia 42/42 en clasificaciones firmes (IC 95 %: 91,6–100 %); 17 límite → 3 perovskita, 6 no, 8 dudosas |
 | F1.5 | Deduplicación estructural y por composición, agrupación de casi duplicados y etiquetado por composición (positivo / sintetizada no perovskita / no etiquetado), con banderas de alta presión y metaestabilidad | A+T | ✅ Completada | 2026-11-14 | 2026-11-14 | `846444d` | `results/f1_5_etiquetado/` (labels.csv + informe): 226 P, 824 U (PU = 1050; prevalencia de etiquetadas 21,5 %), 84 sintetizadas no perovskita, 25 ambiguas, 160 polianiones; 15 metaestables o de alta presión marcadas |
-| F1.6 | Informe de conteos (positivos, sintetizadas no perovskita, no etiquetados; por estructura, composición, elemento A y B y familia). **Decisión:** si hay < ~100 ABO₃ positivas (estimación previa 200–350), ampliar a todas las clases de perovskita y evaluar óxidos aparte | A+T | ⬜ Pendiente | | | | Registrar la decisión en la bitácora |
+| F1.6 | Informe de conteos (positivos, sintetizadas no perovskita, no etiquetados; por estructura, composición, elemento A y B y familia). **Decisión:** si hay < ~100 ABO₃ positivas (estimación previa 200–350), ampliar a todas las clases de perovskita y evaluar óxidos aparte | A+T | 🔄 En proceso | 2026-11-14 | | | Registrar la decisión en la bitácora |
 | F1.7 | Generación de todas las particiones (MatFold o propia) con informe de tamaños de grupo y positivos por grupo; demostrar cuánto se parece `group_system` a `random`. **S1:** distancia al train por grupo y fracción de grupos extrapolativos por esquema (preregistro §10b; requiere F2.1) | A+T | ⬜ Pendiente | | | | Implementación provisional propia ya en `src/perovskite_pu/splits/` |
 | F1.8 | Holdout congelado por grupos (y temporal si aplica), `train_pool.parquet` y hash canónico en `HASHES.json`. Todos los tests de fuga pasan sin saltos | A+T | ⬜ Pendiente | | | | |
 
@@ -59,7 +59,7 @@ son ampliaciones.
 | F2.1 | Features `pre_dft`: MAGPIE (ElementProperty, Stoichiometry, ValenceOrbital, IonProperty) + t, μ, τ (Shannon, A en XII y B en VI; radios extrapolados documentados) | A+T | ⬜ Pendiente | | | | |
 | F2.2 | Features `post_dft`: `pre_dft` + E_hull y ΔHf (una sola funcional) | A+T | ⬜ Pendiente | | | | |
 | F2.3 | Auditoría de features documentada, incluida la circularidad de E_hull | A+T | ⬜ Pendiente | | | | |
-| F2.4 | Líneas base con todos los esquemas y semillas: t de Goldschmidt, τ de Bartel, umbral de E_hull, modelo solo E_hull, modelo solo grupo espacial/simetría, clasificador trivial | A+T | ⬜ Pendiente | | | | |
+| F2.4 | Líneas base con todos los esquemas y semillas: t de Goldschmidt, τ de Bartel, umbral de E_hull, modelo solo E_hull, modelo solo grupo espacial/simetría, balance de carga, clasificador trivial | A+T | ⬜ Pendiente | | | | |
 
 ## Fase 3 — Modelos PU (A+T)
 

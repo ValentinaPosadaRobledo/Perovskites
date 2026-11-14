@@ -24,6 +24,7 @@ OUT = RESULTS_DIR / "f1_5_etiquetado"
 FLAGS = [
     "flag_high_pressure", "flag_metastable_dft", "flag_ambiguous_oxidation",
     "flag_bartel_conflict", "flag_only_hexagonal", "flag_icsd_without_exp",
+    "flag_no_charge_balance", "flag_site_rule_disagrees",
 ]  # fmt: skip
 
 
@@ -101,6 +102,10 @@ ABO₃ ordenados y estequiométricos.
 - `flag_high_pressure`: lista curada en `configs/data.yaml` (ampliable).
 - `flag_metastable_dft`: la perovskita experimental queda ≥ 0,05 eV/átomo por encima del
   polimorfo más estable, que no es perovskita (E_hull GGA/GGA+U).
+- `flag_no_charge_balance`: sin balance de carga con estados comunes (pymatgen). Se mantienen en U
+  (decisión 2026-11-14); la sensibilidad usa solo las U con balance.
+- `flag_site_rule_disagrees`: la asignación A/B por estructura difiere de la regla de tamaño
+  (r_A > r_B). Se usa en la sensibilidad de loeo_A/loeo_B.
 - La sensibilidad de F3.6 excluye **{s["positives_in_sensitivity_exclusion"]} positivas**: alta presión, metaestables u
   oxidación ambigua.
 """

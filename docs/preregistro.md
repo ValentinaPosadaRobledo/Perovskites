@@ -85,7 +85,8 @@ por grupo.
   reportadas por separado; `post_dft` es una cota superior informada por el hull.
 - **Modelo de grafos:** Gu et al. (2022), reevaluado bajo las particiones por grupos.
 - **Líneas base:** t de Goldschmidt, τ de Bartel et al. (2019), umbral de E_hull, modelo de
-  solo E_hull, modelo de solo grupo espacial/simetría y clasificador trivial.
+  solo E_hull, modelo de solo grupo espacial/simetría, **balance de carga** (estados de
+  oxidación comunes, como en SynthNN; añadida el 2026-11-14) y clasificador trivial.
 - **Protocolo:** CV anidada; bucle interno con búsqueda aleatoria de presupuesto fijo
   (n_iter = 15 **[PROPUESTA]**) y selección del umbral; 10 semillas (0–9).
 
@@ -271,6 +272,11 @@ a τ (N = 250).
 8. Recall nominal del punto de operación 0,80 y 0,95 (en lugar de 0,90).
 9. H2 excluyendo los compuestos del conjunto de Bartel (τ fuera de muestra).
 10. S1 en el espacio estandarizado completo, sin PCA.
+11. Solo con las U que admiten balance de carga con estados comunes (las 310 sin balance son
+    no etiquetadas triviales; 2026-11-14).
+12. `loeo_A` / `loeo_B` con los sitios asignados por tamaño (r_A > r_B) en lugar de por
+    estructura (2026-11-14).
+13. Sin las composiciones ambiguas (principal) frente a contarlas como P (2026-11-14).
 
 ## 10b. Análisis secundarios (no confirmatorios) *(añadidos 2026-11-13)*
 

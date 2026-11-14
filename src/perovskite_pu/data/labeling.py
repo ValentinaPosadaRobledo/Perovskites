@@ -32,7 +32,7 @@ from typing import Any
 
 import pandas as pd
 import yaml
-from pymatgen.core import Composition, Structure
+from pymatgen.core import Composition, Species, Structure
 
 from perovskite_pu.data.identify import make_matcher
 from perovskite_pu.utils.paths import CONFIGS_DIR, INTERIM_DIR, RAW_DIR, ROOT
@@ -97,6 +97,43 @@ def site_assignment(group: pd.DataFrame) -> tuple[str | None, str | None]:
     return None, None
 
 
+def charge_balanced(formula: str) -> bool:
+    """True si la composición admite balance de carga con estados de oxidación comunes.
+
+    Usa `Composition.oxi_state_guesses` (estados comunes de pymatgen). Ojo: falla en
+    compuestos reales con estados poco comunes (Fe4+ en CaFeO3, Bi mixto en BaBiO3), así que
+    se usa como BANDERA y como línea base, nunca para excluir.
+    """
+    return bool(Composition(formula).oxi_state_guesses())
+
+
+def size_rule_sites(formula: str) -> tuple[str | None, str | None]:
+    """Sitios por tamaño (sensibilidad): A es el catión con mayor radio de Shannon en VI.
+
+    Convención de Bartel et al. (2019), r_A > r_B. Usa la conjetura de oxidación más probable;
+    devuelve (None, None) si no hay balance de carga o falta algún radio.
+    """
+    comp = Composition(formula)
+    guesses = comp.oxi_state_guesses()
+    if not guesses:
+        return None, None
+    ox = guesses[0]
+    radii = {}
+    for el in (e.symbol for e in comp.elements if e.symbol != "O"):
+        try:
+            sp = Species(el, ox[el])
+            try:
+                radii[el] = sp.get_shannon_radius(cn="VI", radius_type="ionic")
+            except (KeyError, ValueError):
+                radii[el] = sp.ionic_radius
+        except (KeyError, ValueError):
+            return None, None
+        if radii[el] is None:
+            return None, None
+    a, b = sorted(radii, key=lambda e: -radii[e])
+    return a, b
+
+
 def matches_any(formula: str, formulas: Iterable[str]) -> bool:
     """True si `formula` tiene la misma composición reducida que alguna de `formulas`."""
     comp = Composition(formula).reduced_composition
@@ -134,6 +171,11 @@ def build_labels(
                                    alta presión, a confirmar)
         flag_only_hexagonal        sintetizada solo como politipo hexagonal
         flag_icsd_without_exp      tiene IDs de ICSD pero ninguna entrada `theoretical == False`
+        flag_no_charge_balance     no admite balance de carga con estados comunes (pymatgen)
+        flag_site_rule_disagrees   la asignación A/B por estructura difiere de la de tamaño
+
+    Sitios: `A`, `B` salen de la estructura (principal); `A_size`, `B_size` de la regla de
+    tamaño (sensibilidad de loeo_A/loeo_B; decisión de la autora, 2026-11-14).
     """
     high_pressure = flags_cfg.get("high_pressure_or_metastable", [])
     ambiguous_ox = flags_cfg.get("ambiguous_oxidation_state", [])
@@ -145,8 +187,10 @@ def build_labels(
         exp = g[g["experimental"]]
         perov_exp = exp[exp["cls_final"] == "perovskite"]
         gap = metastable_gap(g) if "ehull" in g else None
+        a_size, b_size = size_rule_sites(comp)
         rows.append({
             "reduced_formula": comp, "label": label, "A": a, "B": b,
+            "A_size": a_size, "B_size": b_size,
             "n_entries": len(g), "n_unique_structures": int(g["dup_group"].nunique()),
             "n_experimental": len(exp), "n_perovskite_experimental": len(perov_exp),
             "manual_reviewed": bool(g["manual_reviewed"].any()),
@@ -159,6 +203,8 @@ def build_labels(
             "flag_only_hexagonal": label == "synthesized_non_perovskite"
             and bool((exp["cls_final"] == "hexagonal_polytype").all()),
             "flag_icsd_without_exp": bool((g["n_icsd_ids"] > 0).any()) and exp.empty,
+            "flag_no_charge_balance": not charge_balanced(comp),
+            "flag_site_rule_disagrees": a_size is not None and a is not None and a != a_size,
         })  # fmt: skip
     return pd.DataFrame(rows).sort_values("reduced_formula", ignore_index=True)
 

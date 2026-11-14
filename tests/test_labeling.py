@@ -8,10 +8,12 @@ import pytest
 from perovskite_pu.data.labeling import (
     apply_manual_review,
     build_labels,
+    charge_balanced,
     label_composition,
     matches_any,
     metastable_gap,
     site_assignment,
+    size_rule_sites,
 )
 
 
@@ -112,3 +114,26 @@ def test_build_labels_flags():
     assert lab.loc["NiBaO3", "label"] == "synthesized_non_perovskite"
     assert lab.loc["NiBaO3", "flag_only_hexagonal"]
     assert not lab.loc["FeCaO3", "flag_metastable_dft"]
+
+
+@pytest.mark.parametrize(
+    ("formula", "expected"),
+    [("SrTiO3", True), ("LaAlO3", True), ("BaCaO3", False), ("BaAlO3", False)],
+)
+def test_charge_balanced(formula, expected):
+    """BaCaO3 (2+2 ≠ 6) y BaAlO3 (2+3 ≠ 6) no admiten balance con estados comunes."""
+    assert charge_balanced(formula) is expected
+
+
+@pytest.mark.parametrize(
+    ("formula", "a", "b"),
+    [
+        ("SrTiO3", "Sr", "Ti"),
+        ("TiSrO3", "Sr", "Ti"),
+        ("LaAlO3", "La", "Al"),
+        ("BaCaO3", None, None),
+    ],
+)
+def test_size_rule_sites(formula, a, b):
+    """A es el catión más grande, sin importar el orden de la fórmula; sin balance → None."""
+    assert size_rule_sites(formula) == (a, b)
