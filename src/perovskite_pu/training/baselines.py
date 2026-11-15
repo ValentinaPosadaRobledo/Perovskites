@@ -32,14 +32,21 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 SUBSETS = ("all", "tau_defined", "t_defined", "post_dft")
 
 
-def baseline_inputs(compositions: Sequence[str]) -> pd.DataFrame:
-    """Tabla de entradas de las líneas base, en el orden de `compositions` (train_pool)."""
+def baseline_inputs(compositions: Sequence[str], pool: pd.DataFrame | None = None) -> pd.DataFrame:
+    """Tabla de entradas de las líneas base, en el orden de `compositions` (train_pool).
+
+    `pool` (con columna `composition`) es el pool de la corrida, de donde se lee la bandera de
+    balance de carga; por defecto, `train_pool`. Las sensibilidades con un pool aumentado
+    (F3.6, sensibilidad 13) pasan el suyo.
+    """
     from perovskite_pu.features import sets
     from perovskite_pu.utils.paths import INTERIM_DIR, PROCESSED_DIR, ROOT, TRAIN_POOL_FILENAME
 
     comps = list(compositions)
     paths = sets.output_paths()  # rutas de features.output (configs/data.yaml)
-    pool = pd.read_parquet(PROCESSED_DIR / TRAIN_POOL_FILENAME).set_index("composition")
+    if pool is None:
+        pool = pd.read_parquet(PROCESSED_DIR / TRAIN_POOL_FILENAME)
+    pool = pool.set_index("composition")
     pre = sets.load_feature_matrix("pre_dft_tau", comps)
     pre_meta = pd.read_parquet(ROOT / paths["metadata"])
     post_meta = pd.read_parquet(ROOT / paths["post_metadata"])

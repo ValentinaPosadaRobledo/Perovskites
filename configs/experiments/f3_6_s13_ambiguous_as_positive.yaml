@@ -1,0 +1,68 @@
+# F3.6, sensibilidad 13 del preregistro (§10): las composiciones ambiguas cuentan como
+# positivas (24 con elemento B no reservado; 217 P y 731 U). Pool aumentado y folds nuevos de
+# `scripts/sensitivity_splits.py` (mismas semillas y código que F1.8), así que la comparación
+# con F3.3 no es fold a fold. Sin `temporal`: las ambiguas no tienen año.
+
+name: f3_6_s13_ambiguous_as_positive
+description: >-
+  Ambiguas como positivas, con pool aumentado y folds nuevos.
+roadmap_task: F3.6
+hypotheses: [H1, H2]
+
+sensitivity:
+  id: 13
+  reference_experiment: f3_3_pu
+
+data:
+  config: configs/data.yaml
+  input: data/processed/sensitivity/s13_ambiguous_as_positive_pool.parquet
+  folds: data/splits/sensitivity/s13_ambiguous_as_positive.parquet
+
+splits:
+  schemes: [random, group_system, loeo_A, loeo_B, family, cluster]
+
+_search: &search
+  n_iter: 15                                  # presupuesto fijo (preregistro, 2026-11-14)
+  learners:
+    random_forest:
+      fixed: {n_estimators: 25}               # árboles por bolsa (× 20 bolsas)
+      space:
+        max_depth: [null, 5, 10, 20]
+        min_samples_leaf: [1, 2, 5, 10]
+        max_features: [sqrt, 0.3, 0.5]
+    gradient_boosting:
+      fixed: {n_estimators: 50, learning_rate: 0.1}
+      space:
+        max_depth: [2, 3, 5]
+        min_samples_leaf: [1, 5, 10]
+        max_features: [sqrt, 0.3, 0.5]
+        subsample: [0.8, 1.0]
+
+_pu: &pu
+  kind: pu_bagging
+  subset: family                              # composiciones que admite la familia
+  bagging:
+    n_bags: 20                                # Spearman 0,996–0,998 frente a 100 bolsas
+    unlabeled_sample_size: n_positive         # K = n.º de positivas: bolsas equilibradas
+  preprocessing:
+    add_missing_indicator: true               # t y μ faltan sin balance de carga de Bartel
+  search: *search
+
+models:
+  pu_pre_dft:
+    <<: *pu
+    family: pre_dft                           # solo el modelo confirmatorio (F3.6)
+    role: principal
+
+inner_cv:
+  n_splits: 3
+  split: stratified                           # decisión de la autora (2026-11-14)
+  target_recall: 0.90                         # punto de operación principal (§7.1)
+
+evaluation:
+  fixed_ppr: [0.05, 0.10, 0.20]               # TPR a P(ŷ=1) fija, umbral por fold (§7.2–7.3)
+
+execution:
+  n_jobs: -1                                  # joblib (loky) sobre semilla × esquema × fold
+  dev_mode: false                             # la primera corrida se lanza con --dev-mode
+                                              # (3 semillas) y se amplía a 10 con --resume

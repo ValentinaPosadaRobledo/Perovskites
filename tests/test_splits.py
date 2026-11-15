@@ -51,3 +51,27 @@ def test_temporal_split_u_fraction_extremes(frac):
     labels = pd.Series([1, 0, 0])
     (fold,) = temporal_split(years, labels, 2010, frac, np.random.default_rng(0))
     assert len(fold.test_idx) == 1 + int(2 * frac)
+
+
+# ---------------------------------------------------------------------------
+# Sensibilidad 13 (F3.6): ambiguas como positivas
+# ---------------------------------------------------------------------------
+def test_pool_with_ambiguous_as_positive():
+    """Añade solo las ambiguas con B no reservado, como P, sin año; rechaza duplicados."""
+    from perovskite_pu.splits.build import pool_with_ambiguous_as_positive
+
+    fam = {"3d": ["Ti", "Fe"], "default_family": "main_group"}
+    pool = pd.DataFrame({"composition": ["SrTiO3"], "A": ["Sr"], "B": ["Ti"], "label": [1],
+                         "year": [1950.0], "family": ["3d"], "flag_x": [False]})  # fmt: skip
+    labels = pd.DataFrame({"reduced_formula": ["BaFeO3", "BaMnO3", "CaTiO3"],
+                           "label": ["ambiguous", "ambiguous", "unlabeled"],
+                           "A": ["Ba", "Ba", "Ca"], "B": ["Fe", "Mn", "Ti"],
+                           "flag_x": [True, False, False]})  # fmt: skip
+    out = pool_with_ambiguous_as_positive(pool, labels, {"Mn"}, fam)
+    assert out["composition"].tolist() == ["BaFeO3", "SrTiO3"]
+    added = out.set_index("composition").loc["BaFeO3"]
+    assert added["label"] == 1 and bool(added["added_ambiguous"]) and np.isnan(added["year"])
+    assert added["family"] == "3d" and bool(added["flag_x"])
+    dup = labels.assign(reduced_formula=["SrTiO3", "BaMnO3", "CaTiO3"])
+    with pytest.raises(ValueError, match="ya presentes"):
+        pool_with_ambiguous_as_positive(pool, dup, {"Mn"}, fam)

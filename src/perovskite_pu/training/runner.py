@@ -99,10 +99,12 @@ def exclusion_mask(
     """Composiciones excluidas por un análisis de sensibilidad (F3.6; True = excluida).
 
     Cada regla excluye las composiciones con etiqueta en `labels` (1 = P, 0 = U) que cumplen
-    alguna de sus condiciones: una bandera de `flags` a True (columnas `flag_*` del pool), o
-    pertenecer a la lista del CSV `compositions_file` (columna `composition`). Sin reglas, no
-    se excluye nada (análisis principal). Las rutas son relativas a `root` (por defecto, la raíz
-    del repositorio).
+    alguna de sus condiciones: una bandera de `flags` a True (columnas `flag_*` del pool),
+    pertenecer a la lista del CSV `compositions_file` (columna `composition`), o no ser elegible
+    para la familia de features `not_eligible` (p. ej. `post_dft_r2scan`, sensibilidad 4: así
+    todos los modelos se comparan en las mismas composiciones). Sin reglas, no se excluye nada
+    (análisis principal). Las rutas son relativas a `root` (por defecto, la raíz del
+    repositorio).
     """
     if root is None:
         from perovskite_pu.utils.paths import ROOT as root
@@ -120,6 +122,11 @@ def exclusion_mask(
             if unknown:
                 raise KeyError(f"Composiciones de la lista fuera del pool: {sorted(unknown)[:5]}")
             hit |= pool["composition"].isin(listed).to_numpy()
+        if "not_eligible" in rule:
+            from perovskite_pu.features.sets import eligible
+
+            ok = eligible(rule["not_eligible"], list(pool["composition"]))
+            hit |= ~ok.to_numpy(dtype=bool)
         mask |= hit & pool["label"].isin(labels).to_numpy()
     return mask
 
@@ -216,11 +223,38 @@ def select_and_fit_pu(
 
     Devuelve (puntuaciones del test, umbral, candidato elegido, registro de la búsqueda).
     Solo usa el train externo para elegir; el test solo se puntúa con el modelo final.
+    Es el caso de un solo recall de :func:`select_and_fit_pu_multi`.
+    """
+    recall = inner_cfg["target_recall"]
+    out = select_and_fit_pu_multi(spec, candidates, X_tr, s_tr, X_te, seed, scheme,
+                                  fold_index, inner_cfg, [recall])  # fmt: skip
+    return out[recall]
+
+
+def select_and_fit_pu_multi(
+    spec: Mapping[str, Any],
+    candidates: Sequence[Mapping[str, Any]],
+    X_tr: np.ndarray,
+    s_tr: np.ndarray,
+    X_te: np.ndarray,
+    seed: int,
+    scheme: str,
+    fold_index: int,
+    inner_cfg: Mapping[str, Any],
+    recalls: Sequence[float],
+) -> dict[float, tuple[np.ndarray, float, int, list[dict[str, Any]]]]:
+    """CV anidada con varios recalls nominales a la vez (sensibilidad 8 del preregistro).
+
+    Las puntuaciones fuera de fold de cada candidato se calculan UNA vez (mismos folds
+    internos y semillas que con un solo recall); para cada recall se elige el candidato de
+    menor P(ŷ=1) fuera de fold a su umbral, y el modelo final solo se reentrena una vez por
+    candidato elegido. Con un solo recall reproduce exactamente :func:`select_and_fit_pu`.
+    Devuelve, por recall, (puntuaciones del test, umbral, candidato, registro de la búsqueda).
     """
     inner_rs = sklearn_random_state(task_seed(seed, "fold_assignment", scheme, fold_index))
     skf = StratifiedKFold(n_splits=inner_cfg["n_splits"], shuffle=True, random_state=inner_rs)
     splits = list(skf.split(X_tr, s_tr))  # mismos folds internos para todos los candidatos
-    log, best = [], None
+    oofs, ests = [], []
     for c, cand in enumerate(candidates):
         rs_sampling = sklearn_random_state(task_seed(seed, "pu_sampling", scheme, fold_index, c))
         rs_model = sklearn_random_state(task_seed(seed, "model_init", scheme, fold_index, c))
@@ -229,17 +263,30 @@ def select_and_fit_pu(
         oof = np.empty(len(s_tr), dtype=float)
         for tr, te in splits:
             oof[te] = _score(clone(est).fit(X_tr[tr], s_tr[tr]), X_tr[te])
-        thr = threshold_for_recall(s_tr, oof, inner_cfg["target_recall"])
-        ppr = float((oof >= thr).mean())  # P(ŷ=1) fuera de fold: criterio de selección
-        log.append({"candidate": c, "learner": cand["learner"], "inner_ppr": ppr,
-                    "inner_threshold": thr})  # fmt: skip
-        if best is None or ppr < best[1]:  # empate: gana el candidato de menor índice
-            best = (c, ppr, thr, est)
-    c_best, _, thr_best, est_best = best
-    for row in log:
-        row["selected"] = row["candidate"] == c_best
-    model = clone(est_best).fit(X_tr, s_tr)  # reentrenado con todo el train externo
-    return _score(model, X_te), thr_best, c_best, log
+        oofs.append(oof)
+        ests.append(est)
+    out, test_scores = {}, {}
+    for recall in recalls:
+        log, best = [], None
+        for c, (cand, oof) in enumerate(zip(candidates, oofs, strict=True)):
+            thr = threshold_for_recall(s_tr, oof, recall)
+            ppr = float((oof >= thr).mean())  # P(ŷ=1) fuera de fold: criterio de selección
+            log.append({"candidate": c, "learner": cand["learner"], "inner_ppr": ppr,
+                        "inner_threshold": thr})  # fmt: skip
+            if best is None or ppr < best[1]:  # empate: gana el candidato de menor índice
+                best = (c, ppr, thr)
+        c_best, _, thr_best = best
+        for row in log:
+            row["selected"] = row["candidate"] == c_best
+        if c_best not in test_scores:  # reentrenado con todo el train externo, una vez
+            test_scores[c_best] = _score(clone(ests[c_best]).fit(X_tr, s_tr), X_te)
+        out[recall] = (test_scores[c_best], thr_best, c_best, log)
+    return out
+
+
+def recall_variant_name(name: str, recall: float) -> str:
+    """Nombre de la variante de un modelo a un recall nominal (p. ej. `pu_pre_dft@r080`)."""
+    return f"{name}@r{round(recall * 100):03d}"
 
 
 def evaluate_fold(
@@ -289,6 +336,24 @@ def evaluate_fold(
                                   inner_cfg["target_recall"], inner_rs)  # fmt: skip
             model = clone(est).fit(X[tr], labels[tr])  # reentrenado con todo el train externo
             scores = _score(model, X[te])
+        elif spec["kind"] == "pu_bagging" and spec.get("target_recalls"):
+            # Sensibilidad 8: una variante por recall nominal, con la misma búsqueda interna.
+            X = features[spec["family"]][0]
+            multi = select_and_fit_pu_multi(
+                spec, candidates[name], X[tr], labels[tr], X[te], seed, scheme, fold_index,
+                inner_cfg, spec["target_recalls"],
+            )  # fmt: skip
+            for recall, (scores, thr, selected, log) in multi.items():
+                variant = recall_variant_name(name, recall)
+                if search_log is not None:
+                    search_log += [{"baseline": variant, "scheme": scheme, "seed": seed,
+                                    "fold": fold_index, **r} for r in log]  # fmt: skip
+                rows.append(pd.DataFrame({
+                    "baseline": variant, "scheme": scheme, "seed": seed, "fold": fold_index,
+                    "composition": comps[te], "label": labels[te], "score": scores,
+                    "threshold": thr, "pred": (scores >= thr).astype(int), "selected": selected,
+                }))  # fmt: skip
+            continue
         elif spec["kind"] == "pu_bagging":
             X = features[spec["family"]][0]
             scores, thr, selected, log = select_and_fit_pu(
@@ -506,7 +571,7 @@ def run_experiment(
     pool = pd.read_parquet(ROOT / cfg["data"]["input"])
     comps = list(pool["composition"])
     folds_table = pd.read_parquet(ROOT / cfg["data"]["folds"])
-    inputs = baseline_inputs(comps)
+    inputs = baseline_inputs(comps, pool)  # el pool de la corrida (F3.6: puede ser aumentado)
     labels = pool["label"].to_numpy(int)
     features = _family_matrices(models, comps)
     search = {n: s["search"] for n, s in models.items() if s["kind"] == "pu_bagging"}

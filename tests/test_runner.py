@@ -154,6 +154,17 @@ def test_exclusion_mask_by_file(tmp_path):
         exclusion_mask(pool, [{"compositions_file": "bad.csv"}], tmp_path)
 
 
+def test_exclusion_mask_not_eligible(monkeypatch):
+    """`not_eligible`: excluye las composiciones que la familia no admite (sensibilidad 4)."""
+    import perovskite_pu.features.sets as sets
+
+    monkeypatch.setattr(sets, "eligible",
+                        lambda fam, comps: pd.Series([True, False, True], index=comps))  # fmt: skip
+    pool = pd.DataFrame({"composition": list("ABC"), "label": [1, 0, 0]})
+    m = exclusion_mask(pool, [{"not_eligible": "post_dft_r2scan"}])
+    assert m.tolist() == [False, True, False]
+
+
 def test_restrict_fold_removes_excluded_from_train_and_test():
     """El fold conserva sus grupos; las excluidas desaparecen de train y de test."""
     fold = Fold(np.array([0, 1, 2]), np.array([3, 4]), ("g",))
@@ -324,6 +335,49 @@ def test_pu_nested_selection_and_no_test_influence(inputs, fold):
                          {"fam": (X2, ok)}, cands, log2)  # fmt: skip
     pd.testing.assert_frame_equal(pd.DataFrame(log), pd.DataFrame(log2))
     assert out2["threshold"].iloc[0] == pytest.approx(out["threshold"].iloc[0])
+
+
+def test_multi_recall_reproduces_single_recall(inputs, fold):
+    """Con 0,90 entre sus recalls, la versión múltiple da EXACTAMENTE lo mismo (sensibilidad 8)."""
+    from perovskite_pu.training.runner import (
+        sample_candidates,
+        select_and_fit_pu,
+        select_and_fit_pu_multi,
+    )
+
+    labels = inputs["label"].to_numpy()
+    X, ok = _features(inputs)["fam"]
+    tr, te = fold.train_idx[ok[fold.train_idx]], fold.test_idx[ok[fold.test_idx]]
+    cands = sample_candidates(SEARCH, 0)
+    single = select_and_fit_pu(PU_SPEC, cands, X[tr], labels[tr], X[te], 0, "random", 0, INNER)
+    multi = select_and_fit_pu_multi(PU_SPEC, cands, X[tr], labels[tr], X[te], 0, "random", 0,
+                                    INNER, [0.80, 0.90, 0.95])  # fmt: skip
+    np.testing.assert_array_equal(multi[0.90][0], single[0])
+    assert multi[0.90][1:3] == single[1:3] and multi[0.90][3] == single[3]
+    # A mayor recall nominal, umbral interno menor o igual para cada candidato.
+    for c in range(len(cands)):
+        thr = [multi[r][3][c]["inner_threshold"] for r in (0.80, 0.90, 0.95)]
+        assert thr[0] >= thr[1] >= thr[2]
+
+
+def test_evaluate_fold_emits_one_variant_per_recall(inputs, fold):
+    """Con `target_recalls`, una variante por recall; la de 0,90 coincide con el modelo normal."""
+    from perovskite_pu.training.runner import recall_variant_name, sample_candidates
+
+    labels = inputs["label"].to_numpy()
+    feats = _features(inputs)
+    cands = {"pu": sample_candidates(SEARCH, 0)}
+    spec = {**PU_SPEC, "target_recalls": [0.80, 0.90, 0.95]}
+    log: list = []
+    out = evaluate_fold(inputs, labels, fold, 0, "random", 0, {"pu": spec}, INNER, feats,
+                        cands, log)  # fmt: skip
+    assert set(out["baseline"]) == {"pu@r080", "pu@r090", "pu@r095"}
+    assert recall_variant_name("pu", 0.9) == "pu@r090"
+    assert set(pd.DataFrame(log)["baseline"]) == set(out["baseline"])
+    ref = evaluate_fold(inputs, labels, fold, 0, "random", 0, {"pu": PU_SPEC}, INNER, feats,
+                        cands)  # fmt: skip
+    got = out[out["baseline"] == "pu@r090"].drop(columns="baseline").reset_index(drop=True)
+    pd.testing.assert_frame_equal(got, ref.drop(columns="baseline").reset_index(drop=True))
 
 
 def test_pu_requires_family_subset(inputs, fold):

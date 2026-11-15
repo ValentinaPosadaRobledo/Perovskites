@@ -137,3 +137,27 @@ def test_charge_balanced(formula, expected):
 def test_size_rule_sites(formula, a, b):
     """A es el catión más grande, sin importar el orden de la fórmula; sin balance → None."""
     assert size_rule_sites(formula) == (a, b)
+
+
+# ---------------------------------------------------------------------------
+# Sensibilidad 5 (F3.6): umbral de ángulo B–O–B más estricto
+# ---------------------------------------------------------------------------
+def test_reclassify_min_angle_and_lost_positives():
+    """Con 140°, la perovskita de 137° pasa a borderline (ambigua); la revisada a mano no."""
+    from perovskite_pu.data.labeling import lost_positives, reclassify_min_angle
+
+    e = pd.DataFrame({
+        "reduced_formula": ["AO3", "BO3", "CO3", "CO3", "DO3"],
+        "cls": ["perovskite", "perovskite", "perovskite", "perovskite", "perovskite"],
+        "cls_final": ["perovskite"] * 5,
+        "bob_angle_min": [137.0, 150.0, 136.0, 145.0, 138.0],
+        "manual_reviewed": [False, False, False, False, True],
+        "experimental": [True] * 5,
+    })  # fmt: skip
+    r = reclassify_min_angle(e, 140.0)
+    assert r["flipped_angle"].tolist() == [True, False, True, False, False]
+    assert r.loc[0, "cls_final"] == "perovskite_borderline"
+    lost = lost_positives(e, ["AO3", "BO3", "CO3", "DO3"], 140.0)
+    # AO3 pierde su única perovskita; CO3 conserva la de 145°; DO3 está revisada a mano.
+    assert lost["composition"].tolist() == ["AO3"]
+    assert lost["label_sensitivity"].tolist() == ["ambiguous"]
