@@ -1,0 +1,232 @@
+{
+  "config": {
+    "data": {
+      "config": "configs/data.yaml",
+      "folds": "data/splits/folds.parquet",
+      "input": "data/processed/train_pool.parquet",
+      "labels": "data/interim/f1_5_labels.parquet"
+    },
+    "description": "FPR del bagging PU pre_dft y de las reglas (τ, t, balance de carga) sobre óxidos ABO3 sintetizados no perovskita, y ROC-AUC real entre perovskitas conocidas y esos negativos.",
+    "execution": {
+      "dev_mode": false,
+      "n_jobs": -1
+    },
+    "hypotheses": [
+      "descriptivo"
+    ],
+    "model_source": "configs/experiments/f3_3_pu.yaml",
+    "models": [
+      "pu_pre_dft"
+    ],
+    "name": "f3_4_formability",
+    "negatives": {
+      "principal_set": "principal",
+      "sets": [
+        "principal",
+        "polyanion",
+        "ambiguous"
+      ]
+    },
+    "resolved": {
+      "inner_cv": {
+        "n_splits": 3,
+        "split": "stratified",
+        "target_recall": 0.9
+      },
+      "models": {
+        "pu_pre_dft": {
+          "bagging": {
+            "n_bags": 20,
+            "unlabeled_sample_size": "n_positive"
+          },
+          "family": "pre_dft",
+          "kind": "pu_bagging",
+          "preprocessing": {
+            "add_missing_indicator": true
+          },
+          "role": "principal",
+          "search": {
+            "learners": {
+              "gradient_boosting": {
+                "fixed": {
+                  "learning_rate": 0.1,
+                  "n_estimators": 50
+                },
+                "space": {
+                  "max_depth": [
+                    2,
+                    3,
+                    5
+                  ],
+                  "max_features": [
+                    "sqrt",
+                    0.3,
+                    0.5
+                  ],
+                  "min_samples_leaf": [
+                    1,
+                    5,
+                    10
+                  ],
+                  "subsample": [
+                    0.8,
+                    1.0
+                  ]
+                }
+              },
+              "random_forest": {
+                "fixed": {
+                  "n_estimators": 25
+                },
+                "space": {
+                  "max_depth": [
+                    null,
+                    5,
+                    10,
+                    20
+                  ],
+                  "max_features": [
+                    "sqrt",
+                    0.3,
+                    0.5
+                  ],
+                  "min_samples_leaf": [
+                    1,
+                    2,
+                    5,
+                    10
+                  ]
+                }
+              }
+            },
+            "n_iter": 15
+          },
+          "subset": "family"
+        }
+      },
+      "rules": {
+        "charge_balance_common": {
+          "input": "charge_balanced_common",
+          "kind": "rule",
+          "role": "sensitivity",
+          "rule": {
+            "threshold": 1,
+            "type": "above"
+          },
+          "subset": "all"
+        },
+        "charge_balance_icsd": {
+          "input": "charge_balanced_icsd",
+          "kind": "rule",
+          "role": "principal",
+          "rule": {
+            "threshold": 1,
+            "type": "above"
+          },
+          "subset": "all"
+        },
+        "t_window_bartel": {
+          "input": "t",
+          "kind": "rule",
+          "role": "principal",
+          "rule": {
+            "type": "window",
+            "window": [
+              0.825,
+              1.059
+            ]
+          },
+          "subset": "t_defined"
+        },
+        "t_window_classic": {
+          "input": "t",
+          "kind": "rule",
+          "role": "sensitivity",
+          "rule": {
+            "type": "window",
+            "window": [
+              0.8,
+              1.0
+            ]
+          },
+          "subset": "t_defined"
+        },
+        "tau_bartel": {
+          "input": "tau",
+          "kind": "rule",
+          "role": "principal",
+          "rule": {
+            "threshold": 4.18,
+            "type": "below"
+          },
+          "subset": "tau_defined"
+        }
+      }
+    },
+    "roadmap_task": "F3.4",
+    "rules": [
+      "tau_bartel",
+      "t_window_bartel",
+      "t_window_classic",
+      "charge_balance_icsd",
+      "charge_balance_common"
+    ],
+    "rules_source": "configs/experiments/f2_4_baselines.yaml",
+    "variants": [
+      "final",
+      "family"
+    ]
+  },
+  "config_hash": "b6b371e72440",
+  "counts": {
+    "ambiguous": 8,
+    "conflict_positive": 2,
+    "conflict_unlabeled": 6,
+    "excluded_reserved_b": 13,
+    "polyanion": 61,
+    "principal": 73
+  },
+  "cpu": "x86_64",
+  "cpu_count": 4,
+  "dev_mode": false,
+  "git_commit": "d662b6529a616358be0bfb46177f54b849474cf6",
+  "git_dirty": false,
+  "mp_database_version": "2026.09.28",
+  "n_jobs": -1,
+  "n_tasks": 50,
+  "omp_num_threads": "1",
+  "package_versions": {
+    "emmet-core": "0.88.3",
+    "matminer": "0.10.1",
+    "mp-api": "0.47.2",
+    "numpy": "2.5.4",
+    "pandas": "2.3.3",
+    "perovskite-pu": "0.1.0",
+    "pymatgen": "2026.10.24",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "shap": "0.54.1"
+  },
+  "platform": "Linux-6.18.44-fc-v470-x86_64-with-glibc2.39",
+  "python_version": "3.12.3",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "status": "completed",
+  "timestamp_utc": "2026-11-15T17:04:54+00:00",
+  "timings": {
+    "load_s": 0.709,
+    "run_s": 497.899,
+    "total_s": 498.844
+  },
+  "uv_lock_sha256": "d391607ae1e0ac6a1158ea3fac6cf1af494a1b9058b9152f1565023ffe2eff79"
+}
