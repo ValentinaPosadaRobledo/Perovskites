@@ -77,7 +77,11 @@ def write_provenance(path: Path, inputs: list[Path], note: str = "") -> None:
     meta = {
         "commit": git_commit(),
         "dirty": git_dirty(),
-        "inputs": {p.relative_to(ROOT).as_posix(): sha256_file(p) for p in inputs},
+        # Una entrada por CSV, con el hash bajo la clave `sha256` (formato que reconoce el
+        # filtro de detect-secrets para los hashes registrados por diseño).
+        "inputs": [
+            {"path": p.relative_to(ROOT).as_posix(), "sha256": sha256_file(p)} for p in inputs
+        ],
         "note": note,
     }
     path.with_suffix(".json").write_text(json.dumps(meta, indent=2, ensure_ascii=False) + "\n",

@@ -1,0 +1,11 @@
+{
+  "commit": "7d212b0465100ea3907bdeaacee1676aea572c6a",
+  "dirty": false,
+  "inputs": [
+    {
+      "path": "results/f3_3_pu/h2_descriptive.csv",
+      "sha256": "915288b3b51c0c2da94d93f438e7e822754b6d099c76b5bf6799f6eb8ef4e5ad"
+    }
+  ],
+  "note": "Media y mínimo–máximo de Δ entre 10 semillas; descriptivo."
+}

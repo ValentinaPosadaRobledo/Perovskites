@@ -1,0 +1,12 @@
+% Class prior on train_pool (193 P, 731 U); * principal methods. Mean [95 % CI] over 10 seeds; descriptive (SCAR does not hold).
+\begin{tabular}{lccc}
+\toprule
+Method & c & $\pi_U$ & Hidden positives \\
+\midrule
+Elkan--Noto (RF, isotonic) $^{*}$ & 0.613 [0.608, 0.618] & 0.167 [0.163, 0.170] & 122 \\
+Elkan--Noto (GB, isotonic) & 0.631 [0.625, 0.637] & 0.155 [0.151, 0.159] & 113 \\
+Elkan--Noto (RF, sigmoid) & 0.591 [0.587, 0.594] & 0.183 [0.181, 0.186] & 134 \\
+TIcE (range in 4 bins) $^{*}$ & 0.719 [0.703, 0.734] & 0.104 [0.096, 0.111] & 76 \\
+TIcE (quantile bins) & 0.749 [0.724, 0.774] & 0.089 [0.077, 0.101] & 65 \\
+\bottomrule
+\end{tabular}

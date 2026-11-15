@@ -1,0 +1,11 @@
+{
+  "commit": "7d212b0465100ea3907bdeaacee1676aea572c6a",
+  "dirty": false,
+  "inputs": [
+    {
+      "path": "results/f3_3_pu/summary_same_subset.csv",
+      "sha256": "942c2fa97a9f411be49d9ad6cc8feb06da7f2d9a3868ab1892ec6f530b7283f0"
+    }
+  ],
+  "note": "Composiciones con τ definido; media e IC 95 % de 10 semillas."
+}

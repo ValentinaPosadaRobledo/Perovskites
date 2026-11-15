@@ -1,0 +1,11 @@
+{
+  "commit": "7d212b0465100ea3907bdeaacee1676aea572c6a",
+  "dirty": false,
+  "inputs": [
+    {
+      "path": "results/f3_3_pu/summary.csv",
+      "sha256": "5b944cdab22bca2d88734e8f1b08360bf86d35f701e29128b636c1270bbec8c0"
+    }
+  ],
+  "note": "TPR media e IC 95 % de 10 semillas."
+}

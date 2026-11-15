@@ -1,0 +1,11 @@
+{
+  "commit": "7d212b0465100ea3907bdeaacee1676aea572c6a",
+  "dirty": false,
+  "inputs": [
+    {
+      "path": "results/f3_4_formability/summary.csv",
+      "sha256": "cd2d451ab34fa318c515d2f294f41a3d0d29af7fc210d1e31f2fea09b2855f18"
+    }
+  ],
+  "note": "Formability (not synthesizability): 73 synthesized non-perovskite ABO3 oxides as true negatives; 61 polyanions reported apart."
+}
