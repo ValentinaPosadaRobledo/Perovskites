@@ -43,8 +43,9 @@ de Gu et al. (2022).
   clasificados aparte. Validación manual de ≥ 50 casos límite.
 - **Banderas de sensibilidad:** alta presión/metaestables (MgSiO₃, BiCoO₃, PbVO₃, BiScO₃,
   …) y estados de oxidación ambiguos (BiNiO₃, CaFeO₃, …).
-- **Fuente y versión:** Materials Project, versión de la base de datos: *[se registra en
-  F1.1]*; termodinámica `GGA_GGA+U`.
+- **Fuente y versión:** Materials Project, versión de la base de datos **2026.09.28**
+  (descarga del 2026-11-13, 19:21 UTC; `mp-api` 0.47.2, `emmet-core` 0.88.3, pymatgen
+  2026.10.24; registro en `data/MANIFEST.json`); termodinámica `GGA_GGA+U`.
 
 ## 3. Alcance y delimitaciones
 
@@ -281,6 +282,7 @@ a τ (N = 250).
    o menos de probabilidad de superar el criterio de estimación puntual.
 4. Si en F1.6 el número de positivos resulta muy distinto de 150–350, se recalcula la
    potencia **antes de F4.0**, sin cambiar δ₁ ni δ₂, y se informa en el preregistro.
+   *(Comprobado: `train_pool` tiene 193 positivas, dentro de ese rango; no se recalcula.)*
 
 ## 9. Análisis estadístico *(fijado 2026-11-13)*
 
@@ -304,6 +306,23 @@ a τ (N = 250).
   P*(Δ* ≤ −δ₂).
 - **Semilla:** `bootstrap_seed: 20261113` en `configs/seeds.yaml`, distinta de todas las
   demás semillas del proyecto.
+
+**Implementación** *(precisada antes de congelar; no cambia las reglas anteriores)*:
+`perovskite_pu.evaluation.stats`, con tests sobre datos sintéticos.
+
+- Cada bootstrap (hipótesis × esquema) usa su propio flujo aleatorio, derivado de
+  `bootstrap_seed` con `SeedSequence(spawn_key=(hipótesis, esquema))`: es reproducible aunque
+  se calcule por separado o en otro orden.
+- En el nivel 2, una unidad elegida dos veces en el nivel 1 se remuestrea de forma
+  independiente cada vez. El estadístico es la media sobre todas las composiciones
+  remuestreadas (ponderación por composición, como la TPR micro-agregada).
+- En `loeo_B`, la unidad es el elemento B aunque los grupos pequeños se fusionen por familia
+  para formar los folds.
+- A igual P(ŷ = 1) (H2, H3), h(c) usa el mismo reparto de empates que §7.2: la probabilidad de
+  que cada composición entre en la fracción fijada (`hit_probability_at_ppr`).
+- H2: no inferioridad si el valor p unilateral P*(Δ* ≤ −δ₂), ajustado por Holm sobre los 4
+  esquemas, es < 0,025; superioridad (secundaria) con P*(Δ* ≤ 0), también con Holm.
+- Un valor p bootstrap igual a 0 se informa como < 1/B.
 
 ## 10. Análisis de sensibilidad previstos
 
@@ -330,6 +349,16 @@ a τ (N = 250).
     conjunto, declarada *in-sample*, y solo sobre las composiciones fuera de la TableS1 (P y U),
     como exige la regla 2.1.6. Fuera de la TableS1 quedan 41 positivas, así que la potencia
     es baja y el análisis es descriptivo.
+
+**Ejecución** *(decidida el 2026-11-15, antes de ver resultados de sensibilidad; F3.6)*: solo
+el modelo confirmatorio `pu_pre_dft` (en la 4, `post_dft`), mismo protocolo, semillas y
+esquemas que F3.3. Las sensibilidades de exclusión (1, 2, 5, 11) quitan las composiciones de
+train y test de los **mismos folds**, con las mismas semillas por tarea, para comparar de
+forma pareada por composición con el análisis principal; la 1 y la 2 en corridas separadas, y
+la 11 reentrenando. La 5 excluye las 15 positivas que dejan de serlo con 140°; la 6, la 12 y
+la 13 usan particiones nuevas generadas con el mismo código y semillas (la 13 sin `temporal`:
+las ambiguas no tienen año); la 8 calcula los tres recalls con la misma búsqueda interna. Se
+reportan de forma descriptiva (Δ TPR pareada, caída de H1 y Δ de H2), sin pruebas formales.
 
 ## 10b. Análisis secundarios (no confirmatorios) *(añadidos 2026-11-13)*
 
@@ -374,4 +403,6 @@ particiona por **cristal**.
 
 | Fecha | Desviación | Motivo | Efecto esperado |
 |---|---|---|---|
-| | *(ninguna; el preregistro aún no está congelado)* | | |
+| 2026-11-14 | **20 bolsas** en el bagging PU en lugar de las 50 propuestas (§6) | Coste: con 4 núcleos en paralelo, 50 bolsas eran ~27 h para las 10 semillas. Decisión por coste, antes de analizar resultados del modelo PU | Ninguno detectable: control 20 frente a 50 en 100 folds externos, ΔTPR +0,001 (`pre_dft`) y +0,018 (`post_dft`), Spearman 0,995–0,996 cuando se elige el mismo candidato |
+| *(fecha de F4.0)* | **El preregistro se congela y deposita después de ver los resultados de validación cruzada** de F3.2–F3.4 (y de las sensibilidades de F3.6 que estén hechas), no antes de entrenar | El plan solo exigía congelarlo antes de abrir el conjunto de prueba reservado (F4.1); el depósito en OSF se dejó para el final de F3 | Las reglas confirmatorias (§7–9) están fechadas en el historial de git antes de descargar los datos (commit `e9ff6bc`, 2026-11-13 14:57 UTC; datos a las 19:21) y no cambiaron después. El conjunto reservado sigue sin abrir |
+| *(si aplica)* | F3.5 (modelo de grafos) incompleta al congelar | Pendiente de cómputo | Si F3.5 y su plan B fallan en 3 semanas, H3 pasa a exploratoria (regla de parada de §8) |
