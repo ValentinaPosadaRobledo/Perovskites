@@ -1,0 +1,76 @@
+data:
+  config: configs/data.yaml
+  input: data/processed/train_pool.parquet
+description: Frecuencia de etiquetado c y prior π de train_pool con las features pre_dft,
+  por Elkan–Noto (clasificador calibrado, puntuaciones fuera de fold) y TIcE (Bekker
+  y Davis, 2018, Algorithm 1 con sus valores por defecto). Ambos suponen SCAR, que
+  aquí no se cumple.
+execution:
+  dev_mode: false
+  n_jobs: -1
+features:
+  family: pre_dft
+  preprocessing:
+    add_missing_indicator: true
+hypotheses:
+- descriptivo
+methods:
+  elkan_noto:
+    calibration:
+      cv: 3
+      method: isotonic
+    kind: elkan_noto
+    learner: random_forest
+    n_splits: 5
+    params:
+      max_features: sqrt
+      min_samples_leaf: 5
+      n_estimators: 300
+    role: principal
+  elkan_noto_gb:
+    calibration:
+      cv: 3
+      method: isotonic
+    kind: elkan_noto
+    learner: gradient_boosting
+    n_splits: 5
+    params:
+      learning_rate: 0.1
+      max_depth: 3
+      n_estimators: 100
+    role: sensitivity
+  elkan_noto_sigmoid:
+    calibration:
+      cv: 3
+      method: sigmoid
+    kind: elkan_noto
+    learner: random_forest
+    n_splits: 5
+    params:
+      max_features: sqrt
+      min_samples_leaf: 5
+      n_estimators: 300
+    role: sensitivity
+  tice:
+    binning: uniform
+    k: 5
+    kind: tice
+    max_splits: 500
+    n_bins: 4
+    n_folds: 5
+    role: principal
+  tice_quantile:
+    binning: quantile
+    k: 5
+    kind: tice
+    max_splits: 500
+    n_bins: 4
+    n_folds: 5
+    role: sensitivity
+name: f3_2_prior
+populations:
+  all:
+    exclude_unlabeled_flag: null
+  charge_balanced_u:
+    exclude_unlabeled_flag: flag_no_charge_balance
+roadmap_task: F3.2
