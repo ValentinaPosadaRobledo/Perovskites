@@ -29,6 +29,10 @@ estabilidad acuosa y la discusión de aplicaciones biomédicas con sus limitacio
 
 ## Capítulo 5. Resultados
 (= sección 4 del artículo: H1, H2, H3, formabilidad, interpretabilidad, sensibilidad)
+- Resultados provisionales de F3 (validación cruzada, descriptivos) en la sección 4 de
+  `paper/manuscript_outline.md`; las figuras y tablas tienen versión en español (`*_es`).
+- En la tesis, además: informes completos de F3.2–F3.4 y F3.6 (`results/*/informe.md`), la
+  comparación 20 frente a 50 bolsas y la medición de la reproducción de Gu et al.
 - **Alimentan:** F3.3–F3.6, F4.1–F4.4.
 
 ## Capítulo 6. Discusión
