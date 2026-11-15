@@ -93,6 +93,47 @@ def frozen_folds(
     return out
 
 
+def exclusion_mask(
+    pool: pd.DataFrame, rules: Sequence[Mapping[str, Any]] | None, root: Path | None = None
+) -> np.ndarray:
+    """Composiciones excluidas por un análisis de sensibilidad (F3.6; True = excluida).
+
+    Cada regla excluye las composiciones con etiqueta en `labels` (1 = P, 0 = U) que cumplen
+    alguna de sus condiciones: una bandera de `flags` a True (columnas `flag_*` del pool), o
+    pertenecer a la lista del CSV `compositions_file` (columna `composition`). Sin reglas, no
+    se excluye nada (análisis principal). Las rutas son relativas a `root` (por defecto, la raíz
+    del repositorio).
+    """
+    if root is None:
+        from perovskite_pu.utils.paths import ROOT as root
+    mask = np.zeros(len(pool), dtype=bool)
+    for rule in rules or ():
+        labels = set(rule.get("labels", (0, 1)))
+        hit = np.zeros(len(pool), dtype=bool)
+        for flag in rule.get("flags", ()):
+            if flag not in pool.columns:
+                raise KeyError(f"Bandera desconocida: {flag}")
+            hit |= pool[flag].fillna(False).astype(bool).to_numpy()
+        if "compositions_file" in rule:
+            listed = set(pd.read_csv(root / rule["compositions_file"])["composition"])
+            unknown = listed - set(pool["composition"])
+            if unknown:
+                raise KeyError(f"Composiciones de la lista fuera del pool: {sorted(unknown)[:5]}")
+            hit |= pool["composition"].isin(listed).to_numpy()
+        mask |= hit & pool["label"].isin(labels).to_numpy()
+    return mask
+
+
+def restrict_fold(fold: Fold, keep: np.ndarray) -> Fold:
+    """El mismo fold sin las composiciones excluidas (en train y en test).
+
+    Se conservan la numeración de los folds y, por tanto, las semillas de cada tarea: las
+    diferencias con el análisis principal no se deben al sorteo, sino a la exclusión.
+    """
+    return Fold(fold.train_idx[keep[fold.train_idx]], fold.test_idx[keep[fold.test_idx]],
+                fold.test_groups)  # fmt: skip
+
+
 def task_seed(
     seed: int, stream: str, scheme: str, fold: int, *extra: int
 ) -> np.random.SeedSequence:
@@ -474,8 +515,21 @@ def run_experiment(
     meta["candidates"] = {str(sd): c for sd, c in candidates_by_seed.items()}
     t_load = time.perf_counter()
 
-    tasks = [(scheme, seed, k, f) for seed in seeds for scheme in cfg["splits"]["schemes"]
+    # Sensibilidades (F3.6): composiciones excluidas de train y test, con los mismos folds.
+    excluded = exclusion_mask(pool, cfg.get("sensitivity", {}).get("exclude"))
+    keep = ~excluded
+    if excluded.any():
+        pool.loc[excluded, ["composition", "label"]].to_csv(
+            run_dir / "raw" / "excluded.csv", index=False, lineterminator="\n"
+        )
+    meta["excluded"] = {"positive": int((excluded & (labels == 1)).sum()),
+                        "unlabeled": int((excluded & (labels == 0)).sum())}  # fmt: skip
+    tasks = [(scheme, seed, k, restrict_fold(f, keep)) for seed in seeds
+             for scheme in cfg["splits"]["schemes"]
              for k, f in enumerate(frozen_folds(folds_table, comps, scheme, seed))]  # fmt: skip
+    # Un fold cuyo test queda vacío tras la exclusión no se evalúa (se cuenta en los metadatos).
+    meta["folds_empty_after_exclusion"] = sum(1 for t in tasks if not len(t[3].test_idx))
+    tasks = [t for t in tasks if len(t[3].test_idx)]
     pending = [
         t for t in tasks if not (parts_dir / f"{_part_name(t[1], t[0], t[2])}.parquet").exists()
     ]

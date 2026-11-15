@@ -10,8 +10,10 @@ from perovskite_pu.splits.schemes import SCHEMES, Fold
 from perovskite_pu.training.baselines import RandomScores, make_estimator, rule_scores
 from perovskite_pu.training.runner import (
     evaluate_fold,
+    exclusion_mask,
     frozen_folds,
     inner_threshold,
+    restrict_fold,
     seed_metrics,
     summarize,
     task_seed,
@@ -125,6 +127,40 @@ def test_frozen_folds_errors():
         frozen_folds(table, ["A"], "random", 0)  # composición fuera del pool
     with pytest.raises(KeyError):
         frozen_folds(table, ["Z"], "cluster", 0)  # sin folds para ese esquema
+
+
+def test_exclusion_mask_by_flag_and_label():
+    """Excluye solo las composiciones con la bandera Y la etiqueta pedidas (F3.6)."""
+    pool = pd.DataFrame({"composition": list("ABCDE"), "label": [1, 1, 0, 0, 1],
+                         "flag_x": [True, False, True, None, False],
+                         "flag_y": [False, False, False, True, True]})  # fmt: skip
+    assert not exclusion_mask(pool, None).any()
+    m = exclusion_mask(pool, [{"flags": ["flag_x"], "labels": [1]}])
+    assert m.tolist() == [True, False, False, False, False]  # C tiene la bandera pero es U
+    m = exclusion_mask(pool, [{"flags": ["flag_x", "flag_y"], "labels": [0]}])
+    assert m.tolist() == [False, False, True, True, False]
+    with pytest.raises(KeyError, match="Bandera"):
+        exclusion_mask(pool, [{"flags": ["flag_z"]}])
+
+
+def test_exclusion_mask_by_file(tmp_path):
+    """Lista de composiciones en un CSV (p. ej. las P que se pierden con 140°)."""
+    (tmp_path / "lost.csv").write_text("composition\nB\nE\n")
+    pool = pd.DataFrame({"composition": list("ABCDE"), "label": [1, 1, 0, 0, 1]})
+    m = exclusion_mask(pool, [{"compositions_file": "lost.csv", "labels": [1]}], tmp_path)
+    assert m.tolist() == [False, True, False, False, True]
+    (tmp_path / "bad.csv").write_text("composition\nZ\n")
+    with pytest.raises(KeyError, match="fuera del pool"):
+        exclusion_mask(pool, [{"compositions_file": "bad.csv"}], tmp_path)
+
+
+def test_restrict_fold_removes_excluded_from_train_and_test():
+    """El fold conserva sus grupos; las excluidas desaparecen de train y de test."""
+    fold = Fold(np.array([0, 1, 2]), np.array([3, 4]), ("g",))
+    keep = np.array([True, False, True, True, False])
+    r = restrict_fold(fold, keep)
+    assert r.train_idx.tolist() == [0, 2] and r.test_idx.tolist() == [3]
+    assert r.test_groups == ("g",)
 
 
 def test_task_seed_is_deterministic_and_specific():
