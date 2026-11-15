@@ -1,5 +1,5 @@
 {
-  "code_commit": "166024eebbd8cb559daf09ca39ddb07b8352bb7c",
+  "code_commit": "a347eb53eb16afac13fff88323cd03a693dc7d31",
   "code_dirty": false,
   "pool": {
     "name": "train_pool (definitivo, tras congelar el holdout)",
@@ -119,29 +119,55 @@
     "test_positive_frac": 0.13989637305699482
   },
   "s1_reference": {
-    "random_median_distance": 2.0882859897373125,
+    "random_median_distance": 2.088285989737316,
     "q95_threshold": 4.946172193353342
   },
   "s1": {
     "loeo_A": {
-      "median_distance": 2.611380799670772,
+      "median_distance": 2.6113807996707705,
       "groups_extrapolative_frac": 0.043478260869565216,
       "positives_in_extrapolative_frac": 0.0
     },
     "loeo_B": {
-      "median_distance": 3.885175263162,
+      "median_distance": 3.8851752631620036,
       "groups_extrapolative_frac": 0.125,
       "positives_in_extrapolative_frac": 0.11917098445595854
     },
     "family": {
-      "median_distance": 5.034017323459935,
+      "median_distance": 5.034017323459926,
       "groups_extrapolative_frac": 0.5,
       "positives_in_extrapolative_frac": 0.24870466321243523
     },
     "cluster": {
-      "median_distance": 6.844034015657556,
+      "median_distance": 6.844034015657552,
       "groups_extrapolative_frac": 1.0,
       "positives_in_extrapolative_frac": 1.0
+    }
+  },
+  "s1_sensitivity_no_pca": {
+    "random_median_distance": 2.507237126895615,
+    "q95_threshold": 5.746409885970341,
+    "schemes": {
+      "loeo_A": {
+        "median_distance": 3.0251167532446104,
+        "groups_extrapolative_frac": 0.10144927536231885,
+        "positives_in_extrapolative_frac": 0.031088082901554404
+      },
+      "loeo_B": {
+        "median_distance": 4.434496218976202,
+        "groups_extrapolative_frac": 0.0625,
+        "positives_in_extrapolative_frac": 0.05181347150259067
+      },
+      "family": {
+        "median_distance": 5.7593553086864,
+        "groups_extrapolative_frac": 0.25,
+        "positives_in_extrapolative_frac": 0.18134715025906736
+      },
+      "cluster": {
+        "median_distance": 7.447156882437367,
+        "groups_extrapolative_frac": 1.0,
+        "positives_in_extrapolative_frac": 1.0
+      }
     }
   }
 }

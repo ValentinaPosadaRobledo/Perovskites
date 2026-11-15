@@ -1,6 +1,6 @@
 # Informe F1.7: particiones
 
-> Generado por `scripts/report_f1_7.py` (commit `166024e`).
+> Generado por `scripts/report_f1_7.py` (commit `a347eb5`).
 > No editar a mano. **Pool: train_pool (definitivo, tras congelar el holdout): 924 composiciones, 193 P.**
 > Las particiones definitivas usan solo `train_pool` (regla 2.1.5); están en
 > `data/splits/folds.parquet`, con su hash en `HASHES.json`.
@@ -63,3 +63,16 @@ ajustados en train.
 
 Interpretación preregistrada: si < 50 % de las positivas de un esquema están en grupos
 extrapolativos, sus resultados de H1 se describen como de "extrapolación débil".
+
+### Sensibilidad 10: espacio estandarizado completo, sin PCA
+
+Referencia `random`: mediana 2.51; umbral (q95) 5.75.
+Las distancias no son comparables en valor absoluto con las de arriba (otra dimensión); sí lo
+son las fracciones de grupos y de positivas en grupos extrapolativos.
+
+| Esquema | Distancia mediana | Grupos extrapolativos | Positivas en grupos extrapolativos |
+|---|---|---|---|
+| `loeo_A` | 3.03 | 10% | 3% |
+| `loeo_B` | 4.43 | 6% | 5% |
+| `family` | 5.76 | 25% | 18% |
+| `cluster` | 7.45 | 100% | 100% |
