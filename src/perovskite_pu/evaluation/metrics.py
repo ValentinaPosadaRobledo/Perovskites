@@ -148,6 +148,32 @@ def expected_hits_at_ppr(s: Iterable[int], scores: Iterable[float], target_ppr: 
     return float(hits)
 
 
+def hit_probability_at_ppr(scores: Iterable[float], target_ppr: float) -> np.ndarray:
+    """Probabilidad de que cada fila se prediga positiva a una P(ŷ = 1) EXACTA.
+
+    Versión por fila de :func:`expected_hits_at_ppr`, con el mismo reparto de empates: 1 para
+    los bloques de puntuación que entran enteros, la fracción justa para el bloque donde cae el
+    corte y 0 para el resto. Sumada sobre los positivos da los aciertos esperados. Sirve para
+    las diferencias pareadas por composición a igual P(ŷ = 1) (preregistro §7.2 y §8).
+    """
+    if not 0.0 <= target_ppr <= 1.0:
+        raise ValueError("`target_ppr` debe estar en [0, 1].")
+    scores = np.asarray(scores, dtype=float)
+    prob = np.zeros(scores.size)
+    k = target_ppr * scores.size  # número (fraccionario) de predicciones positivas
+    taken = 0.0
+    for v in np.unique(scores)[::-1]:  # bloques de puntuación, de mayor a menor
+        block = scores == v
+        n_block = int(block.sum())
+        if taken + n_block <= k + 1e-12:
+            prob[block] = 1.0
+            taken += n_block
+        else:
+            prob[block] = (k - taken) / n_block  # fracción del bloque empatado que entra
+            break
+    return prob
+
+
 def tpr_ppr_curve(
     s: Iterable[int], scores: Iterable[float]
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
