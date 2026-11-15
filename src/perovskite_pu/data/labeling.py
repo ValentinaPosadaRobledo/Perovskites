@@ -80,6 +80,38 @@ def label_composition(group: pd.DataFrame) -> str:
     return "synthesized_non_perovskite"
 
 
+def reclassify_min_angle(entries: pd.DataFrame, min_angle: float) -> pd.DataFrame:
+    """`cls_final` con otro umbral de ángulo B–O–B mínimo (sensibilidad 5 del preregistro).
+
+    Reaplica la regla automática de `data.identify`: una entrada `perovskite` con ángulo mínimo
+    por debajo de `min_angle` pasa a `perovskite_borderline`. Las entradas revisadas a mano
+    (F1.4) conservan su veredicto. Solo sirve para umbrales MÁS estrictos que el principal
+    (con uno más laxo harían falta las estructuras). Añade la columna `flipped_angle`.
+    """
+    out = entries.copy()
+    flip = (
+        (out["cls"] == "perovskite")
+        & (out["bob_angle_min"] < min_angle)
+        & ~out["manual_reviewed"].astype(bool)
+    )
+    out.loc[flip, "cls_final"] = "perovskite_borderline"
+    out["flipped_angle"] = flip
+    return out
+
+
+def lost_positives(
+    entries: pd.DataFrame, positives: Iterable[str], min_angle: float
+) -> pd.DataFrame:
+    """Positivas que dejan de serlo con el umbral `min_angle`, con su nueva etiqueta."""
+    labels = (
+        reclassify_min_angle(entries, min_angle)
+        .groupby("reduced_formula")
+        .apply(label_composition, include_groups=False)
+    )
+    changed = [(c, labels.get(c)) for c in positives if labels.get(c) != "positive"]
+    return pd.DataFrame(changed, columns=["composition", "label_sensitivity"])
+
+
 def site_assignment(group: pd.DataFrame) -> tuple[str | None, str | None]:
     """Elementos A y B de la composición: los de sus entradas perovskita (experimentales primero).
 

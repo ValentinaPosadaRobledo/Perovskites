@@ -81,3 +81,29 @@ def generate_folds(
                         }
                     )
     return pd.DataFrame(rows)
+
+
+def pool_with_ambiguous_as_positive(
+    pool: pd.DataFrame, labels: pd.DataFrame, reserved_b: set[str], b_families: Mapping[str, Any]
+) -> pd.DataFrame:
+    """`train_pool` + composiciones ambiguas como positivas (sensibilidad 13 del preregistro).
+
+    Solo las ambiguas cuyo elemento B no está reservado: así el pool aumentado no comparte
+    ninguna composición con el conjunto reservado (definido por elemento B). No tienen año de
+    primera caracterización (no hay entrada perovskita experimental firme). Columna
+    `added_ambiguous` para identificarlas.
+    """
+    amb = labels[(labels["label"] == "ambiguous") & ~labels["B"].isin(reserved_b)].copy()
+    amb = amb.rename(columns={"reduced_formula": "composition"})
+    amb["label"] = 1
+    amb["year"] = np.nan
+    amb["family"] = assign_b_family(amb["B"], b_families)
+    amb["added_ambiguous"] = True
+    keep = [c for c in pool.columns if c in amb.columns]
+    out = pd.concat([pool.assign(added_ambiguous=False), amb[[*keep, "added_ambiguous"]]],
+                    ignore_index=True)  # fmt: skip
+    if out["composition"].duplicated().any():
+        raise ValueError("Composiciones ambiguas ya presentes en el pool.")
+    if out["B"].isin(reserved_b).any():
+        raise ValueError("El pool aumentado contiene un elemento B reservado.")
+    return out.sort_values("composition", ignore_index=True)
