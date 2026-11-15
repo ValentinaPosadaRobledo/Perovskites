@@ -1,0 +1,75 @@
+# F3.6, sensibilidad 1 del preregistro (§10): sin fases de alta presión ni metaestables.
+# Mismo protocolo que F3.3 (configs/experiments/f3_3_pu.yaml) y MISMOS folds: las
+# composiciones excluidas se quitan de train y test de cada fold, y la numeración de los
+# folds y las semillas de cada tarea no cambian (comparación pareada con F3.3). Solo el
+# modelo confirmatorio `pu_pre_dft`. Decisión de la autora (2026-11-15): una corrida por
+# sensibilidad, reentrenando.
+
+name: f3_6_s01_high_pressure
+description: >-
+  Excluye de train y test las positivas con `flag_high_pressure` o `flag_metastable_dft` (9 en train_pool: 3 de alta presión y 8 metaestables, 2 con ambas banderas).
+roadmap_task: F3.6
+hypotheses: [H1, H2]
+
+sensitivity:
+  id: 1
+  reference_experiment: f3_3_pu
+  exclude:
+    - flags: [flag_high_pressure, flag_metastable_dft]
+      labels: [1]
+
+data:
+  config: configs/data.yaml
+  input: data/processed/train_pool.parquet   # todo parte de train_pool (regla 2.1.5)
+  folds: data/splits/folds.parquet            # folds definitivos congelados en F1.8
+
+splits:
+  schemes: [random, group_system, loeo_A, loeo_B, family, cluster, temporal]
+
+# Espacio de búsqueda común a las dos familias. En cada semilla se sortean `n_iter`
+# combinaciones distintas (de RF y GB juntas) y se evalúan en todos los esquemas y folds.
+_search: &search
+  n_iter: 15                                  # presupuesto fijo (preregistro, 2026-11-14)
+  learners:
+    random_forest:
+      fixed: {n_estimators: 25}               # árboles por bolsa (× 20 bolsas)
+      space:
+        max_depth: [null, 5, 10, 20]
+        min_samples_leaf: [1, 2, 5, 10]
+        max_features: [sqrt, 0.3, 0.5]
+    gradient_boosting:
+      fixed: {n_estimators: 50, learning_rate: 0.1}
+      space:
+        max_depth: [2, 3, 5]
+        min_samples_leaf: [1, 5, 10]
+        max_features: [sqrt, 0.3, 0.5]
+        subsample: [0.8, 1.0]
+
+_pu: &pu
+  kind: pu_bagging
+  subset: family                              # composiciones que admite la familia
+  bagging:
+    n_bags: 20                                # Spearman 0,996–0,998 frente a 100 bolsas
+    unlabeled_sample_size: n_positive         # K = n.º de positivas: bolsas equilibradas
+  preprocessing:
+    add_missing_indicator: true               # t y μ faltan sin balance de carga de Bartel
+  search: *search
+
+models:
+  pu_pre_dft:
+    <<: *pu
+    family: pre_dft                           # solo el modelo confirmatorio (F3.6)
+    role: principal
+
+inner_cv:
+  n_splits: 3
+  split: stratified                           # decisión de la autora (2026-11-14)
+  target_recall: 0.90                         # punto de operación principal (§7.1)
+
+evaluation:
+  fixed_ppr: [0.05, 0.10, 0.20]               # TPR a P(ŷ=1) fija, umbral por fold (§7.2–7.3)
+
+execution:
+  n_jobs: -1                                  # joblib (loky) sobre semilla × esquema × fold
+  dev_mode: false                             # la primera corrida se lanza con --dev-mode
+                                              # (3 semillas) y se amplía a 10 con --resume
