@@ -1,0 +1,16 @@
+{
+  "n_splits": 100,
+  "test_identical_in_all": true,
+  "ptest_with_composition_in_train_val_split0": 0.22340425531914893,
+  "removed_per_split_mean": {
+    "total": 37.85,
+    "PTrain": 22.91,
+    "NTrain": 10.83
+  },
+  "removed_per_split_max": {
+    "total": 50,
+    "PTrain": 29,
+    "NTrain": 24
+  },
+  "n_compositions": 6611
+}

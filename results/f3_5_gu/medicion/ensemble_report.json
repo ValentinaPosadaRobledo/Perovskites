@@ -1,0 +1,12 @@
+{
+  "featurize_or_load_s": 221.2504734992981,
+  "inference_s": 565.9031047821045,
+  "n_compared": 12907,
+  "cl_max_abs_diff": 1.9995262845462491e-07,
+  "std_max_abs_diff": 2.0527990398505613e-07,
+  "ptest_same_in_all_splits": true,
+  "ensemble_tpr_aligned": 0.9574468085106383,
+  "ensemble_unlabeled_test_ppr_aligned": 0.1702127659574468,
+  "readme_ensemble_tpr_positionwise": 0.9574468085106383,
+  "mean_single_model_tpr_theirs": 0.9093617021276593
+}
