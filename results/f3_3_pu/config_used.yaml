@@ -1,0 +1,227 @@
+_pu:
+  bagging:
+    n_bags: 20
+    unlabeled_sample_size: n_positive
+  kind: pu_bagging
+  preprocessing:
+    add_missing_indicator: true
+  search:
+    learners:
+      gradient_boosting:
+        fixed:
+          learning_rate: 0.1
+          n_estimators: 50
+        space:
+          max_depth:
+          - 2
+          - 3
+          - 5
+          max_features:
+          - sqrt
+          - 0.3
+          - 0.5
+          min_samples_leaf:
+          - 1
+          - 5
+          - 10
+          subsample:
+          - 0.8
+          - 1.0
+      random_forest:
+        fixed:
+          n_estimators: 25
+        space:
+          max_depth:
+          - null
+          - 5
+          - 10
+          - 20
+          max_features:
+          - sqrt
+          - 0.3
+          - 0.5
+          min_samples_leaf:
+          - 1
+          - 2
+          - 5
+          - 10
+    n_iter: 15
+  subset: family
+_search:
+  learners:
+    gradient_boosting:
+      fixed:
+        learning_rate: 0.1
+        n_estimators: 50
+      space:
+        max_depth:
+        - 2
+        - 3
+        - 5
+        max_features:
+        - sqrt
+        - 0.3
+        - 0.5
+        min_samples_leaf:
+        - 1
+        - 5
+        - 10
+        subsample:
+        - 0.8
+        - 1.0
+    random_forest:
+      fixed:
+        n_estimators: 25
+      space:
+        max_depth:
+        - null
+        - 5
+        - 10
+        - 20
+        max_features:
+        - sqrt
+        - 0.3
+        - 0.5
+        min_samples_leaf:
+        - 1
+        - 2
+        - 5
+        - 10
+  n_iter: 15
+data:
+  config: configs/data.yaml
+  folds: data/splits/folds.parquet
+  input: data/processed/train_pool.parquet
+description: Bagging PU con Random Forest o Gradient Boosting (el aprendiz es un hiperparámetro),
+  con búsqueda aleatoria de presupuesto fijo y umbral a recall 0,90 en el bucle interno
+  (§7.1).
+evaluation:
+  fixed_ppr:
+  - 0.05
+  - 0.1
+  - 0.2
+execution:
+  dev_mode: false
+  n_jobs: -1
+hypotheses:
+- H1
+- H2
+- H3
+inner_cv:
+  n_splits: 3
+  split: stratified
+  target_recall: 0.9
+models:
+  pu_post_dft:
+    bagging:
+      n_bags: 20
+      unlabeled_sample_size: n_positive
+    family: post_dft
+    kind: pu_bagging
+    preprocessing:
+      add_missing_indicator: true
+    role: upper_bound
+    search:
+      learners:
+        gradient_boosting:
+          fixed:
+            learning_rate: 0.1
+            n_estimators: 50
+          space:
+            max_depth:
+            - 2
+            - 3
+            - 5
+            max_features:
+            - sqrt
+            - 0.3
+            - 0.5
+            min_samples_leaf:
+            - 1
+            - 5
+            - 10
+            subsample:
+            - 0.8
+            - 1.0
+        random_forest:
+          fixed:
+            n_estimators: 25
+          space:
+            max_depth:
+            - null
+            - 5
+            - 10
+            - 20
+            max_features:
+            - sqrt
+            - 0.3
+            - 0.5
+            min_samples_leaf:
+            - 1
+            - 2
+            - 5
+            - 10
+      n_iter: 15
+    subset: family
+  pu_pre_dft:
+    bagging:
+      n_bags: 20
+      unlabeled_sample_size: n_positive
+    family: pre_dft
+    kind: pu_bagging
+    preprocessing:
+      add_missing_indicator: true
+    role: principal
+    search:
+      learners:
+        gradient_boosting:
+          fixed:
+            learning_rate: 0.1
+            n_estimators: 50
+          space:
+            max_depth:
+            - 2
+            - 3
+            - 5
+            max_features:
+            - sqrt
+            - 0.3
+            - 0.5
+            min_samples_leaf:
+            - 1
+            - 5
+            - 10
+            subsample:
+            - 0.8
+            - 1.0
+        random_forest:
+          fixed:
+            n_estimators: 25
+          space:
+            max_depth:
+            - null
+            - 5
+            - 10
+            - 20
+            max_features:
+            - sqrt
+            - 0.3
+            - 0.5
+            min_samples_leaf:
+            - 1
+            - 2
+            - 5
+            - 10
+      n_iter: 15
+    subset: family
+name: f3_3_pu
+roadmap_task: F3.3
+splits:
+  schemes:
+  - random
+  - group_system
+  - loeo_A
+  - loeo_B
+  - family
+  - cluster
+  - temporal
