@@ -17,10 +17,12 @@ contenido). Solo composiciones, etiquetas y puntuaciones; nada de ICSD.
 ```bash
 git fetch origin respaldo-raw
 git archive origin/respaldo-raw respaldo/raw | tar -x
-for f in $(find respaldo/raw/results -name '*.csv.gz'); do d=${f#respaldo/raw/}; mkdir -p "$(dirname "$d")"; gunzip -c "$f" > "${d%.gz}"; done
+for f in $(find respaldo/raw/results -name '*.csv.gz'); do d=$(dirname "${f#respaldo/raw/}")/raw; mkdir -p "$d"; gunzip -c "$f" > "$d/$(basename "${f%.gz}")"; done
 sha256sum -c respaldo/raw/SHA256SUMS
 rm -r respaldo
 ```
 
-`SHA256SUMS` tiene el hash de cada CSV ORIGINAL (sin comprimir), con su ruta en `results/`:
+Los `.csv.gz` están en `respaldo/raw/results/<experimento>/<corrida>/` (sin la carpeta
+`raw/`, que el bucle reconstruye). `SHA256SUMS` tiene el hash de cada CSV ORIGINAL (sin comprimir), con su ruta en `results/`:
 `sha256sum -c` debe dar `OK` en los 65.
+Probado el 2026-11-15: 65 OK.
