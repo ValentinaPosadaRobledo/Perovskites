@@ -11,6 +11,10 @@ El holdout son TODAS las composiciones del pool PU cuyo B está en el conjunto r
 `train_pool` es el resto. Ninguna composición puede estar en ambos.
 
 Este módulo crea el holdout; solo `perovskite_pu.evaluation.holdout.load_holdout` lo LEE.
+
+`rebuild` regenera `train_pool` en un contenedor nuevo (data/processed/ no se versiona) sin
+volver a congelar: usa los B reservados de `HASHES.json` y verifica en memoria los dos hashes
+congelados antes de escribir nada.
 """
 
 from __future__ import annotations
@@ -171,14 +175,104 @@ def freeze(allow_dirty: bool = False) -> dict:
     return record
 
 
+def split_frozen(
+    pool: pd.DataFrame, reserved_b: Sequence[str], holdout_sha256: str
+) -> pd.DataFrame:
+    """`train_pool` con los B reservados ya congelados, tras verificar la parte reservada.
+
+    Separa `pool` con `split_holdout` y calcula EN MEMORIA el SHA-256 de la forma canónica de
+    la parte reservada (mismas columnas y orden con que `freeze` escribió el CSV). Si no
+    coincide con `holdout_sha256`, los datos regenerados no son los congelados y se aborta.
+    No lee ni escribe el CSV congelado, y la parte reservada no se devuelve ni se muestra
+    (decisión de la autora, 2026-11-15).
+    """
+    from perovskite_pu.utils.hashing import canonical_csv_bytes, sha256_bytes
+
+    holdout, train_pool = split_holdout(pool, reserved_b)
+    got = sha256_bytes(canonical_csv_bytes(holdout[HOLDOUT_COLUMNS], ["composition"]))
+    del holdout  # no se conserva más allá del hash
+    if got != holdout_sha256:
+        raise ValueError(
+            "La parte reservada regenerada no coincide con el hash congelado "
+            f"({got[:12]}… frente a {holdout_sha256[:12]}…). No se escribe train_pool."
+        )
+    return train_pool
+
+
+def rebuild_train_pool() -> dict:
+    """Regenera `train_pool.parquet` desde los datos intermedios, SIN volver a congelar.
+
+    Pensado para un contenedor nuevo, donde `data/processed/` está vacío. Construye el pool
+    como `freeze`, lo separa con los B reservados registrados en `HASHES.json` (no los vuelve a
+    sortear) y verifica el hash de la parte reservada con `split_frozen`. Escribe primero un
+    archivo provisional y solo lo deja como `train_pool.parquet` si su SHA-256 coincide con
+    `train_pool_sha256`; si no, lo borra y aborta. No toca `holdout_frozen.csv`,
+    `folds.parquet` ni `HASHES.json`.
+    """
+    import json
+    import os
+
+    import yaml
+
+    from perovskite_pu.splits.build import build_pool
+    from perovskite_pu.utils.hashing import sha256_file
+    from perovskite_pu.utils.paths import (
+        CONFIGS_DIR,
+        HASHES_FILENAME,
+        HOLDOUT_FILENAME,
+        INTERIM_DIR,
+        PROCESSED_DIR,
+        RAW_DIR,
+        ROOT,
+        SPLITS_DIR,
+        TRAIN_POOL_FILENAME,
+    )  # fmt: skip
+
+    record = json.loads((SPLITS_DIR / HASHES_FILENAME).read_text("utf-8"))
+    frozen = record["holdout"]
+    cfg = yaml.safe_load((CONFIGS_DIR / "data.yaml").read_text("utf-8"))
+    pool = build_pool(
+        pd.read_parquet(INTERIM_DIR / "f1_5_labels.parquet"),
+        pd.read_parquet(INTERIM_DIR / "f1_5_entries.parquet"),
+        pd.read_parquet(RAW_DIR / "mp_abo3_provenance.parquet"),
+        cfg["b_families"],
+    )
+    train_pool = split_frozen(pool, frozen["reserved_b"], record["files"][HOLDOUT_FILENAME])
+
+    PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
+    final = PROCESSED_DIR / TRAIN_POOL_FILENAME
+    tmp = final.with_name(final.name + ".tmp")
+    train_pool.to_parquet(tmp, index=False)
+    got = sha256_file(tmp)
+    if got != frozen["train_pool_sha256"]:
+        tmp.unlink()
+        raise ValueError(
+            f"train_pool regenerado con otro hash ({got[:12]}… frente a "
+            f"{frozen['train_pool_sha256'][:12]}…); no se escribe."
+        )
+    os.replace(tmp, final)
+    return {
+        "train_pool": final.relative_to(ROOT).as_posix(),
+        "compositions": len(train_pool),
+        "positives": int(train_pool["label"].sum()),
+        "train_pool_sha256": got,
+        "holdout_hash": "coincide (verificado en memoria)",
+    }
+
+
 def main(argv: list[str] | None = None) -> None:
     import argparse
     import json
 
-    parser = argparse.ArgumentParser(description="F1.8: congela el holdout (una sola vez).")
-    parser.add_argument("command", choices=["freeze"])
+    parser = argparse.ArgumentParser(
+        description="F1.8: congela el holdout (una sola vez) o regenera train_pool sin congelar."
+    )
+    parser.add_argument("command", choices=["freeze", "rebuild"])
     parser.add_argument("--allow-dirty", action="store_true")
     args = parser.parse_args(argv)
+    if args.command == "rebuild":
+        print(json.dumps(rebuild_train_pool(), indent=2, ensure_ascii=False))
+        return
     record = freeze(allow_dirty=args.allow_dirty)
     print(
         json.dumps(
