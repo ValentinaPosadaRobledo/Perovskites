@@ -12,13 +12,14 @@ repos:
     rev: v1.5.0
     hooks:
       - id: detect-secrets
-        # Ignora solo las líneas de campos de hash (commit, sha256, md5) con un valor hexadecimal:
-        # los resultados y metadatos del proyecto los registran por diseño.
+        # Ignora solo las líneas de campos de hash (commit, sha256, md5, *_hash) con un valor
+        # hexadecimal de 12 a 64 caracteres: los resultados y metadatos del proyecto los registran
+        # por diseño (p. ej. `config_hash`, 12 caracteres, en `run_metadata.json`).
         args:
           - --baseline
           - .secrets.baseline
           - --exclude-lines
-          - '"[a-z_]*(commit|sha256|md5)[a-z_]*": "[0-9a-f]{32,64}"'
+          - '"[a-z_]*(commit|sha256|md5|hash)[a-z_]*": "[0-9a-f]{12,64}"'
         # Registros de hashes por diseño (SHA-256 y commits): darían falsos positivos.
         exclude: ^(uv\.lock|data/MANIFEST\.json|data/splits/HASHES\.json)$
 
