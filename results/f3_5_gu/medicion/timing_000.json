@@ -1,0 +1,28 @@
+{
+  "torch": "2.15.0+cpu",
+  "threads": 4,
+  "shim_check": "ok",
+  "featurize_s": 0.07095122337341309,
+  "n_crystals": 1886,
+  "featurize_s_per_1000": 0.03761994876639082,
+  "their_test_json_len": 94,
+  "our_test_scores_head": [
+    0.994,
+    0.9279,
+    0.9997,
+    0.7318,
+    0.7612
+  ],
+  "their_test_json_head": [
+    0.9956653714179993,
+    0.9735785722732544,
+    0.9890031218528748,
+    0.9514592289924622,
+    0.986600935459137
+  ],
+  "their_weights_test_auc": 0.9436396559529199,
+  "their_weights_test_tpr_at_0.5": 0.8617021276595744,
+  "epoch_s_mean": 2.7913041639328005,
+  "train_total_s": 139.56520819664001,
+  "best_val_auc": 0.930964237211408
+}
