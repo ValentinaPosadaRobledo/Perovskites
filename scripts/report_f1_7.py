@@ -100,22 +100,29 @@ def main() -> None:
     )
     late = int(((pool["label"] == 1) & (pool["year"] >= cutoff)).sum())
 
-    # 5. S1: ¿extrapolan? Distancia al vecino de train más cercano (PCA 95 %, ajustada en train).
-    pca = sc["extrapolation"]["pca_variance"]
-    d_rand = nearest_train_distances(X, folds0["random"], pca_variance=pca)
-    thr = interpolation_threshold(d_rand, sc["extrapolation"]["reference_quantile"])
-    s1 = {}
-    for scheme in ("loeo_A", "loeo_B", "family", "cluster"):
-        groups = scheme_groups(
-            pool, scheme, sc, fam, rng=rng_streams(0)["fold_assignment"], features=X
-        )
-        d = nearest_train_distances(X, folds0[scheme], pca_variance=pca)
-        g = pd.DataFrame({"g": groups.to_numpy(), "d": d, "p": pool["label"].to_numpy()})
-        per = g.groupby("g").agg(med=("d", "median"), pos=("p", "sum"))
-        per["ext"] = per["med"] > thr
-        s1[scheme] = {"median_distance": float(np.nanmedian(d)),
-                      "groups_extrapolative_frac": float(per["ext"].mean()),
-                      "positives_in_extrapolative_frac": float(per.loc[per["ext"], "pos"].sum() / per["pos"].sum())}  # fmt: skip
+    # 5. S1: ¿extrapolan? Distancia al vecino de train más cercano, con el espacio ajustado en
+    # train. Principal: MAGPIE estandarizado + PCA al 95 %. Sensibilidad 10 (§10): espacio
+    # estandarizado completo, sin PCA (`sensitivity_pca_variance: null`).
+    def s1_analysis(pca: float | None) -> tuple[np.ndarray, float, dict]:
+        """Distancias de `random`, umbral q95 y resumen por esquema confirmatorio."""
+        d_rand = nearest_train_distances(X, folds0["random"], pca_variance=pca)
+        thr = interpolation_threshold(d_rand, sc["extrapolation"]["reference_quantile"])
+        out = {}
+        for scheme in ("loeo_A", "loeo_B", "family", "cluster"):
+            groups = scheme_groups(
+                pool, scheme, sc, fam, rng=rng_streams(0)["fold_assignment"], features=X
+            )
+            d = nearest_train_distances(X, folds0[scheme], pca_variance=pca)
+            g = pd.DataFrame({"g": groups.to_numpy(), "d": d, "p": pool["label"].to_numpy()})
+            per = g.groupby("g").agg(med=("d", "median"), pos=("p", "sum"))
+            per["ext"] = per["med"] > thr
+            out[scheme] = {"median_distance": float(np.nanmedian(d)),
+                           "groups_extrapolative_frac": float(per["ext"].mean()),
+                           "positives_in_extrapolative_frac": float(per.loc[per["ext"], "pos"].sum() / per["pos"].sum())}  # fmt: skip
+        return d_rand, thr, out
+
+    d_rand, thr, s1 = s1_analysis(sc["extrapolation"]["pca_variance"])
+    d_rand_full, thr_full, s1_full = s1_analysis(sc["extrapolation"]["sensitivity_pca_variance"])
 
     s = {
         "code_commit": git_commit(), "code_dirty": git_is_dirty(),
@@ -125,15 +132,21 @@ def main() -> None:
         "temporal": {"cutoff_year": cutoff, "test_positives": late, "test_positive_frac": late / int(pool["label"].sum())},
         "s1_reference": {"random_median_distance": float(np.nanmedian(d_rand)), "q95_threshold": float(thr)},
         "s1": s1,
+        "s1_sensitivity_no_pca": {"random_median_distance": float(np.nanmedian(d_rand_full)),
+                                  "q95_threshold": float(thr_full), "schemes": s1_full},
     }  # fmt: skip
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "summary.json").write_text(json.dumps(s, indent=2, ensure_ascii=False) + "\n", "utf-8")
     table.to_csv(OUT / "groups.csv", index=False, lineterminator="\n")
 
-    s1_rows = "\n".join(
-        f"| `{k}` | {v['median_distance']:.2f} | {v['groups_extrapolative_frac']:.0%} | {v['positives_in_extrapolative_frac']:.0%} |"
-        for k, v in s1.items()
-    )
+    def s1_table(res: dict) -> str:
+        """Filas de la tabla de S1 (una por esquema)."""
+        return "\n".join(
+            f"| `{k}` | {v['median_distance']:.2f} | {v['groups_extrapolative_frac']:.0%} | {v['positives_in_extrapolative_frac']:.0%} |"
+            for k, v in res.items()
+        )
+
+    s1_rows, s1_rows_full = s1_table(s1), s1_table(s1_full)
     sil_rows = " · ".join(f"k={k}: {m:.3f}±{sd:.3f}" for k, (m, sd) in sil.items())
     md = f"""# Informe F1.7: particiones
 
@@ -189,6 +202,16 @@ ajustados en train.
 
 Interpretación preregistrada: si < 50 % de las positivas de un esquema están en grupos
 extrapolativos, sus resultados de H1 se describen como de "extrapolación débil".
+
+### Sensibilidad 10: espacio estandarizado completo, sin PCA
+
+Referencia `random`: mediana {s["s1_sensitivity_no_pca"]["random_median_distance"]:.2f}; umbral (q95) {thr_full:.2f}.
+Las distancias no son comparables en valor absoluto con las de arriba (otra dimensión); sí lo
+son las fracciones de grupos y de positivas en grupos extrapolativos.
+
+| Esquema | Distancia mediana | Grupos extrapolativos | Positivas en grupos extrapolativos |
+|---|---|---|---|
+{s1_rows_full}
 """
     (OUT / "informe.md").write_text(md, "utf-8")
     print(
