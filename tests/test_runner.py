@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from perovskite_pu.splits.schemes import Fold
+from perovskite_pu.splits.schemes import SCHEMES, Fold
 from perovskite_pu.training.baselines import RandomScores, make_estimator, rule_scores
 from perovskite_pu.training.runner import (
     evaluate_fold,
@@ -134,6 +134,19 @@ def test_task_seed_is_deterministic_and_specific():
     assert a != task_seed(0, "model_init", "family", 3).generate_state(2).tolist()
     assert a != task_seed(1, "model_init", "loeo_B", 3).generate_state(2).tolist()
     assert a != task_seed(0, "fold_assignment", "loeo_B", 3).generate_state(2).tolist()
+
+
+def test_task_seed_final_model_key_is_distinct():
+    # El modelo final de F3.4 tiene su propia clave: no coincide con ningún esquema ni con la
+    # búsqueda, y un esquema desconocido sigue fallando.
+    from perovskite_pu.training.runner import EXTRA_SCHEME_KEYS, SEARCH_KEY
+
+    assert EXTRA_SCHEME_KEYS["final"] not in (*range(len(SCHEMES)), SEARCH_KEY)
+    final = task_seed(0, "model_init", "final", 0).generate_state(1)[0]
+    others = {task_seed(0, "model_init", sch, 0).generate_state(1)[0] for sch in SCHEMES}
+    assert final not in others
+    with pytest.raises(KeyError):
+        task_seed(0, "model_init", "otro", 0)
 
 
 # ---------------------------------------------------------------------------
