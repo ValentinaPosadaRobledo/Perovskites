@@ -1,0 +1,9 @@
+Formability (not synthesizability): 73 synthesized non-perovskite ABO3 oxides as true negatives; 61 polyanions reported apart.
+
+| Model or rule                   | FPR, synthesized non-perovskites   | FPR, polyanions      | ROC-AUC, P vs. negatives   |
+|:--------------------------------|:-----------------------------------|:---------------------|:---------------------------|
+| PU pre-DFT, B-family folds      | 0.308 [0.296, 0.321]               | 0.090 [0.069, 0.111] | 0.750 [0.740, 0.761]       |
+| PU pre-DFT, final model         | 0.379 [0.357, 0.402]               | 0.218 [0.185, 0.251] | —                          |
+| τ < 4.18 (in-sample on TableS1) | 0.288                              | 0.000                | 0.872                      |
+| t in [0.825, 1.059]             | 0.394                              | 0.377                | 0.782                      |
+| Charge balance (ICSD states)    | 0.944                              | 0.934                | 0.515                      |

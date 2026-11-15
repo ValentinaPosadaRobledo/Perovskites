@@ -1,0 +1,9 @@
+Prior de clase en train_pool (193 P, 731 U); * métodos principales. Media [IC 95 %] de 10 semillas; descriptiva (SCAR no se cumple).
+
+| Método                       | c                    | π_U                  |   Positivas ocultas |
+|:-----------------------------|:---------------------|:---------------------|--------------------:|
+| Elkan–Noto (RF, isotónica) * | 0,613 [0,608; 0,618] | 0,167 [0,163; 0,170] |                 122 |
+| Elkan–Noto (GB, isotónica)   | 0,631 [0,625; 0,637] | 0,155 [0,151; 0,159] |                 113 |
+| Elkan–Noto (RF, sigmoide)    | 0,591 [0,587; 0,594] | 0,183 [0,181; 0,186] |                 134 |
+| TIcE (rango en 4 partes) *   | 0,719 [0,703; 0,734] | 0,104 [0,096; 0,111] |                  76 |
+| TIcE (cuantiles)             | 0,749 [0,724; 0,774] | 0,089 [0,077; 0,101] |                  65 |

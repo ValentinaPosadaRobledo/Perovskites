@@ -1,0 +1,9 @@
+Formabilidad (no sintetizabilidad): 73 óxidos ABO3 sintetizados no perovskita como negativos verdaderos; 61 polianiones aparte.
+
+| Modelo o regla                     | FPR, sintetizadas no perovskita   | FPR, polianiones     | ROC-AUC, P frente a negativos   |
+|:-----------------------------------|:----------------------------------|:---------------------|:--------------------------------|
+| PU pre-DFT, folds de familia de B  | 0,308 [0,296; 0,321]              | 0,090 [0,069; 0,111] | 0,750 [0,740; 0,761]            |
+| PU pre-DFT, modelo final           | 0,379 [0,357; 0,402]              | 0,218 [0,185; 0,251] | —                               |
+| τ < 4,18 (in-sample en la TableS1) | 0,288                             | 0,000                | 0,872                           |
+| t en [0,825; 1,059]                | 0,394                             | 0,377                | 0,782                           |
+| Balance de carga (estados de ICSD) | 0,944                             | 0,934                | 0,515                           |

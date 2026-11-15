@@ -1,0 +1,11 @@
+{
+  "commit": "7d212b0465100ea3907bdeaacee1676aea572c6a",
+  "dirty": false,
+  "inputs": [
+    {
+      "path": "results/f3_2_prior/summary.csv",
+      "sha256": "5f313771d3693cb3fd360bdc16d0750e6874d6e6fa039b8c32c238f710f9fc96"
+    }
+  ],
+  "note": "Prior de clase en train_pool (193 P, 731 U); * métodos principales. Media [IC 95 %] de 10 semillas; descriptiva (SCAR no se cumple)."
+}
