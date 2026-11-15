@@ -51,15 +51,48 @@ Cada figura y tabla se genera con un script de `paper/scripts/` a partir de `res
 - Preregistro (OSF) y reevaluación del modelo de grafos. — F0.4, F4.0, F3.5
 
 ## 4. Resultados
+> **Estado (2026-11-15):** resultados de validación cruzada sobre `train_pool`, 10 semillas,
+> **descriptivos**. Las pruebas formales (bootstrap jerárquico, Holm) son de F4.2, después de
+> congelar el preregistro (F4.0); el conjunto reservado (F4.1) sigue sin abrir.
+
 - **(a) Efecto de la partición (H1):** ΔTPR random → grupos para todos los modelos. — F3.3, F4.1, F4.2
+  - PU `pre_dft`: TPR 0,895 en `random` → 0,852 `loeo_A`, 0,847 `loeo_B`, **0,689 `family`**,
+    **0,770 `cluster`**; caída ≥ δ₁ = 0,05 solo en `family` (0,206) y `cluster` (0,125).
+    `post_dft` cae menos (0,053 y 0,113).
+  - S1 (§10b): solo `cluster` extrapola de verdad; `loeo_A`, `loeo_B` y `family` son
+    "extrapolación débil" (< 50 % de las positivas en grupos extrapolativos), con PCA y sin él.
+  - **Figura:** `paper/figures/fig_tpr_by_scheme.pdf`.
 - **(b) Modelo composicional frente a τ (H2):** no inferioridad a P(ŷ=1) fija. — F2.4, F3.3, F4.2
+  - A la P(ŷ=1) de τ: Δ = +0,026 (`random`), +0,018 (`loeo_A`), −0,005 (`loeo_B`),
+    **−0,056 (`family`)**, −0,042 (`cluster`). **Resultado nulo probable** para la no
+    inferioridad en `family` (la media ya cruza −δ₂). Sin los compuestos de Bartel (τ fuera de
+    muestra): −0,178 (`family`) y −0,118 (`cluster`).
+  - A P(ŷ=1) fija baja (0,05–0,20), el PU ordena mejor que τ en todos los esquemas (mismas
+    composiciones). τ solo iguala o supera al PU en su propio punto de operación, de P(ŷ=1)
+    alta (P(ŷ=1|U) ≈ 0,42), y sobre todo cuando se extrapola a familias nuevas.
+  - **Figuras:** `fig_h2_delta_tau.pdf`, `fig_tpr_at_fixed_ppr.pdf`.
 - **(c) Grafos frente a composicional y control por simetría (H3).** — F3.5, F2.4, F4.2
+  - Línea base de solo simetría ≈ solo E_hull en `random` (TPR 0,896 y 0,895 con
+    P(ŷ=1|U) 0,126 y 0,154): la procedencia de la estructura basta para separar P de U.
+  - Reproducción de Gu et al.: inferencia exacta con sus pesos (1e-6); S2 en curso.
 - **(d) Validación de formabilidad** (negativos de Bartel, sintetizadas no perovskita; τ *in-sample*). — F3.4
+  - 73 negativos verdaderos: PU (folds de `family`) FPR 0,308 y AUC 0,750; τ FPR 0,288 y AUC
+    0,872, pero *in-sample*: 0,188 en la TableS1 frente a 0,556 fuera. El balance de carga no
+    discrimina (AUC ≈ 0,5). Confusiones: politipos hexagonales y cadenas con A grande.
+  - **Tabla:** `paper/tables/tab_formability.tex`.
 - **(e) Interpretabilidad:** SHAP y estabilidad entre semillas. — F4.3
 - **(f) Análisis de sensibilidad:** alta presión/metaestables, estados ambiguos, π, r2SCAN. — F3.2, F3.6
+  - π_U entre 0,09 y 0,18 (Elkan–Noto 0,167; TIcE 0,104), probablemente baja (SCAR no se
+    cumple). **Tabla:** `paper/tables/tab_prior.tex`.
+  - F3.6 en curso (10 sensibilidades; informe pareado frente a F3.3).
 
 ## 5. Discusión
 - Implicaciones para el cribado de materiales y recomendaciones de evaluación.
+- *(Puntos que emergen de F3; a confirmar con F4.)* La partición aleatoria sobreestima sobre
+  todo al dejar fuera una familia química entera; los esquemas por elemento apenas
+  extrapolan (S1). La ventaja publicada de τ se apoya en parte en datos *in-sample*. La
+  estructura (simetría) separa P de U tan bien como la E_hull, lo que obliga a controlar la
+  procedencia en cualquier comparación con modelos de grafos.
 - Limitaciones: SCAR, ruido de la etiqueta, sesgo de MP hacia fases ordenadas, circularidad
   del hull, procedencia de la estructura.
 - Desviaciones del preregistro.
