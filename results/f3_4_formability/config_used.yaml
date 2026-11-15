@@ -1,0 +1,136 @@
+data:
+  config: configs/data.yaml
+  folds: data/splits/folds.parquet
+  input: data/processed/train_pool.parquet
+  labels: data/interim/f1_5_labels.parquet
+description: FPR del bagging PU pre_dft y de las reglas (τ, t, balance de carga) sobre
+  óxidos ABO3 sintetizados no perovskita, y ROC-AUC real entre perovskitas conocidas
+  y esos negativos.
+execution:
+  dev_mode: false
+  n_jobs: -1
+hypotheses:
+- descriptivo
+model_source: configs/experiments/f3_3_pu.yaml
+models:
+- pu_pre_dft
+name: f3_4_formability
+negatives:
+  principal_set: principal
+  sets:
+  - principal
+  - polyanion
+  - ambiguous
+resolved:
+  inner_cv:
+    n_splits: 3
+    split: stratified
+    target_recall: 0.9
+  models:
+    pu_pre_dft:
+      bagging:
+        n_bags: 20
+        unlabeled_sample_size: n_positive
+      family: pre_dft
+      kind: pu_bagging
+      preprocessing:
+        add_missing_indicator: true
+      role: principal
+      search:
+        learners:
+          gradient_boosting:
+            fixed:
+              learning_rate: 0.1
+              n_estimators: 50
+            space:
+              max_depth:
+              - 2
+              - 3
+              - 5
+              max_features:
+              - sqrt
+              - 0.3
+              - 0.5
+              min_samples_leaf:
+              - 1
+              - 5
+              - 10
+              subsample:
+              - 0.8
+              - 1.0
+          random_forest:
+            fixed:
+              n_estimators: 25
+            space:
+              max_depth:
+              - null
+              - 5
+              - 10
+              - 20
+              max_features:
+              - sqrt
+              - 0.3
+              - 0.5
+              min_samples_leaf:
+              - 1
+              - 2
+              - 5
+              - 10
+        n_iter: 15
+      subset: family
+  rules:
+    charge_balance_common:
+      input: charge_balanced_common
+      kind: rule
+      role: sensitivity
+      rule:
+        threshold: 1
+        type: above
+      subset: all
+    charge_balance_icsd:
+      input: charge_balanced_icsd
+      kind: rule
+      role: principal
+      rule:
+        threshold: 1
+        type: above
+      subset: all
+    t_window_bartel:
+      input: t
+      kind: rule
+      role: principal
+      rule:
+        type: window
+        window:
+        - 0.825
+        - 1.059
+      subset: t_defined
+    t_window_classic:
+      input: t
+      kind: rule
+      role: sensitivity
+      rule:
+        type: window
+        window:
+        - 0.8
+        - 1.0
+      subset: t_defined
+    tau_bartel:
+      input: tau
+      kind: rule
+      role: principal
+      rule:
+        threshold: 4.18
+        type: below
+      subset: tau_defined
+roadmap_task: F3.4
+rules:
+- tau_bartel
+- t_window_bartel
+- t_window_classic
+- charge_balance_icsd
+- charge_balance_common
+rules_source: configs/experiments/f2_4_baselines.yaml
+variants:
+- final
+- family
