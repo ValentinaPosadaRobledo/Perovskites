@@ -7,3 +7,4 @@ timestamp_utc,experiment,run_dir,git_commit,git_dirty,config_hash,n_seeds,n_jobs
 2026-11-15T22:15:28+00:00,f3_6_s02_ambiguous_oxidation,results/f3_6_s02_ambiguous_oxidation/20261115T221528Z_49646ae78eac,afa8a2c359ca26a3fb4fa13ee4f7fda6532fbc4f,False,49646ae78eac,10,-1,5060.043
 2026-11-16T01:40:25+00:00,f3_6_s11_charge_balanced_u,results/f3_6_s11_charge_balanced_u/20261116T014025Z_76ce3fe7ee89,42647f99655b526698a5e2224e207d268b41b388,False,76ce3fe7ee89,10,-1,5384.805
 2026-11-17T14:53:42+00:00,f3_6_s08_recall,results/f3_6_s08_recall/20261117T145342Z_61120c8a1806,3e6911cb4f06e6a3a78cf160bd01f45186b40132,False,61120c8a1806,10,-1,451.88
+2026-11-17T19:01:39+00:00,f3_6_s05_angle140,results/f3_6_s05_angle140/20261117T190139Z_dbd8a4c70fc6,b8a2b4b21f2a1a3362c396b3149276095946f803,False,dbd8a4c70fc6,10,-1,6028.342
