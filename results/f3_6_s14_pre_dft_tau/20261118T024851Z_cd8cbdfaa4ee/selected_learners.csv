@@ -1,0 +1,15 @@
+baseline,scheme,learner,n_folds
+pu_pre_dft_tau,cluster,gradient_boosting,42
+pu_pre_dft_tau,cluster,random_forest,8
+pu_pre_dft_tau,family,gradient_boosting,31
+pu_pre_dft_tau,family,random_forest,9
+pu_pre_dft_tau,group_system,gradient_boosting,40
+pu_pre_dft_tau,group_system,random_forest,10
+pu_pre_dft_tau,loeo_A,gradient_boosting,569
+pu_pre_dft_tau,loeo_A,random_forest,121
+pu_pre_dft_tau,loeo_B,gradient_boosting,136
+pu_pre_dft_tau,loeo_B,random_forest,24
+pu_pre_dft_tau,random,gradient_boosting,41
+pu_pre_dft_tau,random,random_forest,9
+pu_pre_dft_tau,temporal,gradient_boosting,8
+pu_pre_dft_tau,temporal,random_forest,2
