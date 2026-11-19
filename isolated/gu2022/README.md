@@ -32,7 +32,9 @@ valida en `scripts/time_one_model.py` frente a bucles ingenuos.
 | `reproduce_ensemble.py` | Ensemble de sus 100 modelos sobre los 12 907 cristales | CL score hasta 2e-7; TPR 0,957 |
 | `s2_splits.py` | Variante (b) de S2: mismo test, sin polimorfos del test en train/val | 38 cristales menos por partición |
 | `train_split.py` | Entrena un modelo como `2Train.py` (CPU, semillas fijas, test por cristal) | — |
-| `run_s2.sh` | Orquesta S2 (100 + 100 modelos), reanudable | En curso |
+| `run_s2.sh` | Orquesta S2 (100 + 100 modelos), reanudable | 100 + 100 modelos (2026-11-17) |
+| `provenance_features.py` | Grupo espacial, Pm-3m y ángulo B–X–B mínimo de los 12 907 CIF (solo rasgos) | 0 errores; ~2 min con 3 procesos (2026-11-19) |
+| `provenance_report.py` | Líneas base de solo simetría y de solo elementos con el protocolo de sus 100 particiones | TPR a su P(ŷ=1\|U): simetría 0,30–0,39; elementos A, B, X 0,81; su GCNN 0,957 |
 
 Las puntuaciones de test de S2 (`work/S2_{a,b}/test_xxx.json`) se copian a
 `results/f3_5_gu/` y se analizan con `scripts/report_f3_5_s2.py` del proyecto.

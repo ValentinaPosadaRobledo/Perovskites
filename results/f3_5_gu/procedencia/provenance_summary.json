@@ -1,0 +1,39 @@
+{
+  "n_crystals": 12907,
+  "n_feature_errors": 0,
+  "n_ptest": 94,
+  "n_u": 11964,
+  "gu_threshold_0p5": {
+    "tpr_ptest": 0.9574,
+    "ppr_u": 0.0937
+  },
+  "descriptive": {
+    "P (todas)": {
+      "n": 943,
+      "frac_pm3m": 0.684,
+      "frac_cubic": 0.684,
+      "median_min_bxb": 180.0,
+      "frac_bxb_ge_179": 0.6882,
+      "frac_no_bxb": 0.0138,
+      "frac_x_O_or_F": 0.3913
+    },
+    "PTest": {
+      "n": 94,
+      "frac_pm3m": 0.6064,
+      "frac_cubic": 0.6064,
+      "median_min_bxb": 180.0,
+      "frac_bxb_ge_179": 0.6277,
+      "frac_no_bxb": 0.0106,
+      "frac_x_O_or_F": 0.3723
+    },
+    "U (todas)": {
+      "n": 11964,
+      "frac_pm3m": 0.8763,
+      "frac_cubic": 0.8764,
+      "median_min_bxb": 180.0,
+      "frac_bxb_ge_179": 0.8769,
+      "frac_no_bxb": 0.0008,
+      "frac_x_O_or_F": 0.9091
+    }
+  }
+}
