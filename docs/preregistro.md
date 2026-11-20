@@ -324,6 +324,19 @@ a τ (N = 250).
   esquemas, es < 0,025; superioridad (secundaria) con P*(Δ* ≤ 0), también con Holm.
 - Un valor p bootstrap igual a 0 se informa como < 1/B.
 
+**Comparaciones secundarias con Nadeau–Bengio** *(diseño fijado el 2026-11-20 por la autora,
+después de ver F3.3 y antes de calcularlas; no confirmatorias; ver §12)*:
+
+- Modelo de referencia: PU `pre_dft`. Se compara con `post_dft`, el modelo de solo E_hull y
+  el de solo simetría (en el subconjunto `post_dft`), τ < 4,18, la ventana de t de Bartel y
+  el balance de carga con estados de ICSD.
+- Esquemas: `random` y `cluster` (CV repetida con folds aleatorios).
+- Métrica por fold: TPR a P(ŷ = 1) = 0,10 (§7.3), con los dos modelos umbralizados sobre las
+  composiciones que ambos puntúan y los empates repartidos como en §7.2. Se omiten los folds
+  sin positivos en ese subconjunto. J = semillas × folds.
+- t corregido con n_test / n_train de las medias del fold de test y del resto en ese
+  subconjunto. Holm sobre las 6 comparaciones de cada esquema (α = 0,05, bilateral).
+
 ## 10. Análisis de sensibilidad previstos
 
 1. Sin fases de alta presión ni metaestables.
@@ -455,4 +468,5 @@ decisiones de la autora)*:
 | *(fecha de F4.0)* | **El preregistro se congela y deposita después de ver los resultados de validación cruzada** de F3.2–F3.4 (y de las sensibilidades de F3.6 que estén hechas), no antes de entrenar | El plan solo exigía congelarlo antes de abrir el conjunto de prueba reservado (F4.1); el depósito en OSF se dejó para el final de F3 | Las reglas confirmatorias (§7–9) están fechadas en el historial de git antes de descargar los datos (commit `e9ff6bc`, 2026-11-13 14:57 UTC; datos a las 19:21) y no cambiaron después. El conjunto reservado sigue sin abrir |
 | 2026-11-19 | **Se añade S3** (§10b): control exploratorio de H3 con prototipos cúbicos ideales para todas las composiciones | Con la entrada de menor E_hull, la procedencia (experimental inclinada frente a prototipo cúbico) separa casi por completo P de U; S3 permite separar estructura de procedencia | Ninguno sobre las decisiones confirmatorias: H3 se decide con el criterio A, como estaba previsto. Duplica el cómputo del modelo de grafos. Decidido antes de entrenar ningún grafo sobre `train_pool` |
 | 2026-11-20 | **Modelo de grafos sin la transferencia de Gu** (desde cero), sin bucle interno y con 20 bolsas PU en vez de sus 100 modelos | Sus pesos base vienen de datos de MP (información de DFT en una comparación con `pre_dft`); el bucle interno no hace falta para comparar a igual P(ŷ=1); 20 bolsas, como el PU composicional | El grafo puede rendir menos que en su artículo; se reproduce su arquitectura, no su preentrenamiento. Decidido antes de entrenar |
+| 2026-11-20 | **Pares y métrica de las comparaciones secundarias de Nadeau–Bengio** (§9) fijados después de ver F3.3 | §9 nombraba el test y los esquemas, pero no los pares ni la métrica | Ninguno sobre H1–H3: son comparaciones no confirmatorias. Se fijaron antes de calcularlas, con las líneas base de §6 salvo el umbral fijo de E_hull (ordena casi igual que el modelo de solo E_hull: Spearman 0,997), el clasificador trivial y las variantes de sensibilidad |
 | *(si aplica)* | F3.5 (modelo de grafos) incompleta al congelar | Pendiente de cómputo | Si F3.5 y su plan B fallan en 3 semanas, H3 pasa a exploratoria (regla de parada de §8) |

@@ -30,3 +30,20 @@ stats:
   delta1: 0.05                    # §8
   delta2: 0.05                    # §8
   alpha_h2_one_sided: 0.025       # equivale a la cota inferior del IC 95 % > −δ₂
+
+# Comparaciones secundarias (§9, no confirmatorias; diseño fijado el 2026-11-20 por la autora,
+# después de ver F3.3 y antes de calcularlas). Diferencia de TPR a P(ŷ=1) fija, fold a fold,
+# sobre las composiciones puntuadas por los dos modelos; Holm sobre las líneas base de cada
+# esquema.
+nadeau_bengio:
+  schemes: [random, cluster]      # CV repetida con folds aleatorios (§9)
+  ppr: 0.10                       # §7.3
+  alpha: 0.05
+  ci: 0.95
+  comparators:                    # se buscan en los raw/ de F3.3 y de F2.4
+    - pu_post_dft                 # subconjunto post_dft (193 P, 587 U)
+    - ehull_model                 # solo E_hull (subconjunto post_dft)
+    - symmetry_model              # solo simetría (subconjunto post_dft)
+    - tau_bartel                  # τ < 4,18 (τ definido)
+    - t_window_bartel             # ventana de t de Bartel (t definido)
+    - charge_balance_icsd         # balance de carga con estados de ICSD
