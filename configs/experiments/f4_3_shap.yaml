@@ -1,0 +1,48 @@
+# F4.3: interpretabilidad del modelo PU pre_dft con SHAP y su estabilidad entre semillas.
+# Decisiones de la autora (2026-11-20): modelo FINAL de cada semilla (todo train_pool, mismo
+# protocolo que F3.3 y que la variante `final` de F3.4); se explican las 924 composiciones de
+# train_pool (in-sample), con la importancia por separado en P y en U; importancia por feature
+# y por grupo (propiedad elemental de MAGPIE; t, μ y el indicador de dato faltante aparte);
+# estabilidad con Spearman entre pares de semillas, Jaccard del top-k y frecuencia en el top-k.
+# Ampliación fuera del núcleo mínimo; descriptivo (no hay hipótesis sobre SHAP).
+
+name: f4_3_shap
+description: >-
+  SHAP (TreeExplainer path-dependent sobre la salida cruda de cada bolsa, promedio de las bolsas)
+  del modelo PU pre_dft final de cada semilla, por feature y por grupo, con su estabilidad entre
+  semillas.
+roadmap_task: F4.3
+hypotheses: [descriptivo]
+
+data:
+  input: data/processed/train_pool.parquet   # todo parte de train_pool (regla 2.1.5)
+
+# El modelo y su protocolo (búsqueda, bolsas, CV interna) son EXACTAMENTE los de F3.3.
+model_source: configs/experiments/f3_3_pu.yaml
+model: pu_pre_dft
+
+# TreeSHAP path-dependent: exacto y sin fondo. El intervencional en escala de probabilidad no
+# es aditivo con Gradient Boosting (desvío de hasta 0,016; comprobado el 2026-11-20).
+shap:
+  additivity_tol: 1.0e-6          # base + Σ SHAP debe reproducir la salida media de las bolsas
+
+# Grupos de features: el primer patrón que coincide decide el grupo. Las de MAGPIE se agrupan
+# por propiedad elemental (los 6 estadísticos de una misma propiedad van juntos).
+groups:
+  magpie: "^MagpieData (?:minimum|maximum|range|mean|avg_dev|mode) (?P<prop>.+)$"
+  named:
+    - {pattern: "^missingindicator_", group: "missing_t_mu"}   # sin balance de carga de Bartel
+    - {pattern: "^geom_t$", group: "t"}
+    - {pattern: "^geom_mu$", group: "mu"}
+    - {pattern: "-norm$", group: "Stoichiometry"}
+    - {pattern: "valence electrons$", group: "ValenceOrbital"}
+    - {pattern: "^(compound possible|max ionic char|avg ionic char)$", group: "IonProperty"}
+
+stability:
+  top_k_features: 10
+  top_k_groups: 5
+  rank_by: mean_abs_all           # importancia global: media de |SHAP| en las 924
+
+execution:
+  n_jobs: -1                      # joblib (loky) sobre semillas
+  dev_mode: false
