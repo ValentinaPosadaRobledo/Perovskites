@@ -15,6 +15,7 @@ from perovskite_pu.evaluation.stats import (
     bootstrap_rng,
     bootstrap_units,
     composition_hits,
+    fold_tpr_at_ppr_diffs,
     h1_decision,
     h2_decision,
     h3_decision,
@@ -259,6 +260,56 @@ def test_nadeau_bengio_degenerate():
     """Sin variabilidad: p = 1 si la media es 0 y p = 0 si no."""
     assert nadeau_bengio([0.0, 0.0, 0.0], 80, 20)["p_two_sided"] == 1.0
     assert nadeau_bengio([0.1, 0.1, 0.1], 80, 20)["p_two_sided"] == 0.0
+
+
+def _raw_rows(model: str, rows: list[tuple]) -> pd.DataFrame:
+    """Tabla con el formato de `raw/seed_n.csv` desde (semilla, fold, comp., etiqueta, score)."""
+    df = pd.DataFrame(rows, columns=["seed", "fold", "composition", "label", "score"])
+    return df.assign(baseline=model, scheme="random", pred=0)
+
+
+def test_fold_tpr_at_ppr_diffs_common_subset_and_ties():
+    """Solo el subconjunto común, empates repartidos y folds sin positivos omitidos."""
+    # Fold 0: 4 composiciones comunes (2 P); fold 1: sin positivos en el subconjunto común.
+    a = _raw_rows(
+        "a",
+        [
+            (0, 0, "P1", 1, 0.9),
+            (0, 0, "P2", 1, 0.2),
+            (0, 0, "U1", 0, 0.5),
+            (0, 0, "U2", 0, 0.1),
+            (0, 0, "X", 1, 0.95),  # X solo en a: se ignora
+            (0, 1, "U3", 0, 0.3),
+            (0, 1, "U4", 0, 0.7),
+        ],
+    )
+    b = _raw_rows(
+        "b",
+        [
+            (0, 0, "P1", 1, 1.0),
+            (0, 0, "P2", 1, 1.0),
+            (0, 0, "U1", 0, 1.0),
+            (0, 0, "U2", 0, 0.0),
+            (0, 1, "U3", 0, 1.0),
+            (0, 1, "U4", 0, 0.0),
+        ],
+    )
+    out = fold_tpr_at_ppr_diffs(a, b, "random", ppr=0.5)
+    assert out[["seed", "fold"]].values.tolist() == [[0, 0]]
+    row = out.iloc[0]
+    assert (row["n_test"], row["n_pos"], row["n_common"]) == (4, 2, 6)
+    # a: P(ŷ=1) = 0,5 de 4 → P1 y U1 → TPR 0,5. b: bloque empatado de 3 con 2 plazas → 2/3.
+    assert row["tpr_a"] == pytest.approx(0.5)
+    assert row["tpr_b"] == pytest.approx(2 / 3)
+    assert row["diff"] == pytest.approx(0.5 - 2 / 3)
+
+
+def test_fold_tpr_at_ppr_diffs_rejects_mismatched_folds():
+    """Una composición común en folds distintos indica particiones incompatibles."""
+    a = _raw_rows("a", [(0, 0, "P1", 1, 0.9), (0, 0, "U1", 0, 0.1)])
+    b = _raw_rows("b", [(0, 1, "P1", 1, 0.9), (0, 0, "U1", 0, 0.1)])
+    with pytest.raises(ValueError, match="Folds o etiquetas"):
+        fold_tpr_at_ppr_diffs(a, b, "random", ppr=0.5)
 
 
 # ---------------------------------------------------------------------------

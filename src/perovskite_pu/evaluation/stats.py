@@ -95,6 +95,54 @@ def matched_ppr_hits(
     return long.groupby("composition")[["h_model", "h_ref"]].mean()
 
 
+def fold_tpr_at_ppr_diffs(
+    raw_a: pd.DataFrame, raw_b: pd.DataFrame, scheme: str, ppr: float
+) -> pd.DataFrame:
+    """TPR de dos modelos a la misma P(ŷ = 1) fija, fold a fold (Nadeau–Bengio, §9).
+
+    En cada semilla y fold se toman las composiciones puntuadas por **los dos** modelos (el
+    subconjunto común: p. ej. las de τ definido o las de `post_dft`), se umbraliza cada modelo a
+    la P(ŷ = 1) `ppr` sobre ese subconjunto, repartiendo empates (:func:`hit_probability_at_ppr`),
+    y se calcula la TPR. Los folds sin positivos en el subconjunto común se omiten.
+
+    `raw_a` y `raw_b` tienen el formato de `raw/seed_n.csv` y una sola línea base cada uno.
+    Devuelve una fila por (semilla, fold) con `n_test`, `n_pos`, `tpr_a`, `tpr_b` y
+    `diff` = `tpr_a` − `tpr_b`; `n_common` es el tamaño del subconjunto común en la semilla
+    (para el cociente n_test / n_train de la corrección).
+
+    Raises:
+        ValueError: si una composición cambia de fold o de etiqueta entre los dos modelos.
+    """
+    a = raw_a[raw_a["scheme"] == scheme]
+    b = raw_b[raw_b["scheme"] == scheme]
+    keys = ["seed", "fold", "composition"]
+    both = a[[*keys, "label", "score"]].merge(
+        b[[*keys, "label", "score"]], on=["seed", "composition"], suffixes=("_a", "_b")
+    )
+    # Los folds congelados son los mismos para todos los modelos: una composición común debe
+    # caer en el mismo fold y con la misma etiqueta en los dos.
+    if (both["fold_a"] != both["fold_b"]).any() or (both["label_a"] != both["label_b"]).any():
+        raise ValueError(f"Folds o etiquetas distintos entre los dos modelos en {scheme}.")
+    both = both.rename(columns={"fold_a": "fold", "label_a": "label"})
+    n_common = both.groupby("seed").size()
+    rows = []
+    for (seed, fold), f in both.groupby(["seed", "fold"], sort=True):
+        pos = f["label"].to_numpy(int) == 1
+        if not pos.any():
+            continue  # sin positivos no hay TPR que comparar
+        tpr = {
+            m: float(hit_probability_at_ppr(f[f"score_{m}"].to_numpy(float), ppr)[pos].mean())
+            for m in ("a", "b")
+        }
+        rows.append({"seed": seed, "fold": fold, "n_test": len(f),
+                     "n_common": int(n_common[seed]), "n_pos": int(pos.sum()),
+                     "tpr_a": tpr["a"], "tpr_b": tpr["b"],
+                     "diff": tpr["a"] - tpr["b"]})  # fmt: skip
+    if not rows:
+        raise ValueError(f"Sin folds comparables en {scheme}.")
+    return pd.DataFrame(rows)
+
+
 def _check_once_per_seed(d: pd.DataFrame, what: str) -> None:
     """Cada positivo debe evaluarse exactamente una vez por semilla (preregistro §8)."""
     counts = d.groupby(["composition", "seed"]).size()

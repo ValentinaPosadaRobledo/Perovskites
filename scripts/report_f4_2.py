@@ -10,6 +10,9 @@ Lee los `raw/` por composición de la última corrida completada del modelo PU (
   *in-sample*) y sensibilidad sin ellos.
 - H1 descriptivo (estimación puntual y DE entre semillas) para los modelos de
   `descriptive_models`.
+- **Comparaciones secundarias** (§9, no confirmatorias) en `random` y `cluster`: t corregido de
+  Nadeau y Bengio sobre la diferencia de TPR a P(ŷ=1) fija, fold a fold, entre el PU `pre_dft`
+  y cada línea base de `nadeau_bengio.comparators`, con Holm dentro de cada esquema.
 
 Todos los parámetros vienen de `configs/experiments/f4_2_stats.yaml`; las semillas, de
 `configs/seeds.yaml`. No entrena nada y no lee el conjunto reservado.
@@ -37,10 +40,13 @@ from perovskite_pu.evaluation.stats import (
     bootstrap_rng,
     bootstrap_units,
     composition_hits,
+    fold_tpr_at_ppr_diffs,
     h1_decision,
     h2_decision,
     hierarchical_bootstrap,
+    holm,
     matched_ppr_hits,
+    nadeau_bengio,
 )
 from perovskite_pu.utils.paths import RESULTS_DIR, ROOT
 from perovskite_pu.utils.run_metadata import git_commit, git_is_dirty
@@ -86,6 +92,43 @@ def per_seed_tpr(raw: pd.DataFrame, model: str, scheme: str) -> pd.Series:
     """TPR micro-agregada de cada semilla (para la DE entre semillas)."""
     d = raw[(raw["baseline"] == model) & (raw["scheme"] == scheme) & (raw["label"] == 1)]
     return d.groupby("seed")["pred"].mean()
+
+
+def fmt_p_t(p: float) -> str:
+    """Valor p analítico: 4 decimales, o notación científica por debajo de 1e-4."""
+    return f"{p:.4f}" if p >= 1e-4 else f"{p:.1e}"
+
+
+def nadeau_bengio_table(nbc: dict, raw_all: pd.DataFrame, ref_model: str) -> pd.DataFrame:
+    """Comparaciones secundarias del PU de referencia con cada línea base (Nadeau–Bengio, §9).
+
+    En cada esquema y para cada línea base: diferencias de TPR a P(ŷ=1) = `nbc["ppr"]` fold a
+    fold sobre el subconjunto común (:func:`fold_tpr_at_ppr_diffs`), J = semillas × folds con
+    positivos; n_test y n_train son las medias, en ese subconjunto, del fold de test y del resto.
+    Holm sobre las líneas base de cada esquema.
+    """
+    ref = raw_all[raw_all["baseline"] == ref_model]
+    tables = []
+    for g in nbc["schemes"]:
+        rows = []
+        for m in nbc["comparators"]:
+            other = raw_all[raw_all["baseline"] == m]
+            if other.empty:
+                raise ValueError(f"Sin filas de {m} en los raw/.")
+            f = fold_tpr_at_ppr_diffs(ref, other, g, float(nbc["ppr"]))
+            n_test = float(f["n_test"].mean())
+            n_train = float((f["n_common"] - f["n_test"]).mean())
+            r = nadeau_bengio(f["diff"].to_numpy(), n_train, n_test, ci=float(nbc["ci"]))
+            rows.append({"scheme": g, "comparator": m,
+                         "tpr_ref_fold_mean": float(f["tpr_a"].mean()),
+                         "tpr_comp_fold_mean": float(f["tpr_b"].mean()),
+                         "n_test_mean": n_test, "n_train_mean": n_train,
+                         "n_pos_total": int(f["n_pos"].sum()), **r})  # fmt: skip
+        t = pd.DataFrame(rows)
+        t["p_holm"] = holm(t["p_two_sided"].to_numpy())
+        t["significant"] = t["p_holm"] < float(nbc["alpha"])
+        tables.append(t)
+    return pd.concat(tables, ignore_index=True)
 
 
 def fmt_p(p: float, n_boot: int) -> str:
@@ -183,12 +226,18 @@ def main() -> None:
             )
     desc = pd.DataFrame(desc_rows)
 
+    # Comparaciones secundarias (§9): solo con la corrida oficial y su modelo confirmatorio.
+    nb = (pd.DataFrame() if dry_run
+          else nadeau_bengio_table(cfg["nadeau_bengio"], pd.concat([raw, tau_raw]), pu_model))  # fmt: skip
+
     # Salidas: tablas, metadatos de entrada e informe.
     h1.to_csv(out_dir / "h1.csv", lineterminator="\n")
     for label, t in h2_tables.items():
         t.to_csv(out_dir / f"h2_{label}.csv", lineterminator="\n")
     if not desc.empty:
         desc.to_csv(out_dir / "h1_descriptive.csv", index=False, lineterminator="\n")
+    if not nb.empty:
+        nb.to_csv(out_dir / "nadeau_bengio.csv", index=False, lineterminator="\n")
     meta = {
         "date_utc": datetime.now(UTC).isoformat(timespec="seconds"),
         "git_commit": git_commit(), "git_dirty": git_is_dirty(), "dry_run": dry_run,
@@ -198,13 +247,14 @@ def main() -> None:
     }  # fmt: skip
     (out_dir / "run_metadata.json").write_text(json.dumps(meta, indent=2, ensure_ascii=False)
                                               + "\n", "utf-8")  # fmt: skip
-    write_report(out_dir, h1, h2_tables, desc, meta, n_boot)
+    write_report(out_dir, h1, h2_tables, desc, nb, meta, n_boot)
     print((out_dir / "informe.md").read_text("utf-8"))
 
 
 def write_report(out_dir: Path, h1: pd.DataFrame, h2: dict[str, pd.DataFrame],
-                 desc: pd.DataFrame, meta: dict, n_boot: int) -> None:  # fmt: skip
-    """Informe en Markdown con las decisiones de H1 y H2."""
+                 desc: pd.DataFrame, nb: pd.DataFrame, meta: dict,
+                 n_boot: int) -> None:  # fmt: skip
+    """Informe en Markdown con las decisiones de H1 y H2 y las comparaciones secundarias."""
     st = meta["config"]["stats"]
     lines = ["# F4.2: pruebas confirmatorias de H1 y H2 (validación cruzada)", ""]
     if meta["dry_run"]:
@@ -255,6 +305,23 @@ def write_report(out_dir: Path, h1: pd.DataFrame, h2: dict[str, pd.DataFrame],
         for _, r in desc.iterrows():
             lines.append(f"| `{r.model}` | `{r.scheme}` | {r.delta_tpr:.3f} | "
                          f"{r.sd_between_seeds:.3f} |")  # fmt: skip
+        lines.append("")
+    if not nb.empty:
+        nbc = meta["config"]["nadeau_bengio"]
+        lines += ["## Comparaciones secundarias (Nadeau–Bengio, no confirmatorias)", "",
+                  f"PU `{meta['pu_model']}` frente a cada línea base: TPR a P(ŷ=1) = "
+                  f"{nbc['ppr']} en cada fold, sobre las composiciones puntuadas por los dos "
+                  "modelos (empates repartidos, §7.2); t corregido de Nadeau y Bengio con "
+                  f"J = semillas × folds con positivos; Holm por esquema (α = {nbc['alpha']}). "
+                  "Las TPR son medias por fold (no micro-agregadas).", "",
+                  "| Esquema | Línea base | TPR PU | TPR base | Δ | IC 95 % | J | n_test / n_train "
+                  "| p | p (Holm) |", "|---|---|---|---|---|---|---|---|---|---|"]  # fmt: skip
+        for _, r in nb.iterrows():
+            lines.append(f"| `{r.scheme}` | `{r.comparator}` | {r.tpr_ref_fold_mean:.3f} | "
+                         f"{r.tpr_comp_fold_mean:.3f} | {r['mean']:+.3f} | "
+                         f"[{r.ci_low:+.3f}; {r.ci_high:+.3f}] | {int(r.n_diffs)} | "
+                         f"{r.n_test_mean:.0f} / {r.n_train_mean:.0f} | {fmt_p_t(r.p_two_sided)} | "
+                         f"{fmt_p_t(r.p_holm)} |")  # fmt: skip
         lines.append("")
     (out_dir / "informe.md").write_text("\n".join(lines), "utf-8")
 
