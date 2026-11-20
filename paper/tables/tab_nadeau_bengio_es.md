@@ -1,0 +1,16 @@
+Comparaciones secundarias (no confirmatorias): PU pre-DFT frente a cada línea base, TPR a P(ŷ = 1) = 0,10 en cada fold sobre las composiciones puntuadas por las dos; t corregido de Nadeau y Bengio, J = semillas × folds con positivos; Holm dentro de cada partición; * p < 0,05. La TPR es la media por fold.
+
+| Partición   | Línea base              |   TPR PU |   TPR línea base | ΔTPR [IC 95 %]          |   J | p (Holm)   |
+|:------------|:------------------------|---------:|-----------------:|:------------------------|----:|:-----------|
+| aleatorio   | PU post-DFT             |    0,368 |            0,383 | -0,015 [-0,036; +0,006] |  50 | 0,162      |
+| aleatorio   | Solo E_hull             |    0,368 |            0,301 | +0,067 [+0,024; +0,110] |  50 | 0,006 *    |
+| aleatorio   | Solo simetría           |    0,368 |            0,296 | +0,071 [+0,034; +0,108] |  50 | < 0,001 *  |
+| aleatorio   | τ < 4,18                |    0,301 |            0,182 | +0,120 [+0,065; +0,174] |  50 | < 0,001 *  |
+| aleatorio   | Ventana de t (Bartel)   |    0,303 |            0,190 | +0,113 [+0,064; +0,162] |  50 | < 0,001 *  |
+| aleatorio   | Balance de carga (ICSD) |    0,431 |            0,143 | +0,288 [+0,245; +0,331] |  50 | < 0,001 *  |
+| clúster     | PU post-DFT             |    0,401 |            0,427 | -0,026 [-0,143; +0,090] |  41 | 1,000      |
+| clúster     | Solo E_hull             |    0,401 |            0,448 | -0,047 [-0,167; +0,073] |  41 | 1,000      |
+| clúster     | Solo simetría           |    0,401 |            0,383 | +0,018 [-0,126; +0,162] |  41 | 1,000      |
+| clúster     | τ < 4,18                |    0,287 |            0,198 | +0,089 [+0,005; +0,172] |  41 | 0,189      |
+| clúster     | Ventana de t (Bartel)   |    0,288 |            0,226 | +0,062 [-0,013; +0,136] |  41 | 0,416      |
+| clúster     | Balance de carga (ICSD) |    0,438 |            0,194 | +0,244 [+0,065; +0,422] |  41 | 0,052      |

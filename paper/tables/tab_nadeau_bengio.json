@@ -1,0 +1,11 @@
+{
+  "commit": "2246186494ec01f1c49fb500eed64a49cbe790df",
+  "dirty": false,
+  "inputs": [
+    {
+      "path": "results/f4_2_stats/nadeau_bengio.csv",
+      "sha256": "a2c751239347da00feebd2114b681d5406f5d1207d7ef1a8c3da2d2ed0764f2c"
+    }
+  ],
+  "note": "Secondary comparisons (not confirmatory): PU pre-DFT vs. each baseline, TPR at P(ŷ = 1) = 0.10 per fold on the compositions scored by both; corrected resampled t-test (Nadeau and Bengio), J = seeds × folds with positives; Holm within each split; * p < 0.05. TPR is the mean over folds."
+}

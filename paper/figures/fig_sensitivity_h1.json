@@ -1,0 +1,11 @@
+{
+  "commit": "2246186494ec01f1c49fb500eed64a49cbe790df",
+  "dirty": false,
+  "inputs": [
+    {
+      "path": "results/f3_6_sensibilidad/paired.csv",
+      "sha256": "ec6a02bf4ccefd80b319505a46802d25bdf229c514deb7dd0e084ed163ab0906"
+    }
+  ],
+  "note": "Medias de 10 semillas, pareadas por composición con F3.3; descriptivo."
+}

@@ -1,0 +1,11 @@
+{
+  "commit": "2246186494ec01f1c49fb500eed64a49cbe790df",
+  "dirty": false,
+  "inputs": [
+    {
+      "path": "results/f4_2_stats/nadeau_bengio.csv",
+      "sha256": "a2c751239347da00feebd2114b681d5406f5d1207d7ef1a8c3da2d2ed0764f2c"
+    }
+  ],
+  "note": "Comparaciones secundarias (no confirmatorias): PU pre-DFT frente a cada línea base, TPR a P(ŷ = 1) = 0,10 en cada fold sobre las composiciones puntuadas por las dos; t corregido de Nadeau y Bengio, J = semillas × folds con positivos; Holm dentro de cada partición; * p < 0,05. La TPR es la media por fold."
+}

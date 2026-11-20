@@ -1,0 +1,19 @@
+{
+  "commit": "2246186494ec01f1c49fb500eed64a49cbe790df",
+  "dirty": false,
+  "inputs": [
+    {
+      "path": "results/f4_2_stats/h1.csv",
+      "sha256": "9967a92d119e447b5597bef6fd0838a2db94879a8ec781a66b8a3ce7af09e20d"
+    },
+    {
+      "path": "results/f4_2_stats/h2_principal.csv",
+      "sha256": "b45549e838e199d64203f94c075b90b0838fd31b58647698857e22e231086e87"
+    },
+    {
+      "path": "results/f4_2_stats/h2_sin_bartel2019.csv",
+      "sha256": "5b1b186e32d39995f96e2307f9009c888a02cc564dae61243ef20f2bd251389c"
+    }
+  ],
+  "note": "Estimación e IC 95 % del bootstrap jerárquico (B = 10 000); Holm sobre los 4 esquemas confirmatorios."
+}
