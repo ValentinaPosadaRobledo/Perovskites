@@ -65,7 +65,8 @@ def latex_text(value: object) -> str:
     for a, b in (("\\", "\\textbackslash{}"), ("&", "\\&"), ("%", "\\%"), ("_", "\\_"),
                  ("#", "\\#"), ("*", "$^{*}$")):  # fmt: skip
         s = s.replace(a, b)
-    for a, b in (("π\\_U", "$\\pi_U$"), ("τ", "$\\tau$"), ("–", "--")):
+    for a, b in (("π\\_U", "$\\pi_U$"), ("τ", "$\\tau$"), ("–", "--"), ("Δ", "$\\Delta$"),
+                 (" < ", " $<$ ")):  # fmt: skip
         s = s.replace(a, b)
     return s
 

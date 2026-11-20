@@ -61,7 +61,14 @@ Cada figura y tabla se genera con un script de `paper/scripts/` a partir de `res
     `post_dft` cae menos (0,053 y 0,113).
   - S1 (§10b): solo `cluster` extrapola de verdad; `loeo_A`, `loeo_B` y `family` son
     "extrapolación débil" (< 50 % de las positivas en grupos extrapolativos), con PCA y sin él.
-  - **Figura:** `paper/figures/fig_tpr_by_scheme.pdf`.
+  - **Confirmatorio (F4.2, bootstrap jerárquico y Holm):** se cumple en `family` (0,206
+    [0,139; 0,273]) y `cluster` (0,125 [0,074; 0,173]); no en `loeo_A` (0,044) ni `loeo_B`
+    (0,049), con p de Holm 0,082. **H1 no se sostiene en los 4 esquemas** (resultado nulo
+    parcial).
+  - Sensibilidades (F3.6): `family` y `cluster` superan δ₁ en todas; `loeo_A` queda por
+    debajo en las mismas positivas en todas (con las 24 ambiguas como P, 0,061 sobre 217 P).
+  - **Figuras:** `paper/figures/fig_tpr_by_scheme.pdf`, `fig_h1_h2_confirmatory.pdf` (a),
+    `fig_sensitivity_h1.pdf`.
 - **(b) Modelo composicional frente a τ (H2):** no inferioridad a P(ŷ=1) fija. — F2.4, F3.3, F4.2
   - A la P(ŷ=1) de τ: Δ = +0,026 (`random`), +0,018 (`loeo_A`), −0,005 (`loeo_B`),
     **−0,056 (`family`)**, −0,042 (`cluster`). **Resultado nulo probable** para la no
@@ -70,7 +77,14 @@ Cada figura y tabla se genera con un script de `paper/scripts/` a partir de `res
   - A P(ŷ=1) fija baja (0,05–0,20), el PU ordena mejor que τ en todos los esquemas (mismas
     composiciones). τ solo iguala o supera al PU en su propio punto de operación, de P(ŷ=1)
     alta (P(ŷ=1|U) ≈ 0,42), y sobre todo cuando se extrapola a familias nuevas.
-  - **Figuras:** `fig_h2_delta_tau.pdf`, `fig_tpr_at_fixed_ppr.pdf`.
+  - **Confirmatorio (F4.2):** no inferioridad solo en `loeo_A`, con los compuestos de Bartel
+    (Δ +0,018, p de Holm 0,0008) y sin ellos (+0,024); no concluyente en `loeo_B`, `family` y
+    `cluster`. **No inferioridad no demostrada en los 4 esquemas.**
+  - Nadeau–Bengio (no confirmatorio, TPR a P(ŷ=1) = 0,10): en `random` el PU supera a todas
+    las líneas base salvo `post_dft`; en `cluster` ninguna diferencia es significativa tras
+    Holm.
+  - **Figuras:** `fig_h2_delta_tau.pdf`, `fig_tpr_at_fixed_ppr.pdf`,
+    `fig_h1_h2_confirmatory.pdf` (b). **Tabla:** `paper/tables/tab_nadeau_bengio.tex`.
 - **(c) Grafos frente a composicional y control por simetría (H3).** — F3.5, F2.4, F4.2
   - Línea base de solo simetría ≈ solo E_hull en `random` (TPR 0,896 y 0,895 con
     P(ŷ=1|U) 0,126 y 0,154): la procedencia de la estructura basta para separar P de U.
@@ -84,7 +98,9 @@ Cada figura y tabla se genera con un script de `paper/scripts/` a partir de `res
 - **(f) Análisis de sensibilidad:** alta presión/metaestables, estados ambiguos, π, r2SCAN. — F3.2, F3.6
   - π_U entre 0,09 y 0,18 (Elkan–Noto 0,167; TIcE 0,104), probablemente baja (SCAR no se
     cumple). **Tabla:** `paper/tables/tab_prior.tex`.
-  - F3.6 en curso (10 sensibilidades; informe pareado frente a F3.3).
+  - F3.6 (`results/f3_6_sensibilidad/informe.md`): ninguna sensibilidad cambia el patrón de
+    H1. Con τ como feature (14), +0,05 de TPR en `family` y `cluster` fuera de la TableS1 a
+    igual P(ŷ=1|U). **Figura:** `fig_sensitivity_h1.pdf`.
 
 ## 5. Discusión
 - Implicaciones para el cribado de materiales y recomendaciones de evaluación.
