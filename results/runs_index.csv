@@ -16,3 +16,4 @@ timestamp_utc,experiment,run_dir,git_commit,git_dirty,config_hash,n_seeds,n_jobs
 2026-11-19T21:17:26+00:00,f2_4_baselines,results/f2_4_baselines/20261119T211726Z_131d75672dea,675d445f93314cc47dba774d68fb6844d2c0d5f2,False,131d75672dea,10,-1,30.283
 2026-11-19T21:18:24+00:00,f3_3_pu,results/f3_3_pu/20261119T211824Z_aacd15c3f6dd,ff8cbf44cc437f5f894d65d2f90ee558840b6b79,False,aacd15c3f6dd,10,-1,1650.845
 2026-11-20T18:00:18+00:00,f4_3_shap,results/f4_3_shap/20261120T180018Z_ff0dace0b37f,55fd9aa265259641e02b215e6d883e8f4d43f297,False,ff0dace0b37f,10,-1,156.858
+2026-11-20T20:02:54+00:00,f5_1_pourbaix,results/f5_1_pourbaix/20261120T200254Z_069e8fc918f9,0f8e925ba25381ec5bfe140cadb39e888af8c520,False,069e8fc918f9,0,-1,68.161

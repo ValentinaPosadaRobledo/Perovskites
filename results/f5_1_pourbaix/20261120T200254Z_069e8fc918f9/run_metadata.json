@@ -1,0 +1,112 @@
+{
+  "config": {
+    "conditions": {
+      "comp_dict": {
+        "A": 0.5,
+        "B": 0.5
+      },
+      "filter_solids": true,
+      "ion_concentration_M": [
+        1e-06,
+        1e-08
+      ],
+      "pH": [
+        7.4,
+        6.5,
+        5.0
+      ],
+      "potential_step_V": 0.05,
+      "potential_window_V_SHE": [
+        -0.2,
+        0.4
+      ]
+    },
+    "data": {
+      "config": "configs/data.yaml"
+    },
+    "description": "ΔG_pbx (eV/átomo) de la perovskita GGA/GGA+U de cada composición frente al diagrama de Pourbaix de su sistema A–B–O–H, máximo y mínimo en la ventana fisiológica, a pH 7,4, 6,5 y 5 y con iones a 1e-6 y 1e-8 M.",
+    "execution": {
+      "n_jobs": -1
+    },
+    "hypotheses": [
+      "exploratorio"
+    ],
+    "name": "f5_1_pourbaix",
+    "pourbaix_download": {
+      "dir": "data/raw/pourbaix",
+      "emmet_core_version": "0.88.3",
+      "git_commit": "cd2e703a08bc5d8215a1dda62a00a321b52aee08",
+      "git_dirty": false,
+      "ion_reference": {
+        "fields": [
+          "identifier",
+          "formula",
+          "data.charge.value",
+          "data.MajElements",
+          "data.RefSolid",
+          "data.ΔGᶠ.value",
+          "data.ΔGᶠ.unit",
+          "data.ΔGᶠRefSolid.value",
+          "data.ΔGᶠRefSolid.unit",
+          "data.reference"
+        ],
+        "file": "ion_ref_data.json",
+        "limit": 500,
+        "n_records": 362,
+        "project": "ion_ref_data",
+        "sha256": "47734aba21d1a42ea4110c58cba9b090ae7113323391ec249535b2922603c1cc",
+        "url": "https://contribs-api.materialsproject.org/contributions/"
+      },
+      "mp_api_version": "0.47.2",
+      "mp_database_version": "2026.09.28",
+      "n_systems": 780,
+      "pymatgen_version": "2026.10.24",
+      "query_date_utc": "2026-11-20T19:07:47+00:00",
+      "solid_compat": "MaterialsProject2020Compatibility",
+      "systems_file_sha256": "2179b731451d171b0f309c34b30057a2e6668678814e614194a26c40f5182204",
+      "thermo_types": [
+        "GGA_GGA+U"
+      ]
+    },
+    "reference": {
+      "dg_threshold_eV_atom": 0.5
+    },
+    "roadmap_task": "F5.1"
+  },
+  "config_hash": "069e8fc918f9",
+  "counts": {
+    "compositions": 780,
+    "computed": 731,
+    "excluded": 49
+  },
+  "cpu": "x86_64",
+  "cpu_count": 4,
+  "git_commit": "0f8e925ba25381ec5bfe140cadb39e888af8c520",
+  "git_dirty": false,
+  "mp_database_version": "2026.09.28",
+  "n_jobs": -1,
+  "n_tasks": 780,
+  "omp_num_threads": "1",
+  "package_versions": {
+    "emmet-core": "0.88.3",
+    "matminer": "0.10.1",
+    "mp-api": "0.47.2",
+    "numpy": "2.5.4",
+    "pandas": "2.3.3",
+    "perovskite-pu": "0.1.0",
+    "pymatgen": "2026.10.24",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "shap": "0.54.1"
+  },
+  "platform": "Linux-6.18.44-fc-v726-x86_64-with-glibc2.39",
+  "python_version": "3.12.3",
+  "seeds": [],
+  "status": "completed",
+  "timestamp_utc": "2026-11-20T20:02:54+00:00",
+  "timings": {
+    "run_s": 68.031,
+    "total_s": 68.161
+  },
+  "uv_lock_sha256": "d391607ae1e0ac6a1158ea3fac6cf1af494a1b9058b9152f1565023ffe2eff79"
+}
