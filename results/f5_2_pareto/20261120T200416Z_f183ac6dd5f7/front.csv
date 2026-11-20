@@ -1,0 +1,6 @@
+composition,label,A,B,score_mean,score_sd,frac_above_threshold,dg_max,v_at_max,dg_min,stable_at_max,stable_in_window,toxicity,pareto_rank,on_front
+EuVO3,0,Eu,V,0.9529439814036325,0.042336446573515346,1.0,0.209804264,0.4,0.004787223,VO3[-1] + Eu[+3],Eu[+3] + VO2(s) | V3O5(s) + Eu[+3] | VO3[-1] + Eu[+3],,1,True
+CaHfO3,0,Ca,Hf,0.8991913335994326,0.061161360407486154,1.0,0.197626737,-0.2,0.197626737,Ca[+2] + HfO2(s),Ca[+2] + HfO2(s),,1,True
+TbGaO3,0,Tb,Ga,0.8478876902845615,0.07899654625935541,1.0,0.068742921,-0.2,0.068742921,Tb[+3] + Tb3Ga5O12(s),Tb[+3] + Tb3Ga5O12(s),,1,True
+ErAlO3,0,Er,Al,0.7980191656652786,0.03796809724174862,1.0,0.041087012,-0.2,0.041087012,Er3Al5O12(s) + Er[+3],Er3Al5O12(s) + Er[+3],,1,True
+LuAlO3,0,Lu,Al,0.6923337011450763,0.12762252078823835,0.8,0.02103255,-0.2,0.02103255,Lu3Al5O12(s) + Lu2O3(s),Lu3Al5O12(s) + Lu2O3(s),,1,True
