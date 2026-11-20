@@ -1,0 +1,61 @@
+{
+  "date_utc": "2026-11-20T15:30:46+00:00",
+  "git_commit": "8fa9fd3bbc273ea1657fc94355e55f93fc899b0f",
+  "git_dirty": false,
+  "dry_run": false,
+  "config": {
+    "name": "f4_2_stats",
+    "description": "H1 (caída de TPR de random a cada esquema por grupos) y H2 (no inferioridad del PU pre_dft frente a τ a igual P(ŷ=1)), con bootstrap jerárquico pareado por composición y Holm.",
+    "roadmap_task": "F4.2",
+    "hypotheses": [
+      "H1",
+      "H2"
+    ],
+    "inputs": {
+      "pu_experiment": "f3_3_pu",
+      "pu_model": "pu_pre_dft",
+      "descriptive_models": [
+        "pu_post_dft"
+      ],
+      "tau_experiment": "f2_4_baselines",
+      "tau_model": "tau_bartel"
+    },
+    "data": {
+      "config": "configs/data.yaml",
+      "input": "data/processed/train_pool.parquet"
+    },
+    "stats": {
+      "confirmatory_schemes": [
+        "loeo_A",
+        "loeo_B",
+        "family",
+        "cluster"
+      ],
+      "reference_scheme": "random",
+      "n_boot": 10000,
+      "ci": 0.95,
+      "alpha_h1": 0.05,
+      "delta1": 0.05,
+      "delta2": 0.05,
+      "alpha_h2_one_sided": 0.025
+    }
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "bootstrap_seed": 20261113,
+  "pu_model": "pu_pre_dft",
+  "pu_run_dir": "results/f3_3_pu/20261119T211824Z_aacd15c3f6dd",
+  "pu_raw_sha256": "5fb57dd46cb86a1f417ddd1e65d8bb63ce1095b0a9a7a3e5f113be361d39143b",
+  "tau_run_dir": "results/f2_4_baselines/20261119T211726Z_131d75672dea",
+  "tau_raw_sha256": "c95a0e7cede111db265ca84cdfbe14dd30bf2133e33afe3d16f6fa2dc3c72a93"
+}
