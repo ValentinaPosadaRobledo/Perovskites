@@ -95,6 +95,13 @@ Cada figura y tabla se genera con un script de `paper/scripts/` a partir de `res
     discrimina (AUC ≈ 0,5). Confusiones: politipos hexagonales y cadenas con A grande.
   - **Tabla:** `paper/tables/tab_formability.tex`.
 - **(e) Interpretabilidad:** SHAP y estabilidad entre semillas. — F4.3
+  - Modelo PU `pre_dft` final (todo `train_pool`; GB en las 10 semillas), TreeSHAP
+    *path-dependent* sobre los log-odds de cada bolsa. El indicador de t/μ no definidos (sin
+    balance de carga de Bartel: 287 U y ninguna P) reúne el 20 % de la importancia y t el
+    18 %; con `compound possible`, ~27 % es información de balance de carga (anterior a la
+    síntesis; auditada en F2.3). Estabilidad entre semillas: Spearman 0,95 (grupos) y 0,94
+    (features); los 4 primeros, iguales en las 10.
+  - **Figura:** `fig_shap_groups.pdf`. **Tabla:** `paper/tables/tab_shap_features.tex`.
 - **(f) Análisis de sensibilidad:** alta presión/metaestables, estados ambiguos, π, r2SCAN. — F3.2, F3.6
   - π_U entre 0,09 y 0,18 (Elkan–Noto 0,167; TIcE 0,104), probablemente baja (SCAR no se
     cumple). **Tabla:** `paper/tables/tab_prior.tex`.
