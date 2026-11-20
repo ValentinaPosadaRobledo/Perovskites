@@ -1,0 +1,177 @@
+{
+  "config": {
+    "data": {
+      "input": "data/processed/train_pool.parquet"
+    },
+    "description": "SHAP (TreeExplainer path-dependent sobre la salida cruda de cada bolsa, promedio de las bolsas) del modelo PU pre_dft final de cada semilla, por feature y por grupo, con su estabilidad entre semillas.",
+    "execution": {
+      "dev_mode": false,
+      "n_jobs": -1
+    },
+    "groups": {
+      "magpie": "^MagpieData (?:minimum|maximum|range|mean|avg_dev|mode) (?P<prop>.+)$",
+      "named": [
+        {
+          "group": "missing_t_mu",
+          "pattern": "^missingindicator_"
+        },
+        {
+          "group": "t",
+          "pattern": "^geom_t$"
+        },
+        {
+          "group": "mu",
+          "pattern": "^geom_mu$"
+        },
+        {
+          "group": "Stoichiometry",
+          "pattern": "-norm$"
+        },
+        {
+          "group": "ValenceOrbital",
+          "pattern": "valence electrons$"
+        },
+        {
+          "group": "IonProperty",
+          "pattern": "^(compound possible|max ionic char|avg ionic char)$"
+        }
+      ]
+    },
+    "hypotheses": [
+      "descriptivo"
+    ],
+    "model": "pu_pre_dft",
+    "model_source": "configs/experiments/f3_3_pu.yaml",
+    "name": "f4_3_shap",
+    "resolved": {
+      "inner_cv": {
+        "n_splits": 3,
+        "split": "stratified",
+        "target_recall": 0.9
+      },
+      "model": {
+        "bagging": {
+          "n_bags": 20,
+          "unlabeled_sample_size": "n_positive"
+        },
+        "family": "pre_dft",
+        "kind": "pu_bagging",
+        "preprocessing": {
+          "add_missing_indicator": true
+        },
+        "role": "principal",
+        "search": {
+          "learners": {
+            "gradient_boosting": {
+              "fixed": {
+                "learning_rate": 0.1,
+                "n_estimators": 50
+              },
+              "space": {
+                "max_depth": [
+                  2,
+                  3,
+                  5
+                ],
+                "max_features": [
+                  "sqrt",
+                  0.3,
+                  0.5
+                ],
+                "min_samples_leaf": [
+                  1,
+                  5,
+                  10
+                ],
+                "subsample": [
+                  0.8,
+                  1.0
+                ]
+              }
+            },
+            "random_forest": {
+              "fixed": {
+                "n_estimators": 25
+              },
+              "space": {
+                "max_depth": [
+                  null,
+                  5,
+                  10,
+                  20
+                ],
+                "max_features": [
+                  "sqrt",
+                  0.3,
+                  0.5
+                ],
+                "min_samples_leaf": [
+                  1,
+                  2,
+                  5,
+                  10
+                ]
+              }
+            }
+          },
+          "n_iter": 15
+        },
+        "subset": "family"
+      }
+    },
+    "roadmap_task": "F4.3",
+    "shap": {
+      "additivity_tol": 1e-06
+    },
+    "stability": {
+      "rank_by": "mean_abs_all",
+      "top_k_features": 10,
+      "top_k_groups": 5
+    }
+  },
+  "config_hash": "ff0dace0b37f",
+  "cpu": "x86_64",
+  "cpu_count": 4,
+  "dev_mode": false,
+  "git_commit": "55fd9aa265259641e02b215e6d883e8f4d43f297",
+  "git_dirty": false,
+  "mp_database_version": "2026.09.28",
+  "n_features_model": 114,
+  "n_jobs": -1,
+  "n_tasks": 10,
+  "omp_num_threads": "1",
+  "package_versions": {
+    "emmet-core": "0.88.3",
+    "matminer": "0.10.1",
+    "mp-api": "0.47.2",
+    "numpy": "2.5.4",
+    "pandas": "2.3.3",
+    "perovskite-pu": "0.1.0",
+    "pymatgen": "2026.10.24",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "shap": "0.54.1"
+  },
+  "platform": "Linux-6.18.44-fc-v726-x86_64-with-glibc2.39",
+  "python_version": "3.12.3",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "status": "completed",
+  "timestamp_utc": "2026-11-20T18:00:18+00:00",
+  "timings": {
+    "load_s": 0.092,
+    "run_s": 156.533,
+    "total_s": 156.858
+  },
+  "uv_lock_sha256": "d391607ae1e0ac6a1158ea3fac6cf1af494a1b9058b9152f1565023ffe2eff79"
+}
