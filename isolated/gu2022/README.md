@@ -35,6 +35,7 @@ valida en `scripts/time_one_model.py` frente a bucles ingenuos.
 | `run_s2.sh` | Orquesta S2 (100 + 100 modelos), reanudable | 100 + 100 modelos (2026-11-17) |
 | `provenance_features.py` | Grupo espacial, Pm-3m y ángulo B–X–B mínimo de los 12 907 CIF (solo rasgos) | 0 errores; ~2 min con 3 procesos (2026-11-19) |
 | `provenance_report.py` | Líneas base de solo simetría y de solo elementos con el protocolo de sus 100 particiones | TPR a su P(ŷ=1\|U): simetría 0,30–0,39; elementos A, B, X 0,81; su GCNN 0,957 |
+| `h3_train.py` | H3 y S3: su GCNN desde cero con bagging PU (20 bolsas) en nuestros folds; lee el paquete de `scripts/h3_structures.py`; CPU o GPU (`--device`), reanudable | Pendiente de la GPU del grupo |
 
 Las puntuaciones de test de S2 (`work/S2_{a,b}/test_xxx.json`) se copian a
 `results/f3_5_gu/` y se analizan con `scripts/report_f3_5_s2.py` del proyecto.

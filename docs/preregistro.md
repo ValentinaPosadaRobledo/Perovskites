@@ -417,6 +417,29 @@ cúbicos (180°); un modelo de grafos puede aprender la procedencia y no la sint
   sustituye a la regla de interpretación por procedencia de H3; la complementa.
 - Las estructuras de solo teóricas (opción C del borrador, 60 de 193 positivas) **no** se
   usan.
+- *(Comprobado al generar los prototipos, 2026-11-20, antes de entrenar.)* La mediana
+  (a = 4,08 Å) la usan 343 composiciones: 342 U y 1 P, porque t no está definido sin balance
+  de carga de Bartel, que falta en 287 U y en ninguna P. El valor de a lleva así la misma
+  información que el indicador de t faltante del PU `pre_dft` (derivada de la composición,
+  anterior a la síntesis). Se mantiene la regla, por decisión de la autora, para que la
+  comparación con `pre_dft` use la misma información.
+
+**Protocolo del modelo de grafos en H3 y S3** *(fijado 2026-11-20, antes de entrenar;
+decisiones de la autora)*:
+
+- Arquitectura e hiperparámetros **fijos de Gu et al.**: GCNN de 64 features y 1
+  convolución, grafos de su `CIFData` (radio 7 Å), Adam con lr 0,001, lote 512, 50 épocas y
+  la época de mejor AUC de validación. Sin búsqueda de hiperparámetros.
+- **Desde cero:** sin sus pesos base preentrenados con datos de MP, para que el grafo no
+  traiga información de DFT a una comparación con el PU `pre_dft`.
+- **Bagging PU con 20 bolsas**, como el PU composicional: todas las P del train externo y
+  K = |P| no etiquetadas con reemplazo; el 10 % de las P y de las U de cada bolsa, para
+  validación (como su partición 80/10/10). Puntuación = media de las 20 bolsas.
+- **Sin bucle interno:** H3 compara a igual P(ŷ=1) que el PU en cada fold (§7.2); el TPR del
+  grafo en su propio punto de operación no se informa.
+- Esquemas: `random` y los cuatro confirmatorios, 10 semillas. Con el criterio A, solo las
+  composiciones con entrada perovskita en MP (193 P y 587 U); el PU de referencia se toma en
+  esas mismas composiciones.
 
 ## 11. Decisiones contingentes preregistradas
 
@@ -431,4 +454,5 @@ cúbicos (180°); un modelo de grafos puede aprender la procedencia y no la sint
 | 2026-11-14 | **20 bolsas** en el bagging PU en lugar de las 50 propuestas (§6) | Coste: con 4 núcleos en paralelo, 50 bolsas eran ~27 h para las 10 semillas. Decisión por coste, antes de analizar resultados del modelo PU | Ninguno detectable: control 20 frente a 50 en 100 folds externos, ΔTPR +0,001 (`pre_dft`) y +0,018 (`post_dft`), Spearman 0,995–0,996 cuando se elige el mismo candidato |
 | *(fecha de F4.0)* | **El preregistro se congela y deposita después de ver los resultados de validación cruzada** de F3.2–F3.4 (y de las sensibilidades de F3.6 que estén hechas), no antes de entrenar | El plan solo exigía congelarlo antes de abrir el conjunto de prueba reservado (F4.1); el depósito en OSF se dejó para el final de F3 | Las reglas confirmatorias (§7–9) están fechadas en el historial de git antes de descargar los datos (commit `e9ff6bc`, 2026-11-13 14:57 UTC; datos a las 19:21) y no cambiaron después. El conjunto reservado sigue sin abrir |
 | 2026-11-19 | **Se añade S3** (§10b): control exploratorio de H3 con prototipos cúbicos ideales para todas las composiciones | Con la entrada de menor E_hull, la procedencia (experimental inclinada frente a prototipo cúbico) separa casi por completo P de U; S3 permite separar estructura de procedencia | Ninguno sobre las decisiones confirmatorias: H3 se decide con el criterio A, como estaba previsto. Duplica el cómputo del modelo de grafos. Decidido antes de entrenar ningún grafo sobre `train_pool` |
+| 2026-11-20 | **Modelo de grafos sin la transferencia de Gu** (desde cero), sin bucle interno y con 20 bolsas PU en vez de sus 100 modelos | Sus pesos base vienen de datos de MP (información de DFT en una comparación con `pre_dft`); el bucle interno no hace falta para comparar a igual P(ŷ=1); 20 bolsas, como el PU composicional | El grafo puede rendir menos que en su artículo; se reproduce su arquitectura, no su preentrenamiento. Decidido antes de entrenar |
 | *(si aplica)* | F3.5 (modelo de grafos) incompleta al congelar | Pendiente de cómputo | Si F3.5 y su plan B fallan en 3 semanas, H3 pasa a exploratoria (regla de parada de §8) |
