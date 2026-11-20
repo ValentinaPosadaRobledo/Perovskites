@@ -1,0 +1,37 @@
+# F5.2 (tesis, OE4 exploratorio): filtro de toxicidad y frente de Pareto sintetizabilidad–
+# estabilidad acuosa. Decisiones de la autora (2026-11-20):
+# - sintetizabilidad = puntuación FUERA DE FOLD del PU pre_dft de F3.3 en el esquema `random`
+#   (media de las 10 semillas) y fracción de semillas que superan su umbral; la del modelo
+#   final no se usa porque es in-sample;
+# - condición principal: ΔG_pbx máximo en la ventana a pH 7,4 e iones a 1e-6 M; las demás
+#   condiciones de F5.1 son sensibilidad;
+# - toxicidad: se marca con su motivo y las marcadas quedan fuera del frente principal (se
+#   informan aparte).
+# El frente se calcula sobre las no etiquetadas (candidatas); las P se informan como referencia.
+# Determinista: no usa semillas propias.
+
+name: f5_2_pareto
+description: >-
+  Frente de Pareto (máxima puntuación PU fuera de fold, mínimo ΔG_pbx) de las composiciones no
+  etiquetadas sin marcas de toxicidad, con la sensibilidad a pH y concentración.
+roadmap_task: F5.2
+hypotheses: [exploratorio]
+
+inputs:
+  pourbaix_experiment: f5_1_pourbaix   # última corrida en results/runs_index.csv
+  score_experiment: f3_3_pu
+  score_model: pu_pre_dft
+  score_scheme: random
+
+principal_condition: {pH: 7.4, ion_conc_M: 1.0e-6}
+
+toxicity:
+  elements: [Pb, Co, Ni, Cd, Tl]       # por presencia del elemento en la composición
+  # Por especie estable en algún potencial de la ventana, en la condición evaluada (regex sobre
+  # los nombres de pymatgen, p. ej. "Ba[+2]", "CrO4[-2]", "HCrO4[-1]", "Cr2O7[-2]").
+  aqueous_species:
+    soluble_Ba2+: "Ba\\[\\+2\\]"
+    Cr6+: "(?:H?CrO4|Cr2O7)\\["
+
+reference:
+  dg_threshold_eV_atom: 0.5            # Singh et al. (2017): solo como referencia

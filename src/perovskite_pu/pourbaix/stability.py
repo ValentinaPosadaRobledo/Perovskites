@@ -12,7 +12,8 @@ Para cada composición ABO₃ de `train_pool` con polimorfo perovskita GGA/GGA+U
    concentración de iones.
 3. ΔG_pbx (eV/átomo, `get_decomposition_energy`) en una rejilla de potenciales de la ventana,
    a cada pH: máximo (peor caso, criterio conservador), mínimo (mejor caso) y los potenciales
-   donde ocurren, más la fase estable en el potencial del máximo.
+   donde ocurren, más la fase estable en el potencial del máximo y las especies estables en
+   toda la ventana (para el filtro de toxicidad de F5.2).
 
 ΔG_pbx ≤ ~0,5 eV/átomo (Singh et al., 2017) se usa solo como referencia. Determinista.
 """
@@ -102,6 +103,10 @@ def composition_rows(
         for pH in cond["pH"]:
             ext = window_extrema(diagram, target, float(pH), pots)
             stable = diagram.get_stable_entry(float(pH), ext["v_at_max"]).name
+            # Especies estables en toda la ventana (para el filtro de toxicidad de F5.2: Ba²⁺
+            # soluble o Cr⁶⁺ en cualquier potencial de la ventana, no solo en el del máximo).
+            window = sorted({diagram.get_stable_entry(float(pH), float(v)).name for v in pots})
             rows.append({"pH": float(pH), "ion_conc_M": float(conc), **ext,
-                         "stable_at_max": stable})  # fmt: skip
+                         "stable_at_max": stable,
+                         "stable_in_window": " | ".join(window)})  # fmt: skip
     return rows
