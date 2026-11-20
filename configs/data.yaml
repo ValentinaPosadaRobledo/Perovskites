@@ -225,3 +225,23 @@ features:
     # Metadatos (entrada elegida, si es experimental, elegibilidad): NUNCA son features.
     post_metadata: data/interim/features_post_dft_meta.parquet
     post_columns: data/interim/features_post_dft_columns.json
+
+# ---------------------------------------------------------------------------
+# F5.1 Pourbaix (extensión de tesis, OE4): descarga de entradas por sistema A–B–O–H
+# ---------------------------------------------------------------------------
+pourbaix:
+  # Tabla de iones de referencia (proyecto ion_ref_data de MPContribs), por su API REST
+  # pública: mp-api la pide con el cliente de MPContribs (extra `mp-api[contribs]`, ~40
+  # dependencias), que no se instala; se le pasa la tabla ya descargada (2026-11-20).
+  ion_reference:
+    url: https://contribs-api.materialsproject.org/contributions/
+    project: ion_ref_data
+    fields: [identifier, formula, data.charge.value, data.MajElements, data.RefSolid,
+             "data.ΔGᶠ.value", "data.ΔGᶠ.unit", "data.ΔGᶠRefSolid.value",
+             "data.ΔGᶠRefSolid.unit", data.reference]
+    limit: 500                       # 362 registros (2026-11-20): una sola página
+  solid_compat: MaterialsProject2020Compatibility   # + MaterialsProjectAqueousCompatibility
+  thermo_types: [GGA_GGA+U]          # el valor por defecto de get_pourbaix_entries; se comprueba
+  raw_subdir: pourbaix               # data/raw/pourbaix/ (no versionado)
+  # Solo los sistemas de las composiciones de train_pool con polimorfo perovskita GGA/GGA+U
+  # (las de post_dft; 193 P y 587 U). El conjunto reservado no se consulta.

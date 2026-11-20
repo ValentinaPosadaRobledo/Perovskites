@@ -1,0 +1,30 @@
+# F5.1 (tesis, OE4 exploratorio): estabilidad acuosa ΔG_pbx continua de la entrada perovskita
+# GGA/GGA+U de cada composición de train_pool que la tiene (las de post_dft: 193 P y 587 U).
+# Decisiones de la autora (2026-11-20): las 780 composiciones (las P como referencia; la
+# selección por puntuación PU es de F5.2) y, en cada pH y concentración, el peor y el mejor
+# caso de ΔG_pbx en la ventana de potencial. Determinista: no usa semillas.
+
+name: f5_1_pourbaix
+description: >-
+  ΔG_pbx (eV/átomo) de la perovskita GGA/GGA+U de cada composición frente al diagrama de
+  Pourbaix de su sistema A–B–O–H, máximo y mínimo en la ventana fisiológica, a pH 7,4, 6,5 y 5
+  y con iones a 1e-6 y 1e-8 M.
+roadmap_task: F5.1
+hypotheses: [exploratorio]
+
+data:
+  config: configs/data.yaml       # sección `pourbaix` (entradas en data/raw/pourbaix/)
+
+conditions:
+  pH: [7.4, 6.5, 5.0]             # fisiológico, microambiente tumoral, lisosomal
+  potential_window_V_SHE: [-0.2, 0.4]
+  potential_step_V: 0.05          # rejilla de 13 potenciales
+  ion_concentration_M: [1.0e-6, 1.0e-8]
+  comp_dict: {A: 0.5, B: 0.5}     # proporción de metales del diagrama: la del ABO3
+  filter_solids: true
+
+reference:
+  dg_threshold_eV_atom: 0.5       # Singh et al. (2017): referencia, no criterio de estabilidad
+
+execution:
+  n_jobs: -1                      # joblib (loky) sobre composiciones
