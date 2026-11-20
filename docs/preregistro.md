@@ -393,6 +393,31 @@ particiona por **cristal**.
   separa de la caída por extrapolación química que mide H3.
 - Se reporta con un IC bootstrap por composición.
 
+**S3. Control de H3 sin procedencia de la estructura: prototipos cúbicos ideales**
+*(añadido 2026-11-19, antes de entrenar ningún modelo de grafos sobre `train_pool`; decisión
+de la autora)*. Motivación: con la entrada de MP de menor E_hull, nuestras positivas son
+estructuras experimentales inclinadas (B–O–B mediano ≈ 149°) y las no etiquetadas, prototipos
+cúbicos (180°); un modelo de grafos puede aprender la procedencia y no la sintetizabilidad
+(`docs/borradores/f3_5_h3_estructuras.md`).
+
+- **El análisis confirmatorio de H3 no cambia** (criterio A): estructura = la entrada
+  perovskita de menor E_hull de cada composición, la misma de `post_dft` y de la línea base de
+  solo simetría.
+- **S3 (exploratorio):** el mismo modelo de grafos, con los mismos folds, semillas, bolsas,
+  bucle interno y punto de operación, sobre un **prototipo cúbico ideal Pm-3m generado para
+  todas las composiciones** de `train_pool`: A en (0, 0, 0), B en (½, ½, ½) y O en
+  (½, ½, 0), (½, 0, ½) y (0, ½, ½).
+- **Parámetro de red:** a = 2 (r_B + r_O), con r_B el radio de Shannon asignado a B en
+  `features/tolerance.py` (el mismo que usa t) y r_O = 1,40 Å. Donde t no está definido, a es
+  la mediana de los a definidos en `train_pool` (no usa etiquetas); se informa cuántas
+  composiciones la usan.
+- Con estos prototipos, la estructura no distingue P de U salvo por la composición: S3 mide si
+  el grafo aporta algo frente al PU composicional **sin** información de procedencia.
+- Se informa el mismo contraste D_g de H3 (§8) con su IC bootstrap, sin decisión ni Holm. No
+  sustituye a la regla de interpretación por procedencia de H3; la complementa.
+- Las estructuras de solo teóricas (opción C del borrador, 60 de 193 positivas) **no** se
+  usan.
+
 ## 11. Decisiones contingentes preregistradas
 
 - **Si hay < ~100 composiciones ABO₃ positivas (F1.6):** se amplía a todas las clases de
@@ -405,4 +430,5 @@ particiona por **cristal**.
 |---|---|---|---|
 | 2026-11-14 | **20 bolsas** en el bagging PU en lugar de las 50 propuestas (§6) | Coste: con 4 núcleos en paralelo, 50 bolsas eran ~27 h para las 10 semillas. Decisión por coste, antes de analizar resultados del modelo PU | Ninguno detectable: control 20 frente a 50 en 100 folds externos, ΔTPR +0,001 (`pre_dft`) y +0,018 (`post_dft`), Spearman 0,995–0,996 cuando se elige el mismo candidato |
 | *(fecha de F4.0)* | **El preregistro se congela y deposita después de ver los resultados de validación cruzada** de F3.2–F3.4 (y de las sensibilidades de F3.6 que estén hechas), no antes de entrenar | El plan solo exigía congelarlo antes de abrir el conjunto de prueba reservado (F4.1); el depósito en OSF se dejó para el final de F3 | Las reglas confirmatorias (§7–9) están fechadas en el historial de git antes de descargar los datos (commit `e9ff6bc`, 2026-11-13 14:57 UTC; datos a las 19:21) y no cambiaron después. El conjunto reservado sigue sin abrir |
+| 2026-11-19 | **Se añade S3** (§10b): control exploratorio de H3 con prototipos cúbicos ideales para todas las composiciones | Con la entrada de menor E_hull, la procedencia (experimental inclinada frente a prototipo cúbico) separa casi por completo P de U; S3 permite separar estructura de procedencia | Ninguno sobre las decisiones confirmatorias: H3 se decide con el criterio A, como estaba previsto. Duplica el cómputo del modelo de grafos. Decidido antes de entrenar ningún grafo sobre `train_pool` |
 | *(si aplica)* | F3.5 (modelo de grafos) incompleta al congelar | Pendiente de cómputo | Si F3.5 y su plan B fallan en 3 semanas, H3 pasa a exploratoria (regla de parada de §8) |
