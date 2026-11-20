@@ -1,0 +1,15 @@
+{
+  "commit": "d7f98922d8a79d8ac94eb7a3b53577d73a2ebcc9",
+  "dirty": false,
+  "inputs": [
+    {
+      "path": "results/f4_3_shap/20261120T180018Z_ff0dace0b37f/importance_by_seed.csv",
+      "sha256": "2722b194d606fe2392ca9b53e8ea3a3ef2c53b92b5d46d54691f31b529201faa"
+    },
+    {
+      "path": "results/f4_3_shap/20261120T180018Z_ff0dace0b37f/summary_features.csv",
+      "sha256": "b527f7aaca7f26406585906d0e4daede593876ff1e5c21a4e9399174bbb64b70"
+    }
+  ],
+  "note": "Top features of the final PU pre-DFT model (10 seeds; path-dependent TreeSHAP on each bag's log-odds, averaged over bags). Rank range and top-10 frequency across seeds; signed SHAP > 0 raises the score."
+}

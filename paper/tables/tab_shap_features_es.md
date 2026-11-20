@@ -1,0 +1,14 @@
+Features con más peso del modelo PU pre-DFT final (10 semillas; TreeSHAP path-dependent sobre los log-odds de cada bolsa, media de las bolsas). Rango del puesto y frecuencia en el top 10 entre semillas; SHAP con signo > 0 sube la puntuación.
+
+| Feature                         | Grupo                                    | Fracción de la importancia   | Puesto (rango)   | En el top 10   |   SHAP medio, P |   SHAP medio, U |
+|:--------------------------------|:-----------------------------------------|:-----------------------------|:-----------------|:---------------|----------------:|----------------:|
+| geom_t                          | t (Goldschmidt)                          | 16,7%                        | 1,0 (1–1)        | 10/10          |          +0,613 |          -0,492 |
+| missingindicator_geom_t         | t, μ no definidos (sin balance de carga) | 9,4%                         | 2,4 (2–3)        | 10/10          |          +0,250 |          -0,251 |
+| missingindicator_geom_mu        | t, μ no definidos (sin balance de carga) | 9,3%                         | 2,6 (2–3)        | 10/10          |          +0,250 |          -0,244 |
+| compound possible               | Propiedades iónicas                      | 6,4%                         | 4,0 (4–4)        | 10/10          |          +0,129 |          -0,140 |
+| MagpieData avg_dev Number       | MAGPIE: Number                           | 3,2%                         | 5,2 (5–6)        | 10/10          |          +0,101 |          -0,065 |
+| geom_mu                         | μ (octaédrico)                           | 2,4%                         | 11,3 (5–22)      | 6/10           |          +0,071 |          -0,030 |
+| MagpieData avg_dev AtomicWeight | MAGPIE: AtomicWeight                     | 2,3%                         | 8,9 (7–15)       | 8/10           |          +0,080 |          -0,055 |
+| MagpieData avg_dev NValence     | MAGPIE: NValence                         | 2,3%                         | 8,2 (6–11)       | 9/10           |          +0,087 |          -0,045 |
+| frac f valence electrons        | Orbitales de valencia                    | 2,2%                         | 8,6 (7–11)       | 8/10           |          +0,058 |          -0,044 |
+| MagpieData mean MeltingT        | MAGPIE: MeltingT                         | 2,2%                         | 8,9 (6–13)       | 9/10           |          +0,089 |          -0,049 |

@@ -1,0 +1,15 @@
+{
+  "commit": "d7f98922d8a79d8ac94eb7a3b53577d73a2ebcc9",
+  "dirty": false,
+  "inputs": [
+    {
+      "path": "results/f4_3_shap/20261120T180018Z_ff0dace0b37f/group_importance_by_seed.csv",
+      "sha256": "3b2a589f712bd1720253fdeb7c64da64a375d91352167b813426898e89004a9b"
+    },
+    {
+      "path": "results/f4_3_shap/20261120T180018Z_ff0dace0b37f/summary_groups.csv",
+      "sha256": "aed7f83bbdeb0bee8e198ea1b2da973e9ef37481537c9137088d222e1b96bc10"
+    }
+  ],
+  "note": "Media y mínimo–máximo de 10 semillas; TreeSHAP path-dependent, media de las bolsas."
+}

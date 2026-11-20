@@ -1,0 +1,14 @@
+Top features of the final PU pre-DFT model (10 seeds; path-dependent TreeSHAP on each bag's log-odds, averaged over bags). Rank range and top-10 frequency across seeds; signed SHAP > 0 raises the score.
+
+| Feature                         | Group                              | Share of importance   | Rank (range)   | In top 10   |   Mean SHAP, P |   Mean SHAP, U |
+|:--------------------------------|:-----------------------------------|:----------------------|:---------------|:------------|---------------:|---------------:|
+| geom_t                          | t (Goldschmidt)                    | 16.7%                 | 1.0 (1–1)      | 10/10       |          0.613 |         -0.492 |
+| missingindicator_geom_t         | t, μ undefined (no charge balance) | 9.4%                  | 2.4 (2–3)      | 10/10       |          0.25  |         -0.251 |
+| missingindicator_geom_mu        | t, μ undefined (no charge balance) | 9.3%                  | 2.6 (2–3)      | 10/10       |          0.25  |         -0.244 |
+| compound possible               | Ionic properties                   | 6.4%                  | 4.0 (4–4)      | 10/10       |          0.129 |         -0.14  |
+| MagpieData avg_dev Number       | MAGPIE: Number                     | 3.2%                  | 5.2 (5–6)      | 10/10       |          0.101 |         -0.065 |
+| geom_mu                         | μ (octahedral)                     | 2.4%                  | 11.3 (5–22)    | 6/10        |          0.071 |         -0.03  |
+| MagpieData avg_dev AtomicWeight | MAGPIE: AtomicWeight               | 2.3%                  | 8.9 (7–15)     | 8/10        |          0.08  |         -0.055 |
+| MagpieData avg_dev NValence     | MAGPIE: NValence                   | 2.3%                  | 8.2 (6–11)     | 9/10        |          0.087 |         -0.045 |
+| frac f valence electrons        | Valence orbitals                   | 2.2%                  | 8.6 (7–11)     | 8/10        |          0.058 |         -0.044 |
+| MagpieData mean MeltingT        | MAGPIE: MeltingT                   | 2.2%                  | 8.9 (6–13)     | 9/10        |          0.089 |         -0.049 |
