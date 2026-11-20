@@ -1,6 +1,6 @@
 {
-  "date_utc": "2026-11-20T15:30:46+00:00",
-  "git_commit": "8fa9fd3bbc273ea1657fc94355e55f93fc899b0f",
+  "date_utc": "2026-11-20T16:49:32+00:00",
+  "git_commit": "ab0704073d5af2e3f9693a0a67d2b922011ab7b4",
   "git_dirty": false,
   "dry_run": false,
   "config": {
@@ -38,6 +38,23 @@
       "delta1": 0.05,
       "delta2": 0.05,
       "alpha_h2_one_sided": 0.025
+    },
+    "nadeau_bengio": {
+      "schemes": [
+        "random",
+        "cluster"
+      ],
+      "ppr": 0.1,
+      "alpha": 0.05,
+      "ci": 0.95,
+      "comparators": [
+        "pu_post_dft",
+        "ehull_model",
+        "symmetry_model",
+        "tau_bartel",
+        "t_window_bartel",
+        "charge_balance_icsd"
+      ]
     }
   },
   "seeds": [

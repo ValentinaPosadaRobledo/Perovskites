@@ -1,6 +1,6 @@
 # F4.2: pruebas confirmatorias de H1 y H2 (validación cruzada)
 
-Entradas: `results/f3_3_pu/20261119T211824Z_aacd15c3f6dd` (modelo `pu_pre_dft`) y `results/f2_4_baselines/20261119T211726Z_131d75672dea` (τ); semillas 0–9; bootstrap jerárquico B = 10000, semilla 20261113; commit `8fa9fd3`.
+Entradas: `results/f3_3_pu/20261119T211824Z_aacd15c3f6dd` (modelo `pu_pre_dft`) y `results/f2_4_baselines/20261119T211726Z_131d75672dea` (τ); semillas 0–9; bootstrap jerárquico B = 10000, semilla 20261113; commit `ab07040`.
 
 ## H1 — caída de TPR de `random` a cada esquema (modelo PU `pre_dft`)
 
@@ -49,3 +49,22 @@ Criterio: P*(Δ* ≤ −δ₂) con Holm < 0.025 (δ₂ = 0.05).
 | `pu_post_dft` | `loeo_B` | 0.016 | 0.014 |
 | `pu_post_dft` | `family` | 0.053 | 0.028 |
 | `pu_post_dft` | `cluster` | 0.113 | 0.110 |
+
+## Comparaciones secundarias (Nadeau–Bengio, no confirmatorias)
+
+PU `pu_pre_dft` frente a cada línea base: TPR a P(ŷ=1) = 0.1 en cada fold, sobre las composiciones puntuadas por los dos modelos (empates repartidos, §7.2); t corregido de Nadeau y Bengio con J = semillas × folds con positivos; Holm por esquema (α = 0.05). Las TPR son medias por fold (no micro-agregadas).
+
+| Esquema | Línea base | TPR PU | TPR base | Δ | IC 95 % | J | n_test / n_train | p | p (Holm) |
+|---|---|---|---|---|---|---|---|---|---|
+| `random` | `pu_post_dft` | 0.368 | 0.383 | -0.015 | [-0.036; +0.006] | 50 | 156 / 624 | 0.1623 | 0.1623 |
+| `random` | `ehull_model` | 0.368 | 0.301 | +0.067 | [+0.024; +0.110] | 50 | 156 / 624 | 0.0029 | 0.0058 |
+| `random` | `symmetry_model` | 0.368 | 0.296 | +0.071 | [+0.034; +0.108] | 50 | 156 / 624 | 0.0003 | 0.0009 |
+| `random` | `tau_bartel` | 0.301 | 0.182 | +0.120 | [+0.065; +0.174] | 50 | 126 / 506 | 5.5e-05 | 0.0002 |
+| `random` | `t_window_bartel` | 0.303 | 0.190 | +0.113 | [+0.064; +0.162] | 50 | 127 / 510 | 2.6e-05 | 0.0001 |
+| `random` | `charge_balance_icsd` | 0.431 | 0.143 | +0.288 | [+0.245; +0.331] | 50 | 185 / 739 | 5.0e-18 | 3.0e-17 |
+| `cluster` | `pu_post_dft` | 0.401 | 0.427 | -0.026 | [-0.143; +0.090] | 41 | 190 / 590 | 0.6511 | 1.0000 |
+| `cluster` | `ehull_model` | 0.401 | 0.448 | -0.047 | [-0.167; +0.073] | 41 | 190 / 590 | 0.4332 | 1.0000 |
+| `cluster` | `symmetry_model` | 0.401 | 0.383 | +0.018 | [-0.126; +0.162] | 41 | 190 / 590 | 0.8012 | 1.0000 |
+| `cluster` | `tau_bartel` | 0.287 | 0.198 | +0.089 | [+0.005; +0.172] | 41 | 154 / 478 | 0.0379 | 0.1893 |
+| `cluster` | `t_window_bartel` | 0.288 | 0.226 | +0.062 | [-0.013; +0.136] | 41 | 154 / 483 | 0.1040 | 0.4159 |
+| `cluster` | `charge_balance_icsd` | 0.438 | 0.194 | +0.244 | [+0.065; +0.422] | 41 | 224 / 700 | 0.0086 | 0.0516 |
