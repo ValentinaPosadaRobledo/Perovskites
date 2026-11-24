@@ -9,6 +9,8 @@ Lee la última corrida de F5.1 (`pourbaix.csv`) y los `raw/` de la última corri
 - `sensitivity.csv`: rango de cada composición en todas las condiciones de F5.1 y en cuántas
   queda en el frente.
 - `summary.csv`: recuentos por condición (también en results/f5_2_pareto/summary.csv).
+- `diagnostics.json`: Spearman entre ΔG_pbx máximo y la E_hull GGA/GGA+U de la entrada, y el
+  de la parte acuosa (ΔG_pbx − E_hull) con la puntuación PU (circularidad del hull).
 - `run_metadata.json` y una fila en results/runs_index.csv.
 """
 
@@ -77,6 +79,12 @@ def run_pareto_experiment(config_path: Path | str, allow_dirty: bool = False) ->
         missing = table.loc[table["score_mean"].isna(), "composition"].unique()[:5]
         raise ValueError(f"Composiciones de F5.1 sin puntuación de F3.3: {list(missing)}")
 
+    # Circularidad: E_hull de la misma entrada y la parte acuosa de ΔG_pbx (descriptivo).
+    diag = cfg["diagnostics"]
+    ehull = pd.read_parquet(ROOT / diag["ehull_table"])[diag["ehull_column"]].rename("ehull")
+    table = table.merge(ehull, left_on="composition", right_index=True, how="left")
+    table["dg_aqueous"] = table["dg_max"] - table["ehull"]
+
     tox = cfg["toxicity"]
     conds = table[["pH", "ion_conc_M"]].drop_duplicates().sort_values(["pH", "ion_conc_M"])
     per_cond, summary = [], []
@@ -94,7 +102,8 @@ def run_pareto_experiment(config_path: Path | str, allow_dirty: bool = False) ->
     pc = cfg["principal_condition"]
     main = allc[np.isclose(allc["pH"], pc["pH"]) & np.isclose(allc["ion_conc_M"], pc["ion_conc_M"])]
     keep = ["composition", "label", "A", "B", "score_mean", "score_sd", "frac_above_threshold",
-            "dg_max", "v_at_max", "dg_min", "stable_at_max", "stable_in_window", "toxicity",
+            "dg_max", "v_at_max", "dg_min", "ehull", "dg_aqueous", "stable_at_max",
+            "stable_in_window", "toxicity",
             "pareto_rank", "on_front"]  # fmt: skip
     sens = allc.pivot_table(index="composition", columns=["pH", "ion_conc_M"],
                             values="pareto_rank", aggfunc="first")  # fmt: skip
@@ -111,6 +120,23 @@ def run_pareto_experiment(config_path: Path | str, allow_dirty: bool = False) ->
     summ.to_csv(run_dir / "summary.csv", **lt)
     (RESULTS_DIR / cfg["name"]).mkdir(parents=True, exist_ok=True)
     summ.to_csv(RESULTS_DIR / cfg["name"] / "summary.csv", **lt)
+
+    from scipy import stats
+
+    def rho(a: str, b: str, d: pd.DataFrame) -> float:
+        """Spearman entre dos columnas, sin filas incompletas."""
+        x = d[[a, b]].dropna()
+        return float(stats.spearmanr(x[a], x[b]).statistic)
+
+    diagnostics = {
+        "condition": pc, "n_with_ehull": int(main["ehull"].notna().sum()),
+        "spearman_dgmax_ehull_all": rho("dg_max", "ehull", main),
+        "spearman_dgmax_ehull_U": rho("dg_max", "ehull", main[main["label"] == 0]),
+        "spearman_dgaqueous_score_U": rho("dg_aqueous", "score_mean", main[main["label"] == 0]),
+        "median_dg_aqueous_by_label": {int(k): float(v) for k, v in
+                                       main.groupby("label")["dg_aqueous"].median().items()},
+    }  # fmt: skip
+    (run_dir / "diagnostics.json").write_text(json.dumps(diagnostics, indent=2) + "\n", "utf-8")
 
     meta["status"] = "completed"
     meta["counts"] = {k: int(v) for k, v in summ.set_index(["pH", "ion_conc_M"]).loc[

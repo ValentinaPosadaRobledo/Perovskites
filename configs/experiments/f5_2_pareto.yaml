@@ -26,7 +26,10 @@ inputs:
 principal_condition: {pH: 7.4, ion_conc_M: 1.0e-6}
 
 toxicity:
-  elements: [Pb, Co, Ni, Cd, Tl]       # por presencia del elemento en la composición
+  # Por presencia del elemento en la composición. Los radiactivos (Tc, Pm, Po, Ac, Th, Pa, U,
+  # Np, Pu, Am) se añadieron el 2026-11-20, por decisión de la autora y DESPUÉS de ver la
+  # primera corrida (EuTcO3 y KPuO3 quedaban en los rangos 2 y 3; el frente no cambia).
+  elements: [Pb, Co, Ni, Cd, Tl, Tc, Pm, Po, Ac, Th, Pa, U, Np, Pu, Am]
   # Por especie estable en algún potencial de la ventana, en la condición evaluada (regex sobre
   # los nombres de pymatgen, p. ej. "Ba[+2]", "CrO4[-2]", "HCrO4[-1]", "Cr2O7[-2]").
   aqueous_species:
@@ -35,3 +38,10 @@ toxicity:
 
 reference:
   dg_threshold_eV_atom: 0.5            # Singh et al. (2017): solo como referencia
+
+# Diagnóstico de circularidad (decisión de la autora, 2026-11-20): ΔG_pbx incluye la energía de
+# la propia entrada, así que sigue a su E_hull. Se informa también ΔG_pbx − E_hull (lo que
+# aporta el medio acuoso respecto al hull sólido); descriptivo, no cambia el frente.
+diagnostics:
+  ehull_table: data/interim/features_post_dft.parquet
+  ehull_column: thermo_ehull           # E_hull GGA/GGA+U de la misma entrada perovskita
