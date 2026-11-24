@@ -1,0 +1,15 @@
+{
+  "date_utc": "2026-11-24T23:34:32+00:00",
+  "git_commit": "c60ba277887a8e45260557dfe940cb4c6124da71",
+  "git_dirty": false,
+  "inputs": [
+    {
+      "path": "results/f5_1_pourbaix/20261120T200254Z_069e8fc918f9/pourbaix.csv",
+      "sha256": "0476ed20492033bcbd064fe3f7cdda02286a8081c1a8fb714344cc857507c168"
+    },
+    {
+      "path": "results/f5_2_pareto/20261124T152358Z_9cfd42873380/candidates.csv",
+      "sha256": "9e5ff887e4a58d5e3ee1b579e1f72f5b93108d5f77ed30811567c6f01752ff15"
+    }
+  ]
+}
