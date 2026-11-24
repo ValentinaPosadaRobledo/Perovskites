@@ -1,0 +1,92 @@
+{
+  "config": {
+    "description": "Frente de Pareto (máxima puntuación PU fuera de fold, mínimo ΔG_pbx) de las composiciones no etiquetadas sin marcas de toxicidad, con la sensibilidad a pH y concentración.",
+    "diagnostics": {
+      "ehull_column": "thermo_ehull",
+      "ehull_table": "data/interim/features_post_dft.parquet"
+    },
+    "hypotheses": [
+      "exploratorio"
+    ],
+    "inputs": {
+      "pourbaix_experiment": "f5_1_pourbaix",
+      "score_experiment": "f3_3_pu",
+      "score_model": "pu_pre_dft",
+      "score_scheme": "random"
+    },
+    "name": "f5_2_pareto",
+    "principal_condition": {
+      "ion_conc_M": 1e-06,
+      "pH": 7.4
+    },
+    "reference": {
+      "dg_threshold_eV_atom": 0.5
+    },
+    "resolved_inputs": {
+      "pourbaix_run": "results/f5_1_pourbaix/20261120T200254Z_069e8fc918f9",
+      "score_raw_sha256": "5fb57dd46cb86a1f417ddd1e65d8bb63ce1095b0a9a7a3e5f113be361d39143b",
+      "score_run": "results/f3_3_pu/20261119T211824Z_aacd15c3f6dd"
+    },
+    "roadmap_task": "F5.2",
+    "toxicity": {
+      "aqueous_species": {
+        "Cr6+": "(?:H?CrO4|Cr2O7)\\[",
+        "soluble_Ba2+": "Ba\\[\\+2\\]"
+      },
+      "elements": [
+        "Pb",
+        "Co",
+        "Ni",
+        "Cd",
+        "Tl",
+        "Tc",
+        "Pm",
+        "Po",
+        "Ac",
+        "Th",
+        "Pa",
+        "U",
+        "Np",
+        "Pu",
+        "Am"
+      ]
+    }
+  },
+  "config_hash": "9cfd42873380",
+  "counts": {
+    "n_compositions": 731,
+    "n_flagged_toxic": 204,
+    "n_front": 5,
+    "n_front_below_ref": 5,
+    "n_unlabeled": 539,
+    "n_unlabeled_eligible": 390
+  },
+  "cpu": "x86_64",
+  "cpu_count": 4,
+  "git_commit": "a54dba9f8073690b941283beb253ffcd72767b9a",
+  "git_dirty": false,
+  "mp_database_version": null,
+  "n_jobs": 1,
+  "omp_num_threads": "1",
+  "package_versions": {
+    "emmet-core": "0.88.3",
+    "matminer": "0.10.1",
+    "mp-api": "0.47.2",
+    "numpy": "2.5.4",
+    "pandas": "2.3.3",
+    "perovskite-pu": "0.1.0",
+    "pymatgen": "2026.10.24",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "shap": "0.54.1"
+  },
+  "platform": "Linux-6.18.44-fc-v819-x86_64-with-glibc2.39",
+  "python_version": "3.12.3",
+  "seeds": [],
+  "status": "completed",
+  "timestamp_utc": "2026-11-24T15:23:58+00:00",
+  "timings": {
+    "total_s": 8.506
+  },
+  "uv_lock_sha256": "d391607ae1e0ac6a1158ea3fac6cf1af494a1b9058b9152f1565023ffe2eff79"
+}

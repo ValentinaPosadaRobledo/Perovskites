@@ -1,0 +1,14 @@
+{
+  "condition": {
+    "pH": 7.4,
+    "ion_conc_M": 1e-06
+  },
+  "n_with_ehull": 731,
+  "spearman_dgmax_ehull_all": 0.8253487189369366,
+  "spearman_dgmax_ehull_U": 0.7066441025476476,
+  "spearman_dgaqueous_score_U": -0.550664217472502,
+  "median_dg_aqueous_by_label": {
+    "0": 0.4361108656249997,
+    "1": 0.22995076050000002
+  }
+}
